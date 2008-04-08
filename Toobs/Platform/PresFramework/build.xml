@@ -5,10 +5,10 @@
 <!-- ========== Executable Targets ======================================== -->
 
   <target name="project_init" description="Initialize environment" >
-      <property name="component.name" value="presframework"/>
+      <property name="component.name" value="presentation"/>
       <property name="component.package" value="org.toobs.framework.pres"/>
       <property name="component.title" value="Presentation Layer Framework"/>
-      <property name="component.version" value="1.0"/>
+      <property name="component.version" value="0.1"/>
   
       <!-- specify own directory with generated sources-->
       <property name="source.path" value="src;${platform.staging.home}/gensrc/${component.name}/src"/>
