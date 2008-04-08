@@ -18,6 +18,7 @@
   <target name="all" description="Builds all components.">
     <ant dir="Base"              target="dist"/>
     <ant dir="TransformPipeline" target="dist"/>
+    <ant dir="BusinessLogic"     target="dist"/>
     <ant dir="PresFramework"     target="dist"/>
   </target>
   
