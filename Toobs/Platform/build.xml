@@ -1,0 +1,41 @@
+<project basedir="." default="all" name="Framework">
+
+  <!-- Initialize user properties first.-->
+  <echo message="${user.home}/build.properties"/>
+  <property file="${user.home}/build.properties" />
+  <echo message="${user.home}/client.properties"/>
+  <property file="${user.home}/client.properties"/>
+  
+  <!-- Then build specific properties. -->
+  <property file="${basedir}/build.properties"/>
+  <property name="ant.extension" value=".bat"/>
+
+  
+  <!-- ================================================================================
+    Target: all
+    Builds framework components. .
+  ================================================================================= -->
+  <target name="all" description="Builds all components.">
+    <ant dir="Base"              target="dist"/>
+    <ant dir="TransformPipeline" target="dist"/>
+    <ant dir="PresFramework"     target="dist"/>
+  </target>
+  
+  <!-- ================================================================================
+    Target: javadoc
+    Builds framework Javadocs. .
+    ================================================================================= -->
+  <target name="javadoc" description="Builds all javadocs.">
+  </target>
+  
+  <target name="clean" description="Cleaning Distribution directory" >
+    <property name="platform.staging.home" value="../../toobs-core-${toobs.version}"/>
+    <delete dir="${platform.staging.home}"/>
+  </target>
+
+  <target name="cleanout" description="Cleaning Distribution directory" >
+    <property name="platform.staging.home" value="../../toobs-core-${toobs.version}"/>
+    <delete dir="${platform.staging.home}/out"/>
+  </target>
+
+</project>

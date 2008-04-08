@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by spudney (private) -->
+<xs:schema targetNamespace="cc" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:cc="cc" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+ <xs:element name="ComponentConfig">
+  <xs:annotation>
+   <xs:documentation>Configuration for components</xs:documentation>
+  </xs:annotation>
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element ref="cc:Component" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:sequence>
+  </xs:complexType>
+ </xs:element>
+ <xs:element name="Component">
+  <xs:annotation>
+   <xs:documentation>This holds the component</xs:documentation>
+  </xs:annotation>
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element ref="cc:Style" minOccurs="0" maxOccurs="unbounded"/>
+    <xs:element ref="cc:Controller" minOccurs="0" maxOccurs="unbounded"/>
+    <xs:element ref="cc:DataSource" minOccurs="0"/>
+    <xs:element ref="cc:GetObject" maxOccurs="unbounded" minOccurs="0"/>
+    <xs:element ref="cc:Pipeline"/>
+   </xs:sequence>
+   <xs:attribute name="id" type="xs:string" use="required"/>
+   <xs:attribute name="renderErrorObject" type="xs:boolean" default="false"/>
+  </xs:complexType>
+ </xs:element>
+ <xs:element name="DataSource">
+  <xs:annotation>
+   <xs:documentation>This holds a DataSource</xs:documentation>
+  </xs:annotation>
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element ref="cc:DataSourceProperty" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:sequence>
+   <xs:attribute name="className" type="xs:string"/>
+  </xs:complexType>
+ </xs:element>
+ <xs:element name="DataSourceProperty">
+  <xs:annotation>
+   <xs:documentation>This holds a DataSource property</xs:documentation>
+  </xs:annotation>
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element name="DataSourcePropertyName" type="xs:string"/>
+    <xs:element name="DataSourcePropertyValue" type="xs:string" maxOccurs="unbounded"/>
+   </xs:sequence>
+  </xs:complexType>
+ </xs:element>
+ <xs:element name="ContentType">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element ref="cc:Transform" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:sequence>
+   <xs:attribute name="contentType" type="xs:string" default="xhtml"/>
+  </xs:complexType>
+ </xs:element>
+ <xs:element name="Pipeline">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element ref="cc:ContentType" maxOccurs="unbounded"/>
+   </xs:sequence>
+  </xs:complexType>
+ </xs:element>
+ <xs:element name="Transform">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element ref="cc:ParameterMapping" minOccurs="0"/>
+   </xs:sequence>
+   <xs:attribute name="transformName" type="xs:string" use="required"/>
+   <xs:attribute name="transformType" type="xs:string" use="optional" default="xsl"/>
+  </xs:complexType>
+ </xs:element>
+ <xs:element name="GetObject">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element ref="cc:ParameterMapping" minOccurs="0"/>
+    <xs:element ref="cc:OutputParameterMapping" minOccurs="0"/>
+   </xs:sequence>
+   <xs:attribute name="objectAction" use="required" type="xs:string"/>
+   <xs:attribute name="daoObject" use="required" type="xs:string"/>
+   <xs:attribute name="returnedValueObject" use="optional" type="xs:string"/>
+   <xs:attribute name="guidParam" type="xs:string"/>
+   <xs:attribute name="searchCriteria" type="xs:string"/>
+   <xs:attribute name="searchMethod" type="xs:string"/>
+   <xs:attribute name="permissionAction" type="xs:string"/>
+   <xs:attribute name="noCache" type="xs:boolean" default="false"/>
+  </xs:complexType>
+ </xs:element>
+ <xs:element name="ParameterMapping">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element ref="cc:Parameter" minOccurs="1" maxOccurs="unbounded"/>
+   </xs:sequence>
+  </xs:complexType>
+ </xs:element>
+ <xs:element name="OutputParameterMapping">
+   <xs:complexType>
+     <xs:sequence>
+       <xs:element ref="cc:Parameter" minOccurs="1" maxOccurs="unbounded"/>
+     </xs:sequence>
+   </xs:complexType>
+ </xs:element>
+ <xs:element name="Parameter">
+  <xs:complexType>
+   <xs:sequence>
+     <xs:element ref="cc:JexlExpression" minOccurs="0"/>
+     <xs:element ref="cc:JexlScript" minOccurs="0"/>
+   </xs:sequence>
+   <xs:attribute name="name" type="xs:string" use="required"/>
+   <xs:attribute name="path" type="xs:string" use="required"/>
+   <xs:attribute name="sessionPath" type="xs:string" use="optional"/>
+   <xs:attribute name="default" type="xs:string" use="optional"/>
+   <xs:attribute name="condition" type="xs:string" use="optional"/>
+   <xs:attribute name="scope" type="xs:string" use="optional"/>
+   <xs:attribute name="isStatic" type="xs:boolean" default="false"/>
+   <xs:attribute name="isObject" type="xs:boolean" default="false"/>
+   <xs:attribute name="isList" type="xs:boolean" default="false"/>
+   <xs:attribute name="ignoreNull" type="xs:boolean" default="false"/>
+   <xs:attribute name="overwriteExisting" type="xs:boolean" default="true"/>
+   <xs:attribute name="objectIndex" type="xs:int" default="0"/>
+  </xs:complexType>
+ </xs:element>
+ <xs:element name="Controller">
+  <xs:complexType>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+  </xs:complexType>
+ </xs:element>
+  <xs:element name="Style">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="JexlExpression" type="xs:string"/>
+  <xs:element name="JexlScript" type="xs:string"/>
+</xs:schema>
