@@ -4,10 +4,10 @@
 
   <target name="project_init" description="Initialize environment" >
 
-    <property name="component.name" value="util"/>
-    <property name="component.package" value="org.toobs.framework.util"/>
+    <property name="component.name" value="base"/>
+    <property name="component.package" value="org.toobs.framework"/>
     <property name="component.title" value="platform base Utilities"/>
-    <property name="component.version" value="1.0"/>
+    <property name="component.version" value="0.1"/>
 
   </target>
   

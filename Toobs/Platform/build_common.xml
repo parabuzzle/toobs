@@ -36,7 +36,7 @@
     <property name="compile.optimize"     value="on"/>
 
     <!-- This is the Name of the Component Jar -->
-    <property name="component.jar"        value="${component.name}.jar"/>
+    <property name="component.jar"        value="toobs-${component.name}-${component.version}.jar"/>
     <property name="component.jar.name"   value="${dist.home}/lib/${component.jar}"/>
 
     <!-- Setup Compile ClassPath -->
