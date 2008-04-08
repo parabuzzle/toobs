@@ -27,6 +27,7 @@ import org.toobs.framework.pres.doit.config.DoIt;
 import org.toobs.framework.pres.util.ComponentRequestManager;
 import org.toobs.framework.pres.util.ParameterUtil;
 import org.toobs.framework.pres.util.PresConstants;
+import org.toobs.framework.search.index.ISingleIndexBuilder;
 import org.toobs.framework.util.constants.PlatformConstants;
 
 
@@ -36,6 +37,7 @@ public class DoItRunner implements IDoItRunner {
   private static Log log = LogFactory.getLog(DoItRunner.class);
 
   private ComponentRequestManager componentRequestManager;
+  private ISingleIndexBuilder indexBuilder;
 
   public void runDoIt(DoIt doIt, Map paramMap, Map responseMap) throws Exception 
   {
@@ -156,8 +158,9 @@ public class DoItRunner implements IDoItRunner {
         session.setAttribute((String)entry.getKey(), entry.getValue());
       }
     } else if (actionType.equalsIgnoreCase("indexAction") && lastAction) {
-      // TODO Create Interface for this in base
-      //org.toobs.framework.search.index.IndexManualStart.buildIndexes(thisAction.getObjectDao());
+      if (this.getIndexBuilder() != null) {
+        indexBuilder.buildIndexes(thisAction.getObjectDao());
+      }
     } else {
       //TODO -- Add the ability to run scripts defined in config here.
     }
@@ -420,6 +423,14 @@ public class DoItRunner implements IDoItRunner {
   public void setComponentRequestManager(
       ComponentRequestManager componentRequestManager) {
     this.componentRequestManager = componentRequestManager;
+  }
+
+  public ISingleIndexBuilder getIndexBuilder() {
+    return indexBuilder;
+  }
+
+  public void setIndexBuilder(ISingleIndexBuilder indexBuilder) {
+    this.indexBuilder = indexBuilder;
   }
 
 }
