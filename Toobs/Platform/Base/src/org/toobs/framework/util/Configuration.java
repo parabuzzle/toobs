@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 
 public class Configuration {
   
+  public static final String MAIN_PROP_FILE = "toobs.properties";
   public static final String DEPLOY_PROP_FILE = "deploy.properties";
   public static final String DEFAULT_GLOBAL_CONTEXT = "/toobs"; 
 
@@ -53,19 +54,29 @@ public class Configuration {
   private Configuration() {
     properties = new Properties();
     deployProperties = new Properties();
-    String userProperties = System.getProperty("user.home") + "/toobs.properties";
-    File propFile = new File(userProperties);
-    if (propFile.exists()) {      
-      try {
-        properties.load(propFile.toURL().openStream());
-      } catch (MalformedURLException e) {
-        log.warn("Property file " + userProperties + " could not be loaded due to " + e.getMessage(), e);
-      } catch (IOException e) {
-        log.warn("Property file " + userProperties + " could not be loaded due to " + e.getMessage(), e);
-      }
-    }
+
     ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-    URL propUrl =  classLoader.getResource(DEPLOY_PROP_FILE);
+    
+    String userProperties = System.getProperty("user.home") + "/" + MAIN_PROP_FILE;
+    
+    URL propUrl;
+    File propFile = new File(userProperties);
+    try {
+      if (propFile.exists()) {
+        propUrl = propFile.toURL();
+      } else {
+        propUrl = classLoader.getResource(MAIN_PROP_FILE);
+      }
+      if (propUrl != null) {
+        properties.load(propUrl.openStream());
+      }
+    } catch (MalformedURLException e) {
+      log.warn("Property file " + userProperties + " could not be loaded due to " + e.getMessage(), e);
+    } catch (IOException e) {
+      log.warn("Property file " + userProperties + " could not be loaded due to " + e.getMessage(), e);
+    }
+
+    propUrl = classLoader.getResource(DEPLOY_PROP_FILE);
     propFile = new File(propUrl.getFile());
     if (propFile.exists()) {      
       try {
