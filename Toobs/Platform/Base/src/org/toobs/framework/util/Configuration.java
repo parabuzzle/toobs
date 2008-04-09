@@ -45,6 +45,22 @@ public class Configuration {
 
   public static final String INDEX_PATH_PROPERTY = "fulltext.index.basepath";
 
+  
+  /* Moved from PlatformConstants */
+  public static final String DATE_FORMAT_PROPERTY = "toobs.date.format";
+  public static final String TIME_FORMAT_PROPERTY = "toobs.time.format";
+  public static final String TS_FORMAT_PROPERTY   = "toobs.timestamp.format";
+
+  /** Short Date Format for Persistence */
+  public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+
+  /** Time Format for Persistence */
+  public static final String DEFAULT_TIME_FORMAT = "H:mm";
+
+  /** Timestamp Format for Persistence */
+  public static final String DEFAULT_TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss.S";
+  
+
   private Log log = LogFactory.getLog(Configuration.class);
 
   private static Configuration instance = null;
@@ -230,4 +246,32 @@ public class Configuration {
     }
     return prop;
   }
+
+  public String getDateFormat() {
+    String prop = getProperty(DATE_FORMAT_PROPERTY);
+    if (prop != null && prop.length() > 0) {
+      return prop;
+    } else {
+      return DEFAULT_DATE_FORMAT;
+    }
+  }
+
+  public String getTimeFormat() {
+    String prop = getProperty(TIME_FORMAT_PROPERTY);
+    if (prop != null && prop.length() > 0) {
+      return prop;
+    } else {
+      return DEFAULT_TIME_FORMAT;
+    }
+  }
+
+  public String getTimeStampFormat() {
+    String prop = getProperty(TS_FORMAT_PROPERTY);
+    if (prop != null && prop.length() > 0) {
+      return prop;
+    } else {
+      return DEFAULT_TIMESTAMP_FORMAT;
+    }
+  }
+
 }

@@ -35,51 +35,6 @@ public class BaseRequest implements IRequest {
     this.httpRequest = httpRequest;
   }
   
-  public String getClientChangeParam() {
-    Object param = this.params.get(PlatformConstants.SESSION_CLIENT_CHANGE);
-    if (param != null && param.getClass().isArray()) {
-      param = ((Object[])param)[0];
-    }
-    return (String)param;
-  }
-
-  public String[] getClientListParam() {
-    return (String[])this.params.get(PlatformConstants.CLIENT_ACCESS_LIST);
-  }
-
-  public String getClientParam() {
-    return (String)this.params.get(PlatformConstants.SESSION_CLIENT_PARAM);
-  }
-  
-  public Object getClient() {
-    return this.params.get(PlatformConstants.SESSION_CLIENT);
-  }
-  
-  public String getPersonId() {
-    return (String)this.params.get(PlatformConstants.SESSION_PERSON_PARAM);
-  }
-
-  public Object getPerson() {
-    return this.params.get("user");
-  }
-
-  public String getPersonBusinessId() {
-    return (String)this.params.get("userBusinessId");
-  }
-
-  public String getBusinessTemplateId() {
-    return (String)this.params.get("businessTemplateId");
-  }
-
-  public String getSecurityMode() {
-    Object secMode = this.params.get(PlatformConstants.DATA_SECURITY_MODE);
-    if (secMode != null && secMode.getClass().isArray()) {
-      return ((String[])secMode)[0];
-    } else {
-      return (String)secMode;
-    }
-  }
-
   public Boolean getSingleBooleanParam(String paramName) {
     Object param = this.params.get(paramName);
     if (param != null && param.getClass().isArray()) {

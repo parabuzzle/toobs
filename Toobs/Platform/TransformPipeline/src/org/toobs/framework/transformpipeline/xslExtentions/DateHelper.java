@@ -3,10 +3,10 @@ package org.toobs.framework.transformpipeline.xslExtentions;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
 import org.toobs.framework.transformpipeline.domain.XMLTransformerException;
-import org.toobs.framework.util.constants.PlatformConstants;
-
+import org.toobs.framework.util.Configuration;
 
 import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -23,7 +23,7 @@ import java.util.TimeZone;
  */
 public class DateHelper {
   /** DOCUMENT ME! */
-  private static Log nslog = LogFactory.getLog(DateHelper.class);
+  private static Log log = LogFactory.getLog(DateHelper.class);
   
   public static String getMonthStringFromNumber(String monthNumber) {
     int monthInt = -1;
@@ -35,11 +35,12 @@ public class DateHelper {
     if(monthInt < 1 || monthInt > 12) {
       return "";
     }
-    
+    DateFormatSymbols dfs = new DateFormatSymbols();
+    /*
     String[] month = {"", "January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"};
-    
-    return month[monthInt];
+    */
+    return dfs.getMonths()[monthInt - 1]; //month[monthInt];
   }
   public static String getDateNow() {
     return String.valueOf(new Date().getTime());
@@ -65,7 +66,7 @@ public class DateHelper {
   
   public static String getDateNextMonth() {
     Calendar cal = new GregorianCalendar();
-    cal.roll(Calendar.DAY_OF_YEAR, + 27); // taking a guess on this for tachen
+    cal.roll(Calendar.MONTH, + 1); // taking a guess on this for tachen
     return String.valueOf(cal.getTimeInMillis());
   }  
 
@@ -99,7 +100,7 @@ public class DateHelper {
       try {
         ((SimpleDateFormat) dateFormatter).applyPattern(format);
       } catch (ClassCastException cce) {
-        nslog.warn("Exception while applying pattern value", cce);
+        log.warn("Exception while applying pattern value", cce);
       }
 
       dateString = dateFormatter.format(date);
@@ -132,8 +133,8 @@ public class DateHelper {
           date = new Date(inputDateAsLong);
         } catch (NumberFormatException ex) {
           date = (new SimpleDateFormat(
-              PlatformConstants.PERSISTENCE_DATE_FORMAT + " "
-                  + PlatformConstants.PERSISTENCE_TIME_FORMAT))
+              Configuration.getInstance().getDateFormat() + " "
+                  + Configuration.getInstance().getTimeFormat()))
               .parse(inputDate);
         }
 
@@ -146,19 +147,17 @@ public class DateHelper {
           try {
             ((SimpleDateFormat) timeFormatter).applyPattern(timeFormat);
           } catch (ClassCastException cce) {
-            nslog.warn("Exception while applying pattern value", cce);
+            log.warn("Exception while applying pattern value", cce);
           }
         }
 
         timeString = timeFormatter.format(date);
 
-        // nslog.debug("DFH2 got fmted datetime:"+ formatter.format(date));
         // Commenting this out for now...The date is stored in some other
         // timezone than GMT.
         // formatter.setTimeZone(getTimeZone(tzValue));
         dateString = formattedDateString + "  " + timeString;
 
-        // nslog.debug("DFH fmted to:"+ dateString);
       } catch (ParseException ex) {
         dateString = inputDate;
       }
