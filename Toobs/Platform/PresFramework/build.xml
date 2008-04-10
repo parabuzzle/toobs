@@ -11,7 +11,7 @@
       <property name="component.version" value="0.1"/>
   
       <!-- specify own directory with generated sources-->
-      <property name="source.path" value="src;${platform.staging.home}/gensrc/${component.name}/src"/>
+      <property name="source.path" value="src;${toobs.staging.home}/gensrc/${component.name}/src"/>
   
       <path id="project.lib.classpath">
       </path>

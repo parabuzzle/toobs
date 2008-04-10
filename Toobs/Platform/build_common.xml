@@ -12,19 +12,20 @@
   <property file="${basedir}/build.properties"/>
 
   <!-- setup common properties -->
-  <property name="platform.staging.home" value="${basedir}/../../../toobs-core-${toobs.version}"/>
+  <property name="toobs.staging.home" value="${basedir}/../staging"/>
+  <property name="toobs.dist.home"    value="${basedir}/../../../toobs-core-${toobs.version}"/>
 
   <target name="init" description="Initialize environment"  depends="project_init">
 
     <taskdef resource="net/sf/antcontrib/antlib.xml"/>
 
-    <property name="gensrc"               value="${platform.staging.home}/gensrc/${component.name}"/>
-    <property name="build.home"           value="${platform.staging.home}/out/${component.name}"/>
+    <property name="gensrc"               value="${toobs.staging.home}/gensrc/${component.name}"/>
+    <property name="build.home"           value="${toobs.staging.home}/out/${component.name}"/>
     <property name="build.compiler"       value="javac1.5" />
-    <property name="test.build.home"      value="${platform.staging.home}/test/${component.name}"/>
+    <property name="test.build.home"      value="${toobs.staging.home}/test/${component.name}"/>
 
-    <property name="dist.home"            value="${platform.staging.home}/image"/>
-    <property name="javadoc.platform.dir" value="${platform.staging.home}/image/doc"/>
+    <property name="dist.home"            value="${toobs.dist.home}"/>
+    <property name="javadoc.platform.dir" value="${toobs.staging.home}/image/doc"/>
     <property name="javadoc.dir"          value="${javadoc.platform.dir}/${component.name}"/>
     <property name="source.home"          value="src"/>
     <property name="source.path"          value="${source.home}"/>
@@ -37,7 +38,7 @@
 
     <!-- This is the Name of the Component Jar -->
     <property name="component.jar"        value="toobs-${component.name}-${component.version}.jar"/>
-    <property name="component.jar.name"   value="${dist.home}/lib/${component.jar}"/>
+    <property name="component.jar.name"   value="${dist.home}/${component.jar}"/>
 
     <!-- Setup Compile ClassPath -->
     <path id="lib.classpath">
@@ -73,7 +74,7 @@
     <mkdir dir="${build.home}"/>
     <mkdir dir="${build.home}/classes"/>
     <mkdir dir="${test.build.home}/classes"/>
-    <mkdir dir="${dist.home}/lib"/>
+    <mkdir dir="${dist.home}"/>
     <mkdir dir="${gensrc}"/>
     <mkdir dir="${gensrc}/src"/>
   </target>
@@ -145,7 +146,7 @@
   </target>
 
   <target name="jar" depends="init" description="Create binary distribution" >
-    <mkdir dir="${dist.home}/lib"/>
+    <mkdir dir="${dist.home}"/>
     <jar basedir="${compile.dest}" jarfile="${component.jar.name}" >
       <include name="**/*"/>
     </jar>

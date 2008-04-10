@@ -21,4 +21,9 @@ public interface IRequest {
 
   public abstract Boolean getSingleBooleanParam(String paramName);
 
+  public abstract String getString(String paramName);
+
+  public abstract String[] getStringArray(String paramName);
+  
+  public abstract Object getParam(String paramName);
 }

@@ -1,10 +1,7 @@
 <project basedir="." default="all" name="Framework">
 
   <!-- Initialize user properties first.-->
-  <echo message="${user.home}/build.properties"/>
   <property file="${user.home}/build.properties" />
-  <echo message="${user.home}/client.properties"/>
-  <property file="${user.home}/client.properties"/>
   
   <!-- Then build specific properties. -->
   <property file="${basedir}/build.properties"/>
@@ -30,13 +27,15 @@
   </target>
   
   <target name="clean" description="Cleaning Distribution directory" >
-    <property name="platform.staging.home" value="../../toobs-core-${toobs.version}"/>
-    <delete dir="${platform.staging.home}"/>
+    <property name="toobs.dist.home" value="../../toobs-core-${toobs.version}"/>
+    <property name="toobs.staging.home" value="staging"/>
+    <delete dir="${toobs.staging.home}"/>
+    <delete dir="${toobs.dist.home}"/>
   </target>
 
   <target name="cleanout" description="Cleaning Distribution directory" >
-    <property name="platform.staging.home" value="../../toobs-core-${toobs.version}"/>
-    <delete dir="${platform.staging.home}/out"/>
+    <property name="toobs.staging.home" value="staging"/>
+    <delete dir="${toobs.staging.home}/out"/>
   </target>
 
 </project>
