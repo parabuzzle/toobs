@@ -66,7 +66,7 @@ public class DateHelper {
   
   public static String getDateNextMonth() {
     Calendar cal = new GregorianCalendar();
-    cal.roll(Calendar.MONTH, + 1); // taking a guess on this for tachen
+    cal.roll(Calendar.MONTH, + 1); 
     return String.valueOf(cal.getTimeInMillis());
   }  
 

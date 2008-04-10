@@ -5,9 +5,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.toobs.framework.util.constants.PlatformConstants;
-
-
 public class BaseRequest implements IRequest {
   private HttpServletRequest httpRequest;
   HttpServletResponse httpResponse;
@@ -48,6 +45,27 @@ public class BaseRequest implements IRequest {
       paramVal = true;
     }
     return new Boolean(paramVal);
+  }
+
+  public Object getParam(String paramName) {
+    return this.params.get(paramName);
+  }
+
+  public String getString(String paramName) {
+    Object param = this.params.get(paramName);
+    if (param != null && param.getClass().isArray()) {
+      param = ((Object[])param)[0];
+    }
+    return (String)param;
+  }
+
+  public String[] getStringArray(String paramName) {
+    Object param = this.params.get(paramName);
+    if (param != null && param.getClass().isArray()) {
+      return (String[])param;
+    } else {
+      return new String[] {(String)param};
+    }
   }
 
   public HttpServletResponse getHttpResponse() {
