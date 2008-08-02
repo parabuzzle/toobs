@@ -1,0 +1,131 @@
+<project basedir="." default="all" name="PresentaionFramework">
+
+<import file="../build_common.xml" />
+
+<!-- ========== Executable Targets ======================================== -->
+
+  <target name="project_init" description="Initialize environment" >
+      <property name="component.name" value="presentation"/>
+      <property name="component.package" value="org.toobs.framework.pres"/>
+      <property name="component.title" value="Presentation Layer Framework"/>
+      <property name="component.version" value="0.1"/>
+  
+      <!-- specify own directory with generated sources-->
+      <property name="source.path" value="src;${toobs.staging.home}/gensrc/${component.name}/src"/>
+  
+      <path id="project.lib.classpath">
+      </path>
+    </target>
+
+  <target name="project_prepare" depends="gen_component_config, gen_complayout_config, gen_doit_config, gen_chart_config" description="Component Config"/>
+
+  <target name="gen_component_config" description="generate component config source from componentConfig.xsd">
+    <property name="cc.xsd" value="${basedir}/xsd/componentConfig.xsd"/>
+    <outofdate>
+      <sourcefiles>
+        <pathelement location="${cc.xsd}"/>
+      </sourcefiles>
+      <targetfiles>
+        <pathelement location="${gensrc}/src/org/toobs/framework/pres/component/config"/>
+      </targetfiles>
+      <sequential>
+        <mkdir dir="${gensrc}"/>
+        <echo>xsd file: ${cc.xsd}</echo>
+        <java fork="true" classname="org.exolab.castor.builder.SourceGeneratorMain">
+          <arg value="-i"/>
+          <arg value="${cc.xsd}"/>
+          <arg value="-package"/>
+          <arg value="org.toobs.framework.pres.component.config"/>
+          <arg value="-dest"/>
+          <arg value="${gensrc}/src"/>
+          <arg value="-f"/>
+          <classpath refid="lib.classpath"/>
+        </java>
+      </sequential>
+    </outofdate>
+  </target>
+
+  <target name="gen_doit_config" description="generate doit config source from doItConfig.xsd">
+    <property name="di.xsd" value="${basedir}/xsd/doItConfig.xsd"/>
+    <outofdate>
+      <sourcefiles>
+        <pathelement location="${di.xsd}"/>
+      </sourcefiles>
+      <targetfiles>
+        <pathelement location="${gensrc}/src/org/toobs/framework/pres/doit/config"/>
+      </targetfiles>
+      <sequential>
+        <mkdir dir="${gensrc}"/>
+        <echo>xsd file: ${di.xsd}</echo>
+        <java fork="true" classname="org.exolab.castor.builder.SourceGeneratorMain">
+          <arg value="-i"/>
+          <arg value="${di.xsd}"/>
+          <arg value="-binding-file"/>
+          <arg value="xsd/compBinding.xml"/>
+          <arg value="-package"/>
+          <arg value="org.toobs.framework.pres.doit.config"/>
+          <arg value="-dest"/>
+          <arg value="${gensrc}/src"/>
+          <arg value="-f"/>
+          <classpath refid="lib.classpath"/>
+        </java>
+      </sequential>
+    </outofdate>
+  </target>
+
+  <target name="gen_complayout_config" description="generate component layout config source from componentLayoutConfig.xsd">
+    <property name="clc.xsd" value="${basedir}/xsd/componentLayoutConfig.xsd"/>
+    <outofdate>
+      <sourcefiles>
+        <pathelement location="${clc.xsd}"/>
+      </sourcefiles>
+      <targetfiles>
+        <pathelement location="${gensrc}/src/org/toobs/framework/pres/componentlayout/config"/>
+      </targetfiles>
+      <sequential>
+        <mkdir dir="${gensrc}"/>
+        <echo>xsd file: ${clc.xsd}</echo>
+        <java fork="true" classname="org.exolab.castor.builder.SourceGeneratorMain">
+          <arg value="-i"/>
+          <arg value="${clc.xsd}"/>
+          <arg value="-binding-file"/>
+          <arg value="xsd/compBinding.xml"/>
+          <arg value="-package"/>
+          <arg value="org.toobs.framework.pres.componentlayout.config"/>
+          <arg value="-dest"/>
+          <arg value="${gensrc}/src"/>
+          <arg value="-f"/>
+          <classpath refid="lib.classpath"/>
+        </java>
+      </sequential>
+    </outofdate>
+  </target>
+
+  <target name="gen_chart_config" description="generate chart config source from chartConfig.xsd">
+    <property name="chc.xsd" value="${basedir}/xsd/chartConfig.xsd"/>
+    <outofdate>
+      <sourcefiles>
+        <pathelement location="${chc.xsd}"/>
+      </sourcefiles>
+      <targetfiles>
+        <pathelement location="${gensrc}/src/org/toobs/framework/pres/chart/config"/>
+      </targetfiles>
+      <sequential>
+        <mkdir dir="${gensrc}"/>
+        <echo>xsd file: ${chc.xsd}</echo>
+        <java fork="true" classname="org.exolab.castor.builder.SourceGeneratorMain">
+          <arg value="-i"/>
+          <arg value="${chc.xsd}"/>
+          <arg value="-binding-file"/>
+          <arg value="xsd/compBinding.xml"/>
+          <arg value="-package"/>
+          <arg value="org.toobs.framework.pres.chart.config"/>
+          <arg value="-dest"/>
+          <arg value="${gensrc}/src"/>
+          <arg value="-f"/>
+          <classpath refid="lib.classpath"/>
+        </java>
+      </sequential>
+    </outofdate>
+  </target>
+</project>

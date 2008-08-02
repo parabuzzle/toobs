@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="build" name="Main">
+  <property name="thirdparty.home" value="${basedir}/../third"/>
+  <property name="toobs.version"   value="0.1"/>
+
+  <!-- ================================================================================
+    Target: all
+    Cleans, Builds and deploys All sites.
+  ================================================================================= -->
+  <target name="all" depends="clean, build"/>
+  
+  <target name="build" description="Builds/Deploys all sites.">
+    <ant dir="Platform"          target="all"/>
+  </target>
+
+  <target name="clean" description="Undeploys and cleans all sites" >
+    <ant dir="Platform"          target="clean"/>
+  </target>
+
+  <target name="cleanout" description="Undeploys and cleans all sites" >
+    <ant dir="Platform"          target="cleanout"/>
+  </target>
+
+  <target name="delDS">
+    <delete includeemptydirs="true">
+      <fileset dir="." defaultexcludes="no">
+        <include name="**/.DS_Store/" />
+      </fileset>
+    </delete>
+  </target>
+</project>

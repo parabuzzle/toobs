@@ -1,0 +1,16 @@
+<project basedir="." default="dist" name="BusinessLogic">
+
+<!-- ========== Executable Targets ======================================== -->
+
+  <target name="project_init" description="Initialize environment" >
+
+    <property name="component.name" value="script"/>
+    <property name="component.package" value="org.toobs.framework.biz"/>
+    <property name="component.title" value="Business Logic Framework"/>
+    <property name="component.version" value="0.1"/>
+
+  </target>
+  
+  <import file="../build_common.xml" />
+
+</project>
