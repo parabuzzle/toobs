@@ -1,7 +1,7 @@
 package org.toobsframework.pres.client;
 
 import org.toobsframework.client.ClientConfiguration;
-import org.toobsframework.pres.doit.IDoItManager;
+import org.toobsframework.pres.doit.manager.IDoItManager;
 
 
 public class DoItConfiguration extends ClientConfiguration {

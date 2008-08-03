@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    	 xmlns:aop="http://www.springframework.org/schema/aop" 
+    	 xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    	 http://www.springframework.org/schema/beans/spring-beans-2.0.xsd 
+    	 http://www.springframework.org/schema/aop 
+    	 http://www.springframework.org/schema/aop/spring-aop-2.0.xsd"> 
+
+	<!-- Use AOP to inject classes into classes not instantiated by Spring -->
+	<aop:spring-configured/>
+
+  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName"><value>com.mysql.jdbc.Driver</value></property>
+    <property name="username"><value>toobs_test</value></property>
+    <property name="password"><value>toobs_test</value></property>
+    <property name="url"><value>jdbc:mysql://localhost/toobs_test</value></property>
+  </bean>
+  <!-- JNDI DataSource for J2EE environments
+  <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+    <property name="jndiName"><value>java:/toobs</value></property>
+  </bean>
+  -->
+  
+  <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+    <property name="dataSource"><ref bean="dataSource"/></property>
+    <!-- 
+    <property name="mappingJarLocations">
+      <list>
+        <value>mappings.jar</value>
+      </list>
+    </property>
+    -->
+    <property name="mappingResources">
+      <list>
+        <value>mappings/Person.hbm.xml</value>
+      </list>
+    </property>
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.show_sql">false</prop>
+        <prop key="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</prop>
+        <prop key="hibernate.hbm2ddl.auto">update</prop>
+        <prop key="hibernate.cache.use_query_cache">false</prop>
+        <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+        <prop key="hibernate.cache.query_cache_factory">org.hibernate.cache.StandardQueryCacheFactory</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory"><ref bean="sessionFactory"/></property>
+  </bean>
+  <!-- 
+  <bean id="transactionManager" class="org.springframework.transaction.jta.JtaTransactionManager">
+    <property name="userTransactionName"><null/></property>
+    <property name="transactionManagerName"><value>java:/TransactionManager</value></property>
+  </bean>
+  -->
+  
+  <!-- Service Transactional Interceptor -->
+  <bean id="serviceTransactionInterceptor"
+    class="org.springframework.transaction.interceptor.TransactionInterceptor">
+    <property name="transactionManager">
+      <ref bean="transactionManager"/>
+    </property>
+    <property name="transactionAttributeSource">
+      <value>
+        org.toobsframework.pres.spring.multipart.MultipartController.resolveMultipart=PROPAGATION_REQUIRED,-Exception
+        org.toobsframework.pres.doit.controller.IDoItHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception
+        org.toobsframework.pres.layout.controller.IComponentLayoutHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception,readOnly
+        org.toobsframework.pres.component.controller.IComponentViewHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception,readOnly
+        org.toobsframework.pres.chart.controller.IChartHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception,readOnly
+        org.toobsframework.pres.attachment.controller.IAttachmentHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception,readOnly
+      </value>
+    </property>
+  </bean>
+
+  <!-- 
+  <bean id="LayoutSecurity" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target">
+      <bean class="org.example.impl.security.LayoutSecurityImpl">
+        <property name="requestManager" ref="componentRequestManager"/>
+      </bean>
+    </property>
+    <property name="proxyInterfaces" value="org.toobsframework.pres.security.IComponentSecurity"/>
+  </bean>
+  -->
+
+  <!-- 
+  <bean id="IMultipartResolver" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target">
+      <bean class="org.example.impl.multipart.MultipartResolverImpl"/>
+    </property>
+    <property name="proxyInterfaces">
+      <value>org.toobsframework.pres.spring.multipart.IMultipartResolver</value>
+    </property>
+    <property name="interceptorNames">
+      <list>
+        <value>serviceTransactionInterceptor</value>
+      </list>
+    </property>
+  </bean>
+  -->
+
+  <bean id="IComponentLayoutHandler" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target">
+      <bean class="org.toobsframework.pres.layout.controller.ComponentLayoutHandler">
+        <property name="componentLayoutManager"  ref="IComponentLayoutManager"/>
+        <property name="componentRequestManager" ref="componentRequestManager"/>
+        <!-- <property name="layoutSecurity"          ref="LayoutSecurity"/> -->
+      </bean>
+    </property>
+    <property name="proxyInterfaces" value="org.toobsframework.pres.layout.controller.IComponentLayoutHandler"/>
+    <property name="interceptorNames">
+      <list>
+        <value>serviceTransactionInterceptor</value>
+      </list>
+    </property>
+  </bean>
+  
+  <bean id="IComponentViewHandler" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target">
+      <bean class="org.toobsframework.pres.component.controller.ComponentViewHandler">
+        <property name="componentManager" ref="IComponentManager"/>
+        <property name="componentRequestManager" ref="componentRequestManager"/>
+      </bean>
+    </property>
+    <property name="proxyInterfaces">
+      <value>org.toobsframework.pres.component.controller.IComponentViewHandler</value>
+    </property>
+    <property name="interceptorNames">
+      <list>
+        <value>serviceTransactionInterceptor</value>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="IChartHandler" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target">
+      <bean class="org.toobsframework.pres.chart.controller.ChartHandler">
+        <property name="chartManager" ref="IChartManager"/>
+        <property name="chartBuilder" ref="chartBuilder"/>
+        <property name="componentRequestManager" ref="componentRequestManager"/>
+      </bean>
+    </property>
+    <property name="proxyInterfaces">
+      <value>org.toobsframework.pres.chart.controller.IChartHandler</value>
+    </property>
+    <property name="interceptorNames">
+      <list>
+        <value>serviceTransactionInterceptor</value>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="IDoItHandler" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target">
+      <bean class="org.toobsframework.pres.doit.controller.DoItHandler">
+        <property name="doItManager" ref="IDoItManager"/>
+        <property name="doItRunner"  ref="IDoItRunner"/>
+        <property name="componentRequestManager" ref="componentRequestManager"/>
+      </bean>
+    </property>
+    <property name="proxyInterfaces">
+      <value>org.toobsframework.pres.doit.controller.IDoItHandler</value>
+    </property>
+    <property name="interceptorNames">
+      <list>
+        <value>serviceTransactionInterceptor</value>
+      </list>
+    </property>
+  </bean>
+  
+  <!-- 
+  <bean id="IAttachmentHandler" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target">
+      <bean class="org.example.impl.attachment.AttachmentHandler">
+        <property name="componentRequestManager" ref="componentRequestManager"/>
+      </bean>
+    </property>
+    <property name="proxyInterfaces" value="org.toobsframework.pres.attachment.controller.IAttachmentHandler"/>
+    <property name="interceptorNames">
+      <list>
+        <value>serviceTransactionInterceptor</value>
+      </list>
+    </property>
+  </bean>
+  -->
+
+  <bean id="IComponentLayoutManager" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target">
+      <bean class="org.toobsframework.pres.layout.manager.ComponentLayoutManager">
+        <property name="configFiles">
+          <list>
+            <value>clc/example-base.clc.xml</value>
+            <value>clc/example-app.clc.xml</value>
+          </list>
+        </property>
+      </bean>
+    </property>
+    <property name="proxyInterfaces">
+      <value>org.toobsframework.pres.layout.manager.IComponentLayoutManager</value>
+    </property>
+  </bean>
+  
+  <bean id="IComponentManager" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target">
+      <bean class="org.toobsframework.pres.component.manager.ComponentManager">
+        <property name="defaultDatasource" ref="DefaultDatasource"/>
+        <property name="configFiles">
+          <list>
+            <value>cc/example-base.cc.xml</value>
+            <value>cc/example-app.cc.xml</value>
+          </list>
+        </property>
+      </bean>
+    </property>
+    <property name="proxyInterfaces">
+      <value>org.toobsframework.pres.component.manager.IComponentManager</value>
+    </property>
+  </bean>
+  
+  <bean id="IChartManager" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target">
+      <bean class="org.toobsframework.pres.chart.manager.ChartManager">
+        <property name="configFiles">
+          <list>
+            <value>chc/example.chc.xml</value>
+          </list>
+        </property>
+      </bean>
+    </property>
+    <property name="proxyInterfaces">
+      <value>org.toobsframework.pres.chart.manager.IChartManager</value>
+    </property>
+  </bean>
+
+  <bean id="chartBuilder" class="org.toobsframework.pres.chart.ChartBuilder" scope="singleton">
+    <property name="datasource" ref="DefaultDatasource"/>
+  </bean>
+  <bean id="AjaxURLFragment" class="org.jfree.chart.imagemap.AjaxURLFragment" scope="singleton"/>
+
+  <bean id="IDoItManager" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target">
+      <bean class="org.toobsframework.pres.doit.manager.DoItManager">
+        <property name="configFiles">
+          <list>
+            <value>doit/example.doit.xml</value>
+          </list>
+        </property>
+      </bean>
+    </property>
+    <property name="proxyInterfaces">
+      <value>org.toobsframework.pres.doit.manager.IDoItManager</value>
+    </property>
+  </bean>
+
+  <!-- DoItRunner Proxy with inner DoItRunner implementation -->
+  <bean id="IDoItRunner" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target">
+      <bean class="org.toobsframework.pres.doit.DoItRunner">
+        <property name="componentRequestManager" ref="componentRequestManager"/>
+      </bean>
+    </property>
+    <property name="proxyInterfaces">
+      <value>org.toobsframework.pres.doit.IDoItRunner</value>
+    </property>
+    <property name="interceptorNames">
+      <list>
+        <value>serviceTransactionInterceptor</value>
+      </list>
+    </property>
+  </bean>
+  
+  <bean id="DefaultDatasource" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target">
+      <bean class="org.toobsframework.pres.component.datasource.impl.DataSourceImpl">
+        <property name="scriptManager">
+          <ref bean="scriptService"/>
+        </property>
+      </bean>
+    </property>
+    <property name="proxyInterfaces">
+      <value>org.toobsframework.pres.component.datasource.api.IDataSource</value>
+    </property>
+  </bean>
+  
+  <!-- ScriptService Service Proxy with inner ProfileService Service Implementation -->
+  <bean id="scriptService" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target">
+      <bean class="org.toobsframework.biz.scriptmanager.ScriptServiceImpl">
+        <property name="doReload" value="true"/>
+      </bean>
+    </property>
+    <property name="proxyInterfaces">
+      <value>org.toobsframework.biz.scriptmanager.IScriptManager</value>
+    </property>
+  </bean>
+
+  <bean id="componentRequestManager" class="org.toobsframework.pres.util.ComponentRequestManager"/>
+
+</beans>

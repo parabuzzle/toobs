@@ -38,9 +38,11 @@ public class ContextListener extends org.springframework.web.context.ContextLoad
     ContextHelper.getInstance().setWebApplicationContext(webApplicationContext);
     
     context = event.getServletContext();
-    scheduler = (AppScheduler)webApplicationContext.getBean("appScheduler");
-    //scheduler = new AppScheduler();
-    scheduler.init();
+    if (webApplicationContext.containsBean("appScheduler")) {
+      scheduler = (AppScheduler)webApplicationContext.getBean("appScheduler");
+      //scheduler = new AppScheduler();
+      scheduler.init();
+    }
     log.info("Context " + context.getServletContextName() + " initialized");
   }
 

@@ -1,7 +1,7 @@
 package org.toobsframework.pres.client;
 
 import org.toobsframework.client.ClientConfiguration;
-import org.toobsframework.pres.component.IComponentLayoutManager;
+import org.toobsframework.pres.layout.manager.IComponentLayoutManager;
 
 
 public class ComponentLayoutConfiguration extends ClientConfiguration {

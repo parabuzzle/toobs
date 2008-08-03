@@ -20,15 +20,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.toobsframework.pres.component.config.Parameter;
+import org.toobsframework.pres.component.manager.IComponentManager;
 
 import org.toobsframework.data.beanutil.BeanMonkey;
 import org.toobsframework.pres.chart.ChartBuilder;
 import org.toobsframework.pres.chart.ChartDefinition;
-import org.toobsframework.pres.chart.IChartManager;
+import org.toobsframework.pres.chart.manager.IChartManager;
 import org.toobsframework.pres.component.Component;
-import org.toobsframework.pres.component.IComponentLayoutManager;
-import org.toobsframework.pres.component.IComponentManager;
 import org.toobsframework.pres.component.Transform;
+import org.toobsframework.pres.layout.manager.IComponentLayoutManager;
 import org.toobsframework.pres.util.ComponentRequestManager;
 import org.toobsframework.pres.util.ParameterUtil;
 import org.toobsframework.pres.util.PresConstants;

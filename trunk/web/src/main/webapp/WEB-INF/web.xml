@@ -1,2 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app version="2.4" 
+  xmlns="http://java.sun.com/xml/ns/j2ee" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+  http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+  
+  <display-name>Toobs Example</display-name>
+  
+  <description>Toobs Example Web App</description>
+  
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:localContext.xml</param-value>
+  </context-param>
+  <context-param>
+    <param-name>locatorFactorySelector</param-name>
+    <param-value>classpath:beanRefFactory.xml</param-value>
+  </context-param>
+  <context-param>
+    <param-name>parentContextKey</param-name>
+    <param-value>beanRefFactory</param-value>
+  </context-param>
+  
+  <filter>
+    <filter-name>PDFExportFilter</filter-name>
+    <filter-class>org.toobsframework.servlet.filters.export.PDFExportFilter</filter-class>
+  </filter>
+  
+  <filter>
+    <filter-name>RTFExportFilter</filter-name>
+    <filter-class>org.toobsframework.servlet.filters.export.RTFExportFilter</filter-class>
+  </filter>
+  
+  <filter>
+    <filter-name>XLSExportFilter</filter-name>
+    <filter-class>org.toobsframework.servlet.filters.export.XLSExportFilter</filter-class>
+  </filter>
+  
+  <!-- PDF filter mapping -->
+  <filter-mapping>
+    <filter-name>PDFExportFilter</filter-name>
+    <url-pattern>*.xpdf</url-pattern>
+  </filter-mapping>
+  
+  <!-- RTF filter mapping -->
+  <filter-mapping>
+    <filter-name>RTFExportFilter</filter-name>
+    <url-pattern>*.xrtf</url-pattern>
+  </filter-mapping>
+  
+  <!-- XLS filter mapping -->
+  <filter-mapping>
+    <filter-name>XLSExportFilter</filter-name>
+    <url-pattern>*.xxls</url-pattern>
+  </filter-mapping>
+  
+  <listener>	
+    <listener-class>org.toobsframework.servlet.ContextListener</listener-class>
+  </listener>
+  
+  <servlet>
+    <servlet-name>toobs</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>toobs</servlet-name>
+    <url-pattern>*.xhtml</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>toobs</servlet-name>
+    <url-pattern>*.xcomp</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>toobs</servlet-name>
+    <url-pattern>*.xpost</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>toobs</servlet-name>
+    <url-pattern>*.xchart</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>toobs</servlet-name>
+    <url-pattern>*.xpdf</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>toobs</servlet-name>
+    <url-pattern>*.xrtf</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>toobs</servlet-name>
+    <url-pattern>*.xxls</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>toobs</servlet-name>
+    <url-pattern>/attachment/*</url-pattern>
+  </servlet-mapping>
+  
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list> 
+  
+</web-app>

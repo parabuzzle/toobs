@@ -1,7 +1,7 @@
 package org.toobsframework.pres.client;
 
 import org.toobsframework.client.ClientConfiguration;
-import org.toobsframework.pres.chart.IChartManager;
+import org.toobsframework.pres.chart.manager.IChartManager;
 
 
 public class ChartConfiguration extends ClientConfiguration {
