@@ -25,7 +25,7 @@
   					</goals>
 					<configuration>
 					  <schema>PresFramework/src/main/castor/componentConfig.xsd</schema>
-					  <packaging>org.toobs.framework.pres.component.config</packaging>
+					  <packaging>org.toobsframework.pres.component.config</packaging>
 					</configuration>
   				</execution>
   				<execution>
@@ -36,7 +36,7 @@
   					</goals>
 					<configuration>
 					  <schema>PresFramework/src/main/castor/componentLayoutConfig.xsd</schema>
-					  <packaging>org.toobs.framework.pres.componentlayout.config</packaging>
+					  <packaging>org.toobsframework.pres.componentlayout.config</packaging>
 					  <bindingfile>PresFramework/src/main/castor/compBinding.xml</bindingfile>
 					</configuration>
   				</execution>
@@ -48,7 +48,7 @@
   					</goals>
 					<configuration>
 					  <schema>PresFramework/src/main/castor/doItConfig.xsd</schema>
-					  <packaging>org.toobs.framework.pres.doit.config</packaging>
+					  <packaging>org.toobsframework.pres.doit.config</packaging>
 					  <bindingfile>PresFramework/src/main/castor/compBinding.xml</bindingfile>
 					</configuration>
   				</execution>
@@ -60,7 +60,7 @@
   					</goals>
 					<configuration>
 					  <schema>PresFramework/src/main/castor/chartConfig.xsd</schema>
-					  <packaging>org.toobs.framework.pres.chart.config</packaging>
+					  <packaging>org.toobsframework.pres.chart.config</packaging>
 					  <bindingfile>PresFramework/src/main/castor/compBinding.xml</bindingfile>
 					</configuration>
   				</execution>
