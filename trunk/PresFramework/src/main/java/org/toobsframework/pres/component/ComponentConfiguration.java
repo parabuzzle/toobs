@@ -1,4 +1,4 @@
-package org.toobsframework.pres.client;
+package org.toobsframework.pres.component;
 
 import org.toobsframework.client.ClientConfiguration;
 import org.toobsframework.pres.component.manager.IComponentManager;

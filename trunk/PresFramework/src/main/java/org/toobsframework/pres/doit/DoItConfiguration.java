@@ -1,4 +1,4 @@
-package org.toobsframework.pres.client;
+package org.toobsframework.pres.doit;
 
 import org.toobsframework.client.ClientConfiguration;
 import org.toobsframework.pres.doit.manager.IDoItManager;
