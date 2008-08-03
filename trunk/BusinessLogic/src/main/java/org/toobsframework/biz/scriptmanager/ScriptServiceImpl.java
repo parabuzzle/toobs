@@ -1,4 +1,4 @@
-package org.toobs.framework.biz.scriptmanager;
+package org.toobsframework.biz.scriptmanager;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,8 +25,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.orm.hibernate3.SessionFactoryUtils;
-import org.toobs.framework.exception.PermissionException;
-import org.toobs.framework.exception.ValidationException;
+import org.toobsframework.exception.PermissionException;
+import org.toobsframework.exception.ValidationException;
 
 
 @SuppressWarnings("unchecked")

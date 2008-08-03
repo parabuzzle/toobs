@@ -1,6 +1,6 @@
-package org.toobs.framework.biz.scriptmanager;
+package org.toobsframework.biz.scriptmanager;
 
-import org.toobs.framework.exception.BaseException;
+import org.toobsframework.exception.BaseException;
 
 public class ScriptException extends BaseException {
 
