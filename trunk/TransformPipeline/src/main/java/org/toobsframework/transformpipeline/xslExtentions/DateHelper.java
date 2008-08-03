@@ -1,9 +1,9 @@
-package org.toobs.framework.transformpipeline.xslExtentions;
+package org.toobsframework.transformpipeline.xslExtentions;
 
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
-import org.toobs.framework.transformpipeline.domain.XMLTransformerException;
-import org.toobs.framework.util.Configuration;
+import org.toobsframework.transformpipeline.domain.XMLTransformerException;
+import org.toobsframework.util.Configuration;
 
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;

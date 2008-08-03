@@ -1,4 +1,4 @@
-package org.toobs.framework.transformpipeline.domain;
+package org.toobsframework.transformpipeline.domain;
 
 import java.io.File;
 import java.io.IOException;

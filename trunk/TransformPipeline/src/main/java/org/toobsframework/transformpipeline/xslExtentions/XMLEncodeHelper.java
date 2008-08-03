@@ -1,12 +1,12 @@
-package org.toobs.framework.transformpipeline.xslExtentions;
+package org.toobsframework.transformpipeline.xslExtentions;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.toobs.framework.transformpipeline.domain.XMLTransformerException;
-import org.toobs.framework.util.string.StringResource;
+import org.toobsframework.transformpipeline.domain.XMLTransformerException;
+import org.toobsframework.util.string.StringResource;
 
 
 

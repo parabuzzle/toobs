@@ -1,6 +1,6 @@
-package org.toobs.framework.transformpipeline.domain;
+package org.toobsframework.transformpipeline.domain;
 
-import org.toobs.framework.exception.BaseException;
+import org.toobsframework.exception.BaseException;
 
 public class XMLTransformerException extends BaseException {
   /**

@@ -1,11 +1,11 @@
-package org.toobs.framework.transformpipeline.domain;
+package org.toobsframework.transformpipeline.domain;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Properties;
 
 import org.apache.xml.serializer.OutputPropertiesFactory;
-import org.toobs.framework.util.Configuration;
+import org.toobsframework.util.Configuration;
 
 
 @SuppressWarnings("unchecked")
@@ -20,15 +20,15 @@ public class XMLTransformerFactory implements Serializable {
       new XMLTransformerFactory();
 
   /** Holds Constant for Dynamic Transformer */
-  public static final String DYNAMIC_XSL = "org.toobs.framework.transformpipeline.domain.StaticXSLTransformer";
+  public static final String DYNAMIC_XSL = "org.toobsframework.transformpipeline.domain.StaticXSLTransformer";
   /** Holds Constant for Static Transformer */
-  public static final String STATIC_XSL = "org.toobs.framework.transformpipeline.domain.StaticXSLTransformer";
+  public static final String STATIC_XSL = "org.toobsframework.transformpipeline.domain.StaticXSLTransformer";
   /** Holds Constant for Translet Transformer */
-  public static final String TRANSLET_XSL = "org.toobs.framework.transformpipeline.domain.TransletTransformer";
+  public static final String TRANSLET_XSL = "org.toobsframework.transformpipeline.domain.TransletTransformer";
 
-  public static final String CHAIN_XSL = "org.toobs.framework.transformpipeline.domain.ChainedXSLTransformer";
+  public static final String CHAIN_XSL = "org.toobsframework.transformpipeline.domain.ChainedXSLTransformer";
 
-  public static final String TRANSLET_CHAIN_XSL = "org.toobs.framework.transformpipeline.domain.ChainedXSLTransletTransformer";
+  public static final String TRANSLET_CHAIN_XSL = "org.toobsframework.transformpipeline.domain.ChainedXSLTransletTransformer";
 
   public static final String OUTPUT_FORMAT_XML = "xml";
 

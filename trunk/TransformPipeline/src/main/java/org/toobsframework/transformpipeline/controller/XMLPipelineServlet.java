@@ -1,4 +1,4 @@
-package org.toobs.framework.transformpipeline.controller;
+package org.toobsframework.transformpipeline.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
-import org.toobs.framework.transformpipeline.domain.IXMLTransformer;
-import org.toobs.framework.transformpipeline.domain.XMLTransformerException;
-import org.toobs.framework.transformpipeline.domain.XMLTransformerFactory;
+import org.toobsframework.transformpipeline.domain.IXMLTransformer;
+import org.toobsframework.transformpipeline.domain.XMLTransformerException;
+import org.toobsframework.transformpipeline.domain.XMLTransformerFactory;
 
 import java.util.Vector;
 import javax.xml.transform.stream.StreamSource;

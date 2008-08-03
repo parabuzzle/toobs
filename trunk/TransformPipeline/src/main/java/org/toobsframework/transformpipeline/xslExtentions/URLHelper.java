@@ -1,8 +1,8 @@
-package org.toobs.framework.transformpipeline.xslExtentions;
+package org.toobsframework.transformpipeline.xslExtentions;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.toobs.framework.transformpipeline.domain.XMLTransformerException;
+import org.toobsframework.transformpipeline.domain.XMLTransformerException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 

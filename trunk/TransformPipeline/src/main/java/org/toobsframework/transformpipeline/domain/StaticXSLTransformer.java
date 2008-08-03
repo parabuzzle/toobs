@@ -1,4 +1,4 @@
-package org.toobs.framework.transformpipeline.domain;
+package org.toobsframework.transformpipeline.domain;
 
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
