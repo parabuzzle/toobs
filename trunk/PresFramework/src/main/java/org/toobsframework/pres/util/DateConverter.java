@@ -1,4 +1,4 @@
-package org.toobsframework.pres.component.util;
+package org.toobsframework.pres.util;
 
 import java.util.Date;
 

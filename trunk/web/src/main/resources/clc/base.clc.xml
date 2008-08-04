@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layouts xmlns="clc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="clc
+  file:../../../../../PresFramework/src/main/castor/componentLayoutConfig.xsd" fullReload="true">
+  
+  <!--****************************-->
+  <!--**     Base templates     **-->
+  <!--****************************-->
+  
+  <Layout id="basePopup">
+    <Section id="head">
+      <ComponentRef componentId="standardHead" highlightForAdKeywords="false"/>
+    </Section>
+    <Pipeline xmlns="cc">
+      <ContentType contentType="xhtml">
+        <Transform xmlns="cc" transformName="layout/standardPopup"/>
+      </ContentType>
+    </Pipeline>
+  </Layout>
+
+  <Layout id="baseTemplate">
+    <Section id="head">
+      <ComponentRef componentId="standardHead" highlightForAdKeywords="false"/>
+    </Section>
+    <Section id="header">
+      <ComponentRef componentId="standardHeader" highlightForAdKeywords="false"/>
+    </Section>
+    <Section id="footer">
+      <ComponentRef componentId="standardFooter" highlightForAdKeywords="false"/>
+    </Section>
+    <Pipeline xmlns="cc">
+      <ContentType contentType="xhtml">
+        <Transform xmlns="cc" transformName="layout/layoutManager">
+          <Parameters>
+            <Parameter name="pageAccess"  path="pageAccess"/>
+            <Parameter name="layoutId"    path="layoutId"/>
+            <Parameter name="personId"    path="personId"/>
+            <Parameter name="hideMenu"    path="hideMenu" default="false"/>
+            <Parameter name="appContext"  path="appContext" ignoreNull="true"/>
+            <Parameter name="layoutStyle" path="layoutStyle" default="standardLayout"/>
+            <Parameter name="toobs.debug" path="#toobs.debug" isStatic="true"/>
+          </Parameters>
+        </Transform>
+      </ContentType>
+    </Pipeline>
+  </Layout>
+
+  <Layout id="standardTemplate" extends="baseTemplate" noAccessLayout="NoPageAccessDefault">
+    <Section id="menu">
+      <ComponentRef componentId="standardMenu" highlightForAdKeywords="false"/>
+    </Section>
+  </Layout>
+  
+  <Layout id="componentStack"><!--  useComponentScan="true" -->
+    <Pipeline xmlns="cc">
+      <ContentType contentType="xhtml">
+        <Transform xmlns="cc" transformName="layout/componentStack"/>
+      </ContentType>
+    </Pipeline>
+  </Layout>
+  
+  <Layout id="NoPageAccessDefault" extends="standardTemplate">
+    <Parameters xmlns="cc">
+      <Parameter xmlns="cc" name="pageTitle" path="No Access" isStatic="true"/>
+    </Parameters>
+    <Section id="content" type="wide" order="0">
+      <ComponentRef componentId="noPageAccess" />
+    </Section>
+  </Layout>
+
+  <Layout id="FeatureNotEnabled" extends="standardTemplate">
+    <Parameters xmlns="cc">
+      <Parameter xmlns="cc" name="pageTitle" path="Feature Not Enabled" isStatic="true"/>
+    </Parameters>
+    <Section id="content" type="wide" order="0">
+      <ComponentRef componentId="featureNotEnabled" />
+    </Section>
+  </Layout>
+  
+  <Layout id="HomePage" extends="standardTemplate">
+    <Parameters xmlns="cc">
+      <Parameter xmlns="cc" name="pageTitle" path="Home" isStatic="true"/>
+    </Parameters>
+    <Section id="content" type="wide" order="0">
+      <ComponentRef componentId="HomePage" />
+    </Section>    
+  </Layout>
+  
+    <!--*************************************-->
+  <!--**     Layout Grid Components      **-->
+  <!--*************************************-->
+  
+  <Layout id="twoColumnGrid">
+    <Pipeline xmlns="cc">
+      <ContentType contentType="xhtml">
+        <Transform xmlns="cc" transformName="layout/grids/twoColumnLayout"/>
+      </ContentType>
+    </Pipeline>
+  </Layout>
+  
+  <Layout id="threeColumnGrid">
+    <Pipeline xmlns="cc">
+      <ContentType contentType="xhtml">
+        <Transform xmlns="cc" transformName="layout/grids/threeColumnLayout"/>
+      </ContentType>
+    </Pipeline>
+  </Layout>
+
+
+  <Layout id="popupInclude">
+    <Pipeline xmlns="cc">
+      <ContentType contentType="xhtml">
+        <Transform xmlns="cc" transformName="layout/head/popupInclude"/>
+      </ContentType>
+    </Pipeline>
+  </Layout>
+</Layouts>

@@ -3,7 +3,7 @@
 <xs:schema targetNamespace="cc" xmlns:xs="http://www.w3.org/2001/XMLSchema"
            xmlns:cc="cc" elementFormDefault="qualified"
            attributeFormDefault="unqualified">
- <xs:element name="ComponentConfig">
+ <xs:element name="Components">
   <xs:annotation>
    <xs:documentation>Configuration for components</xs:documentation>
   </xs:annotation>
@@ -69,17 +69,26 @@
  <xs:element name="Transform">
   <xs:complexType>
    <xs:sequence>
-    <xs:element ref="cc:ParameterMapping" minOccurs="0"/>
+    <xs:element ref="cc:Parameters" minOccurs="0"/>
    </xs:sequence>
    <xs:attribute name="transformName" type="xs:string" use="required"/>
    <xs:attribute name="transformType" type="xs:string" use="optional" default="xsl"/>
+    <xs:attribute name="moment" default="normal">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="normal"/>
+          <xs:enumeration value="pre"/>
+          <xs:enumeration value="post"/>
+        </xs:restriction>
+      </xs:simpleType>        
+    </xs:attribute> 
   </xs:complexType>
  </xs:element>
  <xs:element name="GetObject">
   <xs:complexType>
    <xs:sequence>
-    <xs:element ref="cc:ParameterMapping" minOccurs="0"/>
-    <xs:element ref="cc:OutputParameterMapping" minOccurs="0"/>
+    <xs:element ref="cc:Parameters" minOccurs="0"/>
+    <xs:element ref="cc:OutputParameters" minOccurs="0"/>
    </xs:sequence>
    <xs:attribute name="objectAction" use="required" type="xs:string"/>
    <xs:attribute name="daoObject" use="required" type="xs:string"/>
@@ -91,14 +100,14 @@
    <xs:attribute name="noCache" type="xs:boolean" default="false"/>
   </xs:complexType>
  </xs:element>
- <xs:element name="ParameterMapping">
+ <xs:element name="Parameters">
   <xs:complexType>
    <xs:sequence>
     <xs:element ref="cc:Parameter" minOccurs="1" maxOccurs="unbounded"/>
    </xs:sequence>
   </xs:complexType>
  </xs:element>
- <xs:element name="OutputParameterMapping">
+ <xs:element name="OutputParameters">
    <xs:complexType>
      <xs:sequence>
        <xs:element ref="cc:Parameter" minOccurs="1" maxOccurs="unbounded"/>

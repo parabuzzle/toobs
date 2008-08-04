@@ -29,17 +29,17 @@ public class RuntimeLayoutConfig {
     }
   }
 
-  public LinkedHashMap getContentParams() {
+  public LinkedHashMap getTransformParams() {
     return contentParams;
   }
-  public Parameter[] getAllContentParams() {
+  public Parameter[] getAllTransformParams() {
     Parameter[] allParams = new Parameter[contentParams.size()];
     return (Parameter[])contentParams.values().toArray(allParams);
   }
-  public void addContentParam(Parameter param) {
-    addContentParam(new Parameter[] {param});
+  public void addTransformParam(Parameter param) {
+    addTransformParam(new Parameter[] {param});
   }
-  public void addContentParam(Parameter[] param) {
+  public void addTransformParam(Parameter[] param) {
     for (int i = 0; i < param.length; i++) {
       contentParams.put(param[i].getName(), param[i]);
     }

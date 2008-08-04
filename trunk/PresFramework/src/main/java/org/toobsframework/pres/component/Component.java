@@ -111,8 +111,8 @@ public class Component {
       GetObject thisObjDef = objectsConfig[i];
       //Fix the params using the param mapping for 
       //this configuration.
-      if(thisObjDef.getParameterMapping() != null){
-        ParameterUtil.mapParameters("Component:" + this.Id + ":GetObject:" + thisObjDef.getDaoObject(), thisObjDef.getParameterMapping().getParameter(), params, params, this.Id, allObjects);
+      if(thisObjDef.getParameters() != null){
+        ParameterUtil.mapParameters("Component:" + this.Id + ":GetObject:" + thisObjDef.getDaoObject(), thisObjDef.getParameters().getParameter(), params, params, this.Id, allObjects);
       }
 
       ArrayList theseObjects = new ArrayList();
@@ -205,10 +205,10 @@ public class Component {
         }
       }
       ParameterUtil.mapScriptParams(outParams, paramsIn);
-      if(thisObjDef.getOutputParameterMapping() != null){
-        ParameterUtil.mapOutputParameters(thisObjDef.getOutputParameterMapping().getParameter(), paramsIn, this.Id, theseObjects);
+      if(thisObjDef.getOutputParameters() != null){
+        ParameterUtil.mapOutputParameters(thisObjDef.getOutputParameters().getParameter(), paramsIn, this.Id, theseObjects);
         if (paramsOut != null) {
-          ParameterUtil.mapOutputParameters(thisObjDef.getOutputParameterMapping().getParameter(), paramsOut, this.Id, theseObjects);
+          ParameterUtil.mapOutputParameters(thisObjDef.getOutputParameters().getParameter(), paramsOut, this.Id, theseObjects);
         }
       }
       allObjects.addAll(theseObjects);

@@ -1,6 +1,6 @@
 package org.toobsframework.pres.component;
 
-import org.toobsframework.pres.component.config.ParameterMapping;
+import org.toobsframework.pres.component.config.Parameters;
 
 /**
  * @author spudney
@@ -9,7 +9,7 @@ public class Transform {
 
   private String transformType;
   private String transformName;
-  private ParameterMapping transformParams;
+  private Parameters transformParams;
 
   public Transform() {
   }
@@ -17,14 +17,14 @@ public class Transform {
   public Transform(org.toobsframework.pres.component.config.Transform transform) {
     this.transformName = transform.getTransformName();
     this.transformType = transform.getTransformType();
-    this.transformParams = transform.getParameterMapping();
+    this.transformParams = transform.getParameters();
   }
 
-  public ParameterMapping getTransformParams() {
+  public Parameters getTransformParams() {
     return transformParams;
   }
 
-  public void setTransformParams(ParameterMapping transformParams) {
+  public void setTransformParams(Parameters transformParams) {
     this.transformParams = transformParams;
   }
 

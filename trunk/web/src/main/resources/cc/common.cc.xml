@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Components xmlns="cc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="cc
+  file:../../../../../PresFramework/src/main/castor/componentConfig.xsd">
+  
+  <Component id="PleaseSelectPopup">
+    <Pipeline>
+      <ContentType contentType="xhtml">
+        <Transform transformName="common/popup/PleaseSelectPopup">
+          <Parameters>
+            <Parameter name="type" path="type"/>
+          </Parameters>
+        </Transform>
+      </ContentType>
+    </Pipeline>
+  </Component>
+
+</Components>

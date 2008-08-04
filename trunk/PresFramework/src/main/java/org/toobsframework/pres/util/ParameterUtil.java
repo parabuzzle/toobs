@@ -334,7 +334,7 @@ public class ParameterUtil {
     }
   }
   
-  public static void mapDoItInputParameters(Parameter[] paramMap, Map paramsIn, Map paramsOut, boolean useJXPathContext) 
+  public static void mapDoItParameters(Parameter[] paramMap, Map paramsIn, Map paramsOut, boolean useJXPathContext) 
   {
     JXPathContext context = null;
     if(useJXPathContext)

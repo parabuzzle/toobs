@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Components xmlns="cc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="cc
+  file:../../../../../PresFramework/src/main/castor/componentConfig.xsd">
+
+  <!-- ****************************************** -->
+  <!--            Layout definitions              -->
+  <!-- ****************************************** -->
+
+  <Component id="standardHead">
+    <Pipeline>
+      <ContentType contentType="xhtml">
+        <Transform transformName="layout/head/standardHead">
+          <Parameters>
+            <Parameter name="pageTitle" path="pageTitle" ignoreNull="true"/>
+            <Parameter name="toobs.debug" path="#toobs.debug" isStatic="true"/>
+            <Parameter name="deployTime" path="deployTime"/>
+          </Parameters>
+        </Transform>
+      </ContentType>
+    </Pipeline>
+  </Component>
+
+  <Component id="standardHeader">
+    <Pipeline>
+      <ContentType contentType="xhtml">
+        <Transform transformName="layout/header/standardHeader"/>
+      </ContentType>
+    </Pipeline>
+  </Component>
+
+  <Component id="standardFooter">
+    <Pipeline>
+      <ContentType contentType="xhtml">
+        <Transform transformName="layout/footer/standardFooter">
+          <Parameters>
+            <Parameter name="clientName" path="clientName"/>
+          </Parameters>
+        </Transform>
+      </ContentType>
+    </Pipeline>
+  </Component>
+
+  <Component id="noPageAccess">
+    <Pipeline>
+      <ContentType contentType="xhtml">
+        <Transform transformName="layout/security/noPageAccess"/>
+      </ContentType>
+    </Pipeline>
+  </Component>
+
+  <Component id="featureNotEnabled">
+    <Pipeline>
+      <ContentType contentType="xhtml">
+        <Transform transformName="layout/security/featureNotEnabled"/>
+      </ContentType>
+    </Pipeline>
+  </Component>
+  
+</Components>

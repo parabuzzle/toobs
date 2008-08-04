@@ -125,8 +125,8 @@ public final class ChartManager implements IChartManager {
         chartDefinition.setDoImageWithMap(chart.getDoImageWithMap());
         chartDefinition.setUrlFragmentBean(chart.getUrlFragmentBean());
         
-        if (chart.getParameterMapping() != null) {
-          chartDefinition.setParameterMapping(chart.getParameterMapping());
+        if (chart.getParameters() != null) {
+          chartDefinition.setParameters(chart.getParameters());
         }
         if (chart.getTitle() != null) {
           chartDefinition.setTitle(chart.getTitle());

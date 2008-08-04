@@ -174,9 +174,9 @@ public class DoItHandler extends AbstractController implements IDoItHandler {
     }
     
     params = ParameterUtil.buildParameterMap(request);
-    if (forwardDef != null && forwardDef.getQueryParameterMapping() != null) {
+    if (forwardDef != null && forwardDef.getParameters() != null) {
       try {
-        ParameterUtil.mapParameters("Forward:" + forwardDef.getUri(),forwardDef.getQueryParameterMapping().getParameter(), params, forwardParams, doIt.getName());
+        ParameterUtil.mapParameters("Forward:" + forwardDef.getUri(),forwardDef.getParameters().getParameter(), params, forwardParams, doIt.getName());
       } catch (ParameterException e) {
         log.error("Forward Parameter Mapping error " + e.getMessage(), e);
         forwardView = new RedirectView(PresConstants.ERROR_FORWARD, true);
@@ -244,9 +244,9 @@ public class DoItHandler extends AbstractController implements IDoItHandler {
   }
   
   /* (non-Javadoc)
- * @see org.toobsframework.pres.doit.controller.IDoItHandler#getDoItRunner()
- */
-public IDoItRunner getDoItRunner() {
+   * @see org.toobsframework.pres.doit.controller.IDoItHandler#getDoItRunner()
+   */
+  public IDoItRunner getDoItRunner() {
     return doItRunner;
   }
 

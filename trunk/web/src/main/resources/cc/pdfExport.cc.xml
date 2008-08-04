@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Components xmlns="cc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="cc
+  file:../../../../../PresFramework/src/main/castor/componentConfig.xsd">
+  
+  <Component id="PrintOptionsPopup">
+    <Pipeline>
+      <ContentType contentType="xhtml">
+        <Transform transformName="export/PrintOptionsPopup">
+          <Parameters>
+            <Parameter name="printTitle"   path="printTitle" ignoreNull="true"/>
+            <Parameter name="format"       path="format" default="acrobat"/>
+            <Parameter name="component"    path="component"/>
+            <Parameter name="exportURI"    path="exportURI" ignoreNull="true"/>
+            <Parameter name="exportMode"   path="exportMode" ignoreNull="true"/>
+            <Parameter name="firstResult"  path="firstResult" default="0"/>
+            <Parameter name="totalRows"    path="totalRows" default="9999"/>
+            <Parameter name="pageSize"     path="pageSize" default="10"/>
+            <Parameter name="sortOrder"    path="sortOrder" ignoreNull="true"/>
+            <Parameter name="closePopup"   path="closePopup" default="false"/>
+            <Parameter name="showPage"     path="showPage" default="true"/>
+            <Parameter name="showSimple"   path="showSimple" default="false"/>
+            <Parameter name="queryString"  path="httpQueryString"/>
+          </Parameters>
+        </Transform>
+      </ContentType>
+    </Pipeline>
+  </Component>
+
+</Components>  
