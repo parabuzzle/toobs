@@ -1,6 +1,5 @@
 package org.toobsframework.pres.component.manager;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,16 +16,13 @@ import org.toobsframework.pres.component.ComponentException;
 import org.toobsframework.pres.component.ComponentInitializationException;
 import org.toobsframework.pres.component.ComponentNotFoundException;
 import org.toobsframework.pres.component.ComponentNotInitializedException;
-import org.toobsframework.pres.component.Transform;
 import org.toobsframework.pres.component.config.Component;
 import org.toobsframework.pres.component.config.Components;
 import org.toobsframework.pres.component.config.ContentType;
 import org.toobsframework.pres.component.config.DataSourceProperty;
 import org.toobsframework.data.beanutil.converter.DateToStringConverter;
-import org.toobsframework.data.beanutil.converter.StringToDateConverter;
 import org.toobsframework.exception.ParameterException;
 import org.toobsframework.pres.component.datasource.api.IDataSource;
-import org.toobsframework.util.Configuration;
 
 import java.util.Vector;
 import java.util.Enumeration;
@@ -157,7 +153,7 @@ public final class ComponentManager implements IComponentManager {
                   org.toobsframework.pres.component.config.Transform thisTransformConfig = (org.toobsframework.pres.component.config.Transform) transEnum.nextElement();                  
                   org.toobsframework.pres.component.Transform thisTransform = new org.toobsframework.pres.component.Transform();
     
-                  thisTransform.setTransformName(thisTransformConfig.getTransformName());
+                  thisTransform.setTransformName(thisTransformConfig.getName());
                   thisTransform.setTransformParams(thisTransformConfig.getParameters());
     
                   theseTransforms.add(thisTransform);

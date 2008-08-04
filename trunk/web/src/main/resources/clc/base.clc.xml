@@ -7,17 +7,6 @@
   <!--**     Base templates     **-->
   <!--****************************-->
   
-  <Layout id="basePopup">
-    <Section id="head">
-      <ComponentRef componentId="standardHead" highlightForAdKeywords="false"/>
-    </Section>
-    <Pipeline xmlns="cc">
-      <ContentType contentType="xhtml">
-        <Transform xmlns="cc" transformName="layout/standardPopup"/>
-      </ContentType>
-    </Pipeline>
-  </Layout>
-
   <Layout id="baseTemplate">
     <Section id="head">
       <ComponentRef componentId="standardHead" highlightForAdKeywords="false"/>
@@ -30,7 +19,7 @@
     </Section>
     <Pipeline xmlns="cc">
       <ContentType contentType="xhtml">
-        <Transform xmlns="cc" transformName="layout/layoutManager">
+        <Transform xmlns="cc" name="layout/layoutManager">
           <Parameters>
             <Parameter name="pageAccess"  path="pageAccess"/>
             <Parameter name="layoutId"    path="layoutId"/>
@@ -54,7 +43,7 @@
   <Layout id="componentStack"><!--  useComponentScan="true" -->
     <Pipeline xmlns="cc">
       <ContentType contentType="xhtml">
-        <Transform xmlns="cc" transformName="layout/componentStack"/>
+        <Transform xmlns="cc" name="layout/componentStack"/>
       </ContentType>
     </Pipeline>
   </Layout>
@@ -93,7 +82,7 @@
   <Layout id="twoColumnGrid">
     <Pipeline xmlns="cc">
       <ContentType contentType="xhtml">
-        <Transform xmlns="cc" transformName="layout/grids/twoColumnLayout"/>
+        <Transform xmlns="cc" name="layout/grids/twoColumnLayout"/>
       </ContentType>
     </Pipeline>
   </Layout>
@@ -101,7 +90,7 @@
   <Layout id="threeColumnGrid">
     <Pipeline xmlns="cc">
       <ContentType contentType="xhtml">
-        <Transform xmlns="cc" transformName="layout/grids/threeColumnLayout"/>
+        <Transform xmlns="cc" name="layout/grids/threeColumnLayout"/>
       </ContentType>
     </Pipeline>
   </Layout>
@@ -110,7 +99,7 @@
   <Layout id="popupInclude">
     <Pipeline xmlns="cc">
       <ContentType contentType="xhtml">
-        <Transform xmlns="cc" transformName="layout/head/popupInclude"/>
+        <Transform xmlns="cc" name="layout/head/popupInclude"/>
       </ContentType>
     </Pipeline>
   </Layout>

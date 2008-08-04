@@ -15,8 +15,8 @@ public class Transform {
   }
 
   public Transform(org.toobsframework.pres.component.config.Transform transform) {
-    this.transformName = transform.getTransformName();
-    this.transformType = transform.getTransformType();
+    this.transformName = transform.getName();
+    this.transformType = transform.getType();
     this.transformParams = transform.getParameters();
   }
 

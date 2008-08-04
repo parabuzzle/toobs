@@ -6,7 +6,7 @@
   <Component id="PrintOptionsPopup">
     <Pipeline>
       <ContentType contentType="xhtml">
-        <Transform transformName="export/PrintOptionsPopup">
+        <Transform name="export/PrintOptionsPopup">
           <Parameters>
             <Parameter name="printTitle"   path="printTitle" ignoreNull="true"/>
             <Parameter name="format"       path="format" default="acrobat"/>

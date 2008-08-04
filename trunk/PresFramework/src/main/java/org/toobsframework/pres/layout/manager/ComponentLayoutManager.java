@@ -181,7 +181,7 @@ public final class ComponentLayoutManager implements IComponentLayoutManager {
                     org.toobsframework.pres.component.config.Transform thisTransformConfig = (org.toobsframework.pres.component.config.Transform) transEnum.nextElement();                  
                     org.toobsframework.pres.component.Transform thisTransform = new org.toobsframework.pres.component.Transform();
       
-                    thisTransform.setTransformName(thisTransformConfig.getTransformName());
+                    thisTransform.setTransformName(thisTransformConfig.getName());
                     thisTransform.setTransformParams(thisTransformConfig.getParameters());
       
                     theseTransforms.add(thisTransform);

@@ -5,7 +5,7 @@
   <Component id="PleaseSelectPopup">
     <Pipeline>
       <ContentType contentType="xhtml">
-        <Transform transformName="common/popup/PleaseSelectPopup">
+        <Transform name="common/popup/PleaseSelectPopup">
           <Parameters>
             <Parameter name="type" path="type"/>
           </Parameters>

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
@@ -66,10 +67,12 @@ public class Configuration {
   private static Configuration instance = null;
   
   private Properties properties = null;
-  private Properties deployProperties = null;
+  //private Properties deployProperties = null;
+  public static final long deployTime = new Date().getTime();
+
   private Configuration() {
     properties = new Properties();
-    deployProperties = new Properties();
+    //deployProperties = new Properties();
 
     ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
     
@@ -92,7 +95,9 @@ public class Configuration {
       log.warn("Property file " + userProperties + " could not be loaded due to " + e.getMessage(), e);
     }
 
+    /*
     propUrl = classLoader.getResource(DEPLOY_PROP_FILE);
+    
     propFile = new File(propUrl.getFile());
     if (propFile.exists()) {      
       try {
@@ -103,6 +108,7 @@ public class Configuration {
         log.warn("Property file " + DEPLOY_PROP_FILE + " could not be loaded due to " + e.getMessage(), e);
       }
     }
+    */
 
   }
   
@@ -126,7 +132,10 @@ public class Configuration {
   }
   
   public String getMainContext() {
+    /* TODO Fix this
     return deployProperties.getProperty(MAIN_CONTEXT_PROPERTY, DEFAULT_GLOBAL_CONTEXT);
+    */
+    return "/web";
   }
 
   public String getMainHost() {
@@ -202,10 +211,13 @@ public class Configuration {
   }
   
   public long getDeployTime() {
+    /* TODO
     ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
     URL propUrl =  classLoader.getResource(DEPLOY_PROP_FILE);
     File propFile = new File(propUrl.getFile());
     return propFile.lastModified();
+    */
+    return new Date().getTime();
   }
 
   public String getLayoutExtension() {
