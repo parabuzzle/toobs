@@ -1,0 +1,21 @@
+<project basedir="." default="all" name="TransformPipeline">
+
+<!-- ========== Executable Targets ======================================== -->
+
+  <target name="project_init" description="Initialize environment" >
+
+    <property name="component.name" value="tranformpipeline"/>
+    <property name="component.package" value="org.toobs.framework.transformpipeline"/>
+    <property name="component.title" value="Transformation Pipeline framework"/>
+    <property name="component.version" value="0.1"/>
+
+    <!-- specify own directory with generated sources-->
+    <property name="source.path" value="src;"/>
+
+    <path id="project.lib.classpath">
+    </path>
+  </target>
+
+  <import file="../build_common.xml" />
+
+</project>

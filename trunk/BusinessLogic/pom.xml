@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.toobsframework</groupId>
+  <artifactId>businesslogic</artifactId>
+  <name>businesslogic</name>
+  <version>${toobs.version}</version>
+  <description/>
+  <parent>
+  	<artifactId>toobsframework</artifactId>
+  	<groupId>org.toobsframework</groupId>
+  	<version>${toobs.version}</version>
+  </parent>
+  <dependencies>
+  	<dependency>
+  	  <groupId>org.toobsframework</groupId>
+  	  <artifactId>base</artifactId>
+  	  <version>${toobs.version}</version>
+  	</dependency>
+  	<dependency>
+  	  <groupId>rhino</groupId>
+  	  <artifactId>js</artifactId>
+    </dependency>
+  </dependencies>
+</project>

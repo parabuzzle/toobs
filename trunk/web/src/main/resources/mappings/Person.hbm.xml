@@ -1,0 +1,22 @@
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+          
+<hibernate-mapping default-cascade="none">
+  <class name="org.toobsframework.example.data.person.PersonImpl" table="PERSON" dynamic-insert="false" dynamic-update="false">
+    <id name="guid" type="java.lang.String" unsaved-value="null">
+      <column name="GUID" sql-type="VARCHAR(36)"/>
+      <generator class="guid">
+      </generator>
+    </id>
+    <version name="versionInt" column="VERSION_INT" type="int"/>
+    <property name="createTs" type="java.util.Date">
+      <column name="CREATE_TS" not-null="true" unique="false" sql-type="DATETIME"/>
+    </property>
+    <property name="username" type="java.lang.String">
+      <column name="USERNAME" not-null="false" unique="false" sql-type="VARCHAR(255)"/>
+    </property>
+    <property name="password" type="java.lang.String">
+      <column name="PASSWORD" not-null="false" unique="false" sql-type="VARCHAR(255)"/>
+    </property>
+  </class>
+</hibernate-mapping>

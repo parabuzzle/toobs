@@ -1,0 +1,16 @@
+<project basedir="." default="dist" name="util">
+
+<!-- ========== Executable Targets ======================================== -->
+
+  <target name="project_init" description="Initialize environment" >
+
+    <property name="component.name" value="base"/>
+    <property name="component.package" value="org.toobs.framework"/>
+    <property name="component.title" value="platform base Utilities"/>
+    <property name="component.version" value="0.1"/>
+
+  </target>
+  
+  <import file="../build_common.xml" />
+
+</project>

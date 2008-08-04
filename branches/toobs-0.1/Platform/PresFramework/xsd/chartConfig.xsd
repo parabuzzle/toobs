@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="chc" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  attributeFormDefault="unqualified"
+  xmlns:chc="chc"
+  xmlns:cc="cc"
+  >
+  <xs:import namespace="cc" schemaLocation="componentConfig.xsd"/>
+  
+  <xs:element name="ChartConfig">
+    <xs:annotation>
+      <xs:documentation>Configuration for component layouts</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="chc:Chart" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Chart">
+    <xs:complexType>
+      <xs:annotation>
+        <xs:documentation>This holds the chart configuration</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+        <xs:element ref="cc:ParameterMapping" minOccurs="0"/>
+        <xs:element ref="chc:Title" minOccurs="0"/>
+        <xs:element ref="chc:Subtitle" minOccurs="0"/>
+        <xs:element ref="chc:Legend" minOccurs="0"/>
+        <xs:element ref="chc:Plot" minOccurs="1"/>
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:string" use="required"/>
+      <xs:attribute name="showLegend" type="xs:boolean" default="true"/>
+      <xs:attribute name="height" type="xs:int" default="400"/>
+      <xs:attribute name="width" type="xs:int" default="600"/>
+      <xs:attribute name="backgroundColor" type="xs:string" default="ffffff"/>
+      <xs:attribute name="doImageWithMap" type="xs:boolean" default="false"/>
+      <xs:attribute name="urlFragmentBean" type="xs:string" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="RectangleSet">
+    <xs:attribute name="top" type="xs:string" default="0.0"/>
+    <xs:attribute name="right" type="xs:string" default="0.0"/>
+    <xs:attribute name="bottom" type="xs:string" default="0.0"/>
+    <xs:attribute name="left" type="xs:string" default="0.0"/>
+    <xs:attribute name="unitType" default="absolute">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="absolute"/>
+          <xs:enumeration value="relative"/>
+        </xs:restriction>
+      </xs:simpleType>        
+    </xs:attribute> 
+  </xs:complexType>
+  <xs:element name="AxisOffsets">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chc:RectangleSet"/>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Padding">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chc:RectangleSet"/>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Insets">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chc:RectangleSet"/>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Border">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chc:RectangleSet"/>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="Legend">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="chc:Padding" minOccurs="0"/>
+        <xs:element ref="chc:Border" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>    
+  </xs:element>
+
+  <xs:complexType name="BasePlot">
+    <xs:sequence>
+      <xs:element ref="chc:Insets" minOccurs="0"/>
+      <xs:element ref="chc:AxisOffsets" minOccurs="0"/>
+      <xs:element ref="chc:DomainAxisDef" minOccurs="0"/>
+      <xs:element ref="chc:RangeAxisDef" minOccurs="0"/>
+      <xs:element ref="chc:DatasetGroup" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="type" type="xs:string" default="category">
+      <!--
+          <xs:enumeration value="category"/>
+          <xs:enumeration value="xy"/>
+          <xs:enumeration value="combinedDomainCategory"/>
+          <xs:enumeration value="combinedRangeCategory"/>
+          <xs:enumeration value="multiCategory"/>
+      -->
+    </xs:attribute> 
+    <xs:attribute name="is3D" type="xs:string" default="false"/>
+    <xs:attribute name="backgroundColor" type="xs:string" default="dddddd"/>
+    <xs:attribute name="foregroundAlpha" type="xs:string" default="0.0"/>
+    <xs:attribute name="showDomainItemLabels" type="xs:boolean" default="false"/>
+    <xs:attribute name="orientation" type="xs:string" default="vertical"/>
+  </xs:complexType>
+  <xs:element name="Plot">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chc:BasePlot">
+          <xs:sequence>
+            <xs:element ref="chc:SubPlot" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+          <xs:attribute name="gap" type="xs:double" default="5.0"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SubPlot">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chc:BasePlot"/>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:complexType name="AxisDef">
+    <xs:attribute name="gridColor" type="xs:string" default="333333"/>
+    <xs:attribute name="showGridlines" type="xs:boolean" default="true"/>
+    <xs:attribute name="upperMargin" type="xs:string" default="0.0"/>
+    <xs:attribute name="lowerMargin" type="xs:string" default="0.0"/>
+    <xs:attribute name="location" type="xs:string" use="optional"/>
+  </xs:complexType>
+  
+  <xs:element name="DomainAxisDef">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chc:AxisDef">
+          <xs:sequence>
+            <xs:element ref="chc:DomainLabel" minOccurs="0"/>
+          </xs:sequence>
+          <xs:attribute name="domainMargin" type="xs:string" default="0.0"/>
+          <xs:attribute name="labelPosition" type="xs:string" default="STANDARD">
+            <!--
+                <xs:enumeration value="STANDARD"/>
+                <xs:enumeration value="UP_45"/>
+                <xs:enumeration value="DOWN_45"/>
+                <xs:enumeration value="UP_90"/>
+                <xs:enumeration value="DOWN_90"/>
+            -->
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="RangeAxisDef">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chc:AxisDef">
+          <xs:sequence>
+            <xs:element ref="chc:RangeLabel" minOccurs="0" />
+          </xs:sequence>
+          <xs:attribute name="labelAngle" type="xs:int" default="0"/>
+          <xs:attribute name="integerTicks" type="xs:boolean" default="false"/>
+          <xs:attribute name="lowerBound" type="xs:string" use="optional"/>
+          <xs:attribute name="upperBound" type="xs:string" use="optional"/>
+          <xs:attribute name="numberFormater" use="optional">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="percent"/>
+                <xs:enumeration value="customBean"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="customFormatBean" type="xs:string" use="optional"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="DatasetGroup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="chc:Dataset" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:string" use="optional"/>
+      <xs:attribute name="urlBase" type="xs:string" use="optional"/>
+      <xs:attribute name="renderer" type="xs:string" default="area"/>
+      <xs:attribute name="stacked" type="xs:boolean" default="false"/>
+      <xs:attribute name="even" type="xs:boolean" default="true"/>
+      <xs:attribute name="renderAsPercentages" type="xs:boolean" default="false"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Dataset">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="cc:ParameterMapping" minOccurs="0"/>
+        <xs:element ref="chc:DatasetSeries" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="type" default="category">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="category"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="action"              type="xs:string" use="required"/>
+      <xs:attribute name="daoObject"           type="xs:string" use="required"/>
+      <xs:attribute name="searchCriteria"      type="xs:string" use="optional"/>
+      <xs:attribute name="searchMethod"        type="xs:string" use="optional"/>
+      <xs:attribute name="returnedValueObject" type="xs:string" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="DatasetSeries">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="chc:ValueElement" minOccurs="1" maxOccurs="1"/>
+        <xs:element ref="chc:RowElement" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="chc:ColumnElement" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+      <xs:attribute name="name"  type="xs:string" use="optional"/>
+      <xs:attribute name="color" type="xs:string" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Font">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="size" type="xs:int" use="required"/>
+      <xs:attribute name="style" default="plain">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="plain"/>
+            <xs:enumeration value="bold"/>
+            <xs:enumeration value="italic"/>
+          </xs:restriction>
+        </xs:simpleType>        
+      </xs:attribute> 
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:complexType name="TextLabel">
+    <xs:sequence>
+      <xs:element ref="chc:Font" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+    <xs:attribute name="path" type="xs:string" use="required"/>
+    <xs:attribute name="isStatic" type="xs:boolean" use="optional"/>
+    <xs:attribute name="default" type="xs:string" use="optional"/>
+    <xs:attribute name="color" type="xs:string" default="000000"/>
+  </xs:complexType>
+  
+  <xs:element name="Title">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chc:TextLabel"/>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Subtitle">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chc:TextLabel">
+          <xs:sequence>
+            <xs:element ref="chc:Padding" minOccurs="0"/>
+          </xs:sequence>
+          <xs:attribute name="position" default="top">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="top"/>
+                <xs:enumeration value="left"/>
+                <xs:enumeration value="bottom"/>
+                <xs:enumeration value="right"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="verticalAlignment" default="top">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="top"/>
+                <xs:enumeration value="center"/>
+                <xs:enumeration value="bottom"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DomainLabel">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chc:TextLabel"/>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RangeLabel">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chc:TextLabel"/>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:complexType name="DataElement">
+    <xs:attribute name="path" type="xs:string" use="required"/>
+    <xs:attribute name="isStatic" type="xs:boolean" use="optional"/>
+    <xs:attribute name="conversion" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+  <xs:element name="ValueElement">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chc:DataElement"/>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RowElement">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chc:DataElement">
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ColumnElement">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chc:DataElement">
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

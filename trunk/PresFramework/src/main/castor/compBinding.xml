@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<cbf:binding xmlns:cbf="http://www.castor.org/SourceGenerator/Binding">
+  <cbf:package>
+    <cbf:name>org.toobsframework.pres.component.config</cbf:name>
+    <cbf:namespace>cc</cbf:namespace>
+  </cbf:package>
+</cbf:binding>
