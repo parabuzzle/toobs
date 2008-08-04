@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layouts xmlns="clc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="clc
+  file:../../../../../PresFramework/src/main/castor/componentLayoutConfig.xsd">
+
+  <Layout id="baseHtmlEmail">
+    <Section id="head">
+      <ComponentRef componentId="emailHead"/>
+    </Section>
+    <Section id="header">
+      <ComponentRef componentId="emailHeader"/>
+    </Section>
+    <Section id="footer">
+      <ComponentRef componentId="emailFooter"/>
+    </Section>
+    <Pipeline xmlns="cc">
+      <ContentType contentType="xhtml">
+        <Transform xmlns="cc" transformName="email/baseHtmlEmail"/>
+      </ContentType>
+    </Pipeline>
+  </Layout>
+
+  <Layout id="baseTextEmail">
+    <Section id="header">
+      <ComponentRef componentId="emailHeader"/>
+    </Section>
+    <Section id="footer">
+      <ComponentRef componentId="emailFooter"/>
+    </Section>
+    <Pipeline xmlns="cc">
+      <ContentType contentType="xhtml">
+        <Transform xmlns="cc" transformName="email/baseTextEmail"/>
+      </ContentType>
+    </Pipeline>
+  </Layout>
+  
+  <Layout id="ContactUsText" extends="baseTextEmail">
+    <Section id="content" type="wide">
+      <ComponentRef componentId="ContactUsEmail"/>
+    </Section>
+  </Layout>
+
+  <Layout id="ContactUsHtml" extends="baseHtmlEmail">
+    <Section id="content" type="wide">
+      <ComponentRef componentId="ContactUsEmail"/>
+    </Section>
+  </Layout>
+  
+</Layouts>

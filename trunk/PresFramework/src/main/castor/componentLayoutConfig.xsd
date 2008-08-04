@@ -6,25 +6,26 @@
   xmlns:cc="cc"
   >
   <xs:import namespace="cc" schemaLocation="componentConfig.xsd"/>
-  <!-- <xs:import namespace="dc" schemaLocation="doItConfig.xsd"/> -->
-  <xs:element name="ComponentLayoutConfig">
+
+  <xs:element name="Layouts">
     <xs:annotation>
       <xs:documentation>Configuration for component layouts</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="clc:ComponentLayout" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="clc:Layout" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
       <xs:attribute name="fullReload" type="xs:boolean" default="false"/>
+      <xs:attribute name="validate" type="xs:boolean" default="false"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ComponentLayout">
+  <xs:element name="Layout">
     <xs:annotation>
       <xs:documentation>This holds the component layout</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="cc:ParameterMapping" minOccurs="0">
+        <xs:element ref="cc:Parameters" minOccurs="0">
           <xs:annotation>
             <xs:documentation>
             This set of parameters is used in the normal manner to map params to names.
@@ -32,7 +33,7 @@
             </xs:documentation>
           </xs:annotation>
         </xs:element>
-        <xs:element ref="clc:ContentParameters" minOccurs="0"/>
+        <xs:element ref="clc:TransformParameters" minOccurs="0"/>
         <xs:element ref="clc:Section" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="cc:Pipeline" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="clc:DoItRef" minOccurs="0" maxOccurs="1"/>
@@ -40,7 +41,6 @@
       <xs:attribute name="id" type="xs:string" use="required"/>
       <xs:attribute name="extends" type="xs:string" use="optional"/>
       <xs:attribute name="noAccessLayout" type="xs:string" use="optional"/>
-      <xs:attribute name="useComponentScan" type="xs:boolean" default="false"/>
       <xs:attribute name="embedded" type="xs:boolean" default="false"/>
     </xs:complexType>
   </xs:element>
@@ -48,9 +48,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="clc:ComponentRef" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="clc:ComponentLayoutRef" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="clc:ComponentHeader" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element ref="clc:Nav" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="clc:LayoutRef" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
       <xs:attribute name="id" type="xs:string" use="required"/>
       <xs:attribute name="type" type="xs:string" use="optional"/>
@@ -59,7 +57,7 @@
   </xs:element>
   <xs:complexType name="Include">
     <xs:sequence>
-      <xs:element ref="cc:ParameterMapping" minOccurs="0"/>
+      <xs:element ref="cc:Parameters" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="type" type="xs:string" use="optional"/>
     <xs:attribute name="order" type="xs:int" use="optional"/>
@@ -83,7 +81,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ComponentLayoutRef">
+  <xs:element name="LayoutRef">
     <xs:complexType>
       <xs:complexContent>
         <xs:extension base="clc:Include">
@@ -101,39 +99,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ComponentHeader">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="cc:ParameterMapping" minOccurs="0"/>
-      </xs:sequence>
-      <xs:attribute name="id" type="xs:string" use="required"/>
-      <xs:attribute name="type" type="xs:string" use="required"/>
-      <xs:attribute name="styleClass" type="xs:string" default="component header"/>
-      <xs:attribute name="order" type="xs:int" use="optional"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="Nav">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="cc:ParameterMapping" minOccurs="0"/>
-        <xs:element ref="clc:NavEntry" minOccurs="1" maxOccurs="unbounded"/>
-      </xs:sequence>
-      <xs:attribute name="id" type="xs:string" use="required"/>
-      <xs:attribute name="type" type="xs:string" use="required"/>
-      <xs:attribute name="styleClass" type="xs:string" default="feature-nav"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="NavEntry">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="clc:Nav" minOccurs="0"/>
-      </xs:sequence>
-      <xs:attribute name="link" type="xs:string" use="required"/>
-      <xs:attribute name="label" type="xs:string" use="required"/>
-      <xs:attribute name="icon" type="xs:string" use="optional"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ContentParameters">
+  <xs:element name="TransformParameters">
     <xs:annotation>
       <xs:documentation>
       This element is used to place a set of parameter definitions as a node to be processed

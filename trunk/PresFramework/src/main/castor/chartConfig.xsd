@@ -24,7 +24,7 @@
         <xs:documentation>This holds the chart configuration</xs:documentation>
       </xs:annotation>
       <xs:sequence>
-        <xs:element ref="cc:ParameterMapping" minOccurs="0"/>
+        <xs:element ref="cc:Parameters" minOccurs="0"/>
         <xs:element ref="chc:Title" minOccurs="0"/>
         <xs:element ref="chc:Subtitle" minOccurs="0"/>
         <xs:element ref="chc:Legend" minOccurs="0"/>
@@ -207,7 +207,7 @@
   <xs:element name="Dataset">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="cc:ParameterMapping" minOccurs="0"/>
+        <xs:element ref="cc:Parameters" minOccurs="0"/>
         <xs:element ref="chc:DatasetSeries" minOccurs="1" maxOccurs="unbounded"/>
       </xs:sequence>
       <xs:attribute name="type" default="category">

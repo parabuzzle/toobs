@@ -68,7 +68,7 @@
       <value>
         org.toobsframework.pres.spring.multipart.MultipartController.resolveMultipart=PROPAGATION_REQUIRED,-Exception
         org.toobsframework.pres.doit.controller.IDoItHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception
-        org.toobsframework.pres.layout.controller.IComponentLayoutHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception,readOnly
+        org.toobsframework.pres.layout.controller.ILayoutHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception,readOnly
         org.toobsframework.pres.component.controller.IComponentViewHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception,readOnly
         org.toobsframework.pres.chart.controller.IChartHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception,readOnly
         org.toobsframework.pres.attachment.controller.IAttachmentHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception,readOnly
@@ -103,15 +103,15 @@
   </bean>
   -->
 
-  <bean id="IComponentLayoutHandler" class="org.springframework.aop.framework.ProxyFactoryBean">
+  <bean id="ILayoutHandler" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="target">
-      <bean class="org.toobsframework.pres.layout.controller.ComponentLayoutHandler">
-        <property name="componentLayoutManager"  ref="IComponentLayoutManager"/>
+      <bean class="org.toobsframework.pres.layout.controller.LayoutHandler">
+        <property name="componentLayoutManager"  ref="ILayoutManager"/>
         <property name="componentRequestManager" ref="componentRequestManager"/>
         <!-- <property name="layoutSecurity"          ref="LayoutSecurity"/> -->
       </bean>
     </property>
-    <property name="proxyInterfaces" value="org.toobsframework.pres.layout.controller.IComponentLayoutHandler"/>
+    <property name="proxyInterfaces" value="org.toobsframework.pres.layout.controller.ILayoutHandler"/>
     <property name="interceptorNames">
       <list>
         <value>serviceTransactionInterceptor</value>
@@ -188,9 +188,9 @@
   </bean>
   -->
 
-  <bean id="IComponentLayoutManager" class="org.springframework.aop.framework.ProxyFactoryBean">
+  <bean id="ILayoutManager" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="target">
-      <bean class="org.toobsframework.pres.layout.manager.ComponentLayoutManager">
+      <bean class="org.toobsframework.pres.layout.manager.LayoutManager">
         <property name="configFiles">
           <list>
             <value>clc/example-base.clc.xml</value>
@@ -200,7 +200,7 @@
       </bean>
     </property>
     <property name="proxyInterfaces">
-      <value>org.toobsframework.pres.layout.manager.IComponentLayoutManager</value>
+      <value>org.toobsframework.pres.layout.manager.ILayoutManager</value>
     </property>
   </bean>
   

@@ -6,8 +6,6 @@ import org.toobsframework.pres.component.datasource.api.IDataSourceObject;
 import org.toobsframework.util.BaseRequestManager;
 import org.toobsframework.util.IRequest;
 
-
-@SuppressWarnings("unchecked")
 public class ComponentRequestManager extends BaseRequestManager {
 
   private static Log log = LogFactory.getLog(ComponentRequestManager.class);

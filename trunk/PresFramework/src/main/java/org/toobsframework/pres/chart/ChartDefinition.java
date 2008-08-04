@@ -4,7 +4,7 @@ import org.toobsframework.pres.chart.config.Legend;
 import org.toobsframework.pres.chart.config.Plot;
 import org.toobsframework.pres.chart.config.Subtitle;
 import org.toobsframework.pres.chart.config.Title;
-import org.toobsframework.pres.component.config.ParameterMapping;
+import org.toobsframework.pres.component.config.Parameters;
 
 public class ChartDefinition {
   
@@ -16,7 +16,7 @@ public class ChartDefinition {
   private boolean doImageWithMap;
   private String urlFragmentBean;
   
-  private ParameterMapping parameterMapping;
+  private Parameters parameterMapping;
   private Title title;
   private Subtitle subtitle;
   private Plot plot;
@@ -47,10 +47,10 @@ public class ChartDefinition {
   public void setId(String id) {
     this.id = id;
   }
-  public ParameterMapping getParameterMapping() {
+  public Parameters getParameters() {
     return parameterMapping;
   }
-  public void setParameterMapping(ParameterMapping parameterMapping) {
+  public void setParameters(Parameters parameterMapping) {
     this.parameterMapping = parameterMapping;
   }
   public Plot getPlot() {

@@ -19,8 +19,8 @@ import org.toobsframework.pres.layout.ComponentLayoutNotFoundException;
 import org.toobsframework.pres.component.config.ContentType;
 import org.toobsframework.pres.layout.RuntimeLayout;
 import org.toobsframework.pres.layout.RuntimeLayoutConfig;
-import org.toobsframework.pres.layout.config.ComponentLayout;
-import org.toobsframework.pres.layout.config.ComponentLayoutConfig;
+import org.toobsframework.pres.layout.config.Layout;
+import org.toobsframework.pres.layout.config.Layouts;
 import org.toobsframework.exception.PermissionException;
 
 
@@ -105,20 +105,20 @@ public final class ComponentLayoutManager implements IComponentLayoutManager {
           if (configFile.lastModified() <= lastModified[fileCounter]) {
             continue;
           }
-          log.info("Reloading ComponentLayoutConfig file [" + fileName + "]");
+          log.info("Reloading Layouts file [" + fileName + "]");
           //registry.clear();
           reader = new InputStreamReader(configFileURL.openStream());
           Unmarshaller unmarshaller = new Unmarshaller(
-              Class.forName(ComponentLayoutConfig.class.getName()));
+              Class.forName(Layouts.class.getName()));
           unmarshaller.setValidation(false);
-          ComponentLayoutConfig componentLayoutConfig = (ComponentLayoutConfig) unmarshaller.unmarshal(reader);
+          Layouts componentLayoutConfig = (Layouts) unmarshaller.unmarshal(reader);
           if (componentLayoutConfig.getFullReload()) {
             lastModified = new long[l];
           }
-          ComponentLayout[] layouts = componentLayoutConfig.getComponentLayout();
+          Layout[] layouts = componentLayoutConfig.getLayout();
           //HashMap tempLayoutMap = new HashMap();
           if ((layouts != null) && (layouts.length > 0)) {
-            ComponentLayout compLayout = null;
+            Layout compLayout = null;
             RuntimeLayout layout = null;
             RuntimeLayoutConfig layoutConfig = null;
             for (int i = 0; i < layouts.length; i ++) {
@@ -134,7 +134,7 @@ public final class ComponentLayoutManager implements IComponentLayoutManager {
                   String extension = extSplit[ext];
                   RuntimeLayout extend = (RuntimeLayout)registry.get(extension);
                   if (extend == null) {
-                    log.error("The ComponentLayout extension " + extension + " for " + compLayout.getId() + 
+                    log.error("The Layout extension " + extension + " for " + compLayout.getId() + 
                         " could not be located in the registry.\n"
                         + "Check the spelling and case of the extends property and ensure it is defined before\n"
                         + "the dependent templates");
@@ -146,28 +146,28 @@ public final class ComponentLayoutManager implements IComponentLayoutManager {
                         " cannot extend " + extension + " cause it does not exist or has not yet been loaded");
                   }
                   layoutConfig.addParam(extendConfig.getAllParams());
-                  layoutConfig.addContentParam(extendConfig.getAllContentParams());
+                  layoutConfig.addTransformParam(extendConfig.getAllTransformParams());
                   layoutConfig.addSection(extendConfig.getAllSections());
                   layoutConfig.setNoAccessLayout(extendConfig.getNoAccessLayout());
                   //layout.addTransform(extend.getAllTransforms());
                   layout.getTransforms().putAll(extend.getTransforms());
-                  layout.setUseComponentScan(extend.isUseComponentScan());
+                  //layout.setUseComponentScan(extend.isUseComponentScan());
                   layout.setEmbedded(extend.isEmbedded());
                 }
               }
               
-              if (compLayout.getParameterMapping() != null) {
-                layoutConfig.addParam(compLayout.getParameterMapping().getParameter());
+              if (compLayout.getParameters() != null) {
+                layoutConfig.addParam(compLayout.getParameters().getParameter());
               }
-              if (compLayout.getContentParameters() != null) {
-                layoutConfig.addContentParam(compLayout.getContentParameters().getParameter());
+              if (compLayout.getTransformParameters() != null) {
+                layoutConfig.addTransformParam(compLayout.getTransformParameters().getParameter());
               }
               layoutConfig.addSection(compLayout.getSection());
               if (compLayout.getNoAccessLayout() != null) {
                 layoutConfig.setNoAccessLayout(compLayout.getNoAccessLayout());
               }
               layout.setId(compLayout.getId());
-              layout.setUseComponentScan(compLayout.getUseComponentScan() || layout.isEmbedded());
+              //layout.setUseComponentScan(compLayout.getUseComponentScan() || layout.isEmbedded());
               layout.setEmbedded(compLayout.getEmbedded() || layout.isEmbedded());
               
               //Set component pipeline properties.
@@ -182,7 +182,7 @@ public final class ComponentLayoutManager implements IComponentLayoutManager {
                     org.toobsframework.pres.component.Transform thisTransform = new org.toobsframework.pres.component.Transform();
       
                     thisTransform.setTransformName(thisTransformConfig.getTransformName());
-                    thisTransform.setTransformParams(thisTransformConfig.getParameterMapping());
+                    thisTransform.setTransformParams(thisTransformConfig.getParameters());
       
                     theseTransforms.add(thisTransform);
                   }

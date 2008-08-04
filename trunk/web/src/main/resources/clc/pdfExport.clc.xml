@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layouts xmlns="clc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="clc
+  file:../../../../../PresFramework/src/main/castor/componentLayoutConfig.xsd">
+  
+  <!--**************************************-->
+  <!--**        XLS Outputs            **-->
+  <!--**************************************-->
+  
+  <Layout id="baseXls" embedded="true">
+    <Pipeline xmlns="cc">
+      <ContentType contentType="xxls">
+        <Transform xmlns="cc" transformName="export/xls/xlsBase">
+          <Parameters>
+            <Parameter name="exportMode" path="exportMode" default="normal"/>
+            <Parameter name="component" path="component" ignoreNull="true"/>
+          </Parameters>
+        </Transform>
+      </ContentType>
+    </Pipeline>
+  </Layout>
+
+  <!--**************************************-->
+  <!--**        Pdf FO Outputs            **-->
+  <!--**************************************-->
+
+  <Layout id="basePdf"><!--  useComponentScan="true" -->
+    <Pipeline xmlns="cc">
+      <ContentType contentType="xpdf">
+        <Transform xmlns="cc" transformName="export/pdf/pdfBase">
+          <Parameters>
+            <Parameter name="exportMode" path="exportMode" default="normal"/>
+            <Parameter name="component" path="component" ignoreNull="true"/>
+          </Parameters>
+        </Transform>
+      </ContentType>
+      <ContentType contentType="xrtf">
+        <Transform xmlns="cc" transformName="export/pdf/pdfBase">
+          <Parameters>
+            <Parameter name="exportMode" path="exportMode" default="normal"/>
+            <Parameter name="component" path="component" ignoreNull="true"/>
+          </Parameters>
+        </Transform>
+      </ContentType>
+    </Pipeline>
+  </Layout>
+  
+  <Layout id="ExportTable" extends="basePdf;baseXls">
+    <Parameters xmlns="cc">
+      <Parameter name="exportMode" path="table" isStatic="true"/>
+    </Parameters>
+    <Section id="body">
+      <ComponentRef componentId="ExportTable">
+        <Parameters xmlns="cc">
+          <Parameter name="maximumResultSize" path="displayRows" default="9999"/>
+          <Parameter name="outputFormat" path="outputFormat"/>
+          <Parameter name="orient" path="orient" default="portrait"/>
+          <Parameter name="printTitle" path="printTitle" ignoreNull="true"/>
+        </Parameters>
+      </ComponentRef>
+    </Section>    
+  </Layout>
+
+</Layouts>

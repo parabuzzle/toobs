@@ -26,8 +26,8 @@ import org.toobsframework.util.IRequest;
 public class RuntimeLayout {
   private static final String XML_HEADER = "<RuntimeLayout>";
   private static final String XML_FOOTER = "</RuntimeLayout>";
-  private static final String XML_CP_HEADER = "<ContentParams>";
-  private static final String XML_CP_FOOTER = "</ContentParams>";
+  private static final String XML_CP_HEADER = "<TransformParams>";
+  private static final String XML_CP_FOOTER = "</TransformParams>";
   private String id;
   private Map transforms = new HashMap();
   private RuntimeLayoutConfig config;
@@ -43,7 +43,7 @@ public class RuntimeLayout {
     this.config = config;
     StringBuffer sb = new StringBuffer();
     sb.append(XML_HEADER);
-    Parameter[] contentParams = config.getAllContentParams();
+    Parameter[] contentParams = config.getAllTransformParams();
     if (contentParams.length > 0) {
       sb.append(XML_CP_HEADER);
       for (int c = 0; c < contentParams.length; c++) {
@@ -151,7 +151,8 @@ public class RuntimeLayout {
       } else {
         xmlTransformer = XMLTransformerFactory.getInstance().getDefaultTransformer();
       }
-      ParameterUtil.mapParameters("Layout:" + this.id, config.getAllParams(), request.getParams(), layoutParams, this.id);
+      //ParameterUtil.mapParameters("Layout:" + this.id, config.getAllParams(), request.getParams(), layoutParams, this.id);
+      ParameterUtil.mapParameters("Layout:" + this.id, config.getAllTransformParams(), request.getParams(), layoutParams, this.id);
 
       inputXMLs.add(this.layoutXml);
       layoutParams.put("context", Configuration.getInstance().getMainContext() + "/");
@@ -176,12 +177,14 @@ public class RuntimeLayout {
   public void setDoItRef(DoItRef doItRef) {
     this.doItRef = doItRef;
   }
+  /*
   public boolean isUseComponentScan() {
     return useComponentScan;
   }
   public void setUseComponentScan(boolean useComponentScan) {
     this.useComponentScan = useComponentScan;
   }
+  */
   public boolean isEmbedded() {
     return embedded;
   }

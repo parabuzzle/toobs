@@ -35,8 +35,8 @@
   <xsd:element name="Action">
     <xsd:complexType>
       <xsd:sequence>
-        <xsd:element ref="dc:InputParameterMapping" minOccurs="0"/>
-        <xsd:element ref="dc:OutputParameterMapping" minOccurs="0"/>
+        <xsd:element ref="cc:Parameters" minOccurs="0"/>
+        <xsd:element ref="cc:OutputParameters" minOccurs="0"/>
       </xsd:sequence>
       <xsd:attribute name="actionType" use="required" type="xsd:string"/>
       <xsd:attribute name="guidParam" type="xsd:string"/>
@@ -62,33 +62,12 @@
   <xsd:element name="Forward">
     <xsd:complexType>
       <xsd:sequence>
-        <xsd:element ref="dc:QueryParameterMapping" minOccurs="0"/>
+        <xsd:element ref="cc:Parameters" minOccurs="0"/>
       </xsd:sequence>
       <xsd:attribute name="name" use="required" type="xsd:string"/>
       <xsd:attribute name="uri" use="required" type="xsd:string"/>
       <xsd:attribute name="forward" type="xsd:boolean" default="false"/>
       <xsd:attribute name="useContext" type="xsd:boolean" default="true"/>
-    </xsd:complexType>
-  </xsd:element>
-  <xsd:element name="QueryParameterMapping">
-    <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element ref="cc:Parameter" minOccurs="1" maxOccurs="unbounded"/>
-      </xsd:sequence>
-    </xsd:complexType>
-  </xsd:element>
-  <xsd:element name="InputParameterMapping">
-    <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element ref="cc:Parameter" minOccurs="1" maxOccurs="unbounded"/>
-      </xsd:sequence>
-    </xsd:complexType>
-  </xsd:element>
-  <xsd:element name="OutputParameterMapping">
-    <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element ref="cc:Parameter" maxOccurs="unbounded"/>
-      </xsd:sequence>
     </xsd:complexType>
   </xsd:element>
 </xsd:schema>

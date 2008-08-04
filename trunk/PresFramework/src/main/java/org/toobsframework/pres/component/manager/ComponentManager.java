@@ -19,7 +19,7 @@ import org.toobsframework.pres.component.ComponentNotFoundException;
 import org.toobsframework.pres.component.ComponentNotInitializedException;
 import org.toobsframework.pres.component.Transform;
 import org.toobsframework.pres.component.config.Component;
-import org.toobsframework.pres.component.config.ComponentConfig;
+import org.toobsframework.pres.component.config.Components;
 import org.toobsframework.pres.component.config.ContentType;
 import org.toobsframework.pres.component.config.DataSourceProperty;
 import org.toobsframework.data.beanutil.converter.DateToStringConverter;
@@ -102,20 +102,20 @@ public final class ComponentManager implements IComponentManager {
           ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
           URL configFileURL = classLoader.getResource(fileName);
           if (configFileURL == null) {
-            log.warn("Skipping missing ComponentConfig file [" + fileName + "]");
+            log.warn("Skipping missing Components file [" + fileName + "]");
             continue;
           }
           File configFile = new File(configFileURL.getFile());
           if (configFile.lastModified() <= lastModified[fileCounter]) {
             continue;
           }
-          log.info("Reloading ComponentConfig file [" + fileName + "]");
+          log.info("Reloading Components file [" + fileName + "]");
           //registry.clear();
           reader = new InputStreamReader(configFileURL.openStream());
           Unmarshaller unmarshaller = new Unmarshaller(
-              Class.forName(ComponentConfig.class.getName()));
+              Class.forName(Components.class.getName()));
           unmarshaller.setValidation(false);
-          ComponentConfig componentConfig = (ComponentConfig) unmarshaller.unmarshal(reader);
+          Components componentConfig = (Components) unmarshaller.unmarshal(reader);
           Component[] components = componentConfig.getComponent();
           if ((components != null) && (components.length > 0)) {
             Component comp = null;
@@ -158,7 +158,7 @@ public final class ComponentManager implements IComponentManager {
                   org.toobsframework.pres.component.Transform thisTransform = new org.toobsframework.pres.component.Transform();
     
                   thisTransform.setTransformName(thisTransformConfig.getTransformName());
-                  thisTransform.setTransformParams(thisTransformConfig.getParameterMapping());
+                  thisTransform.setTransformParams(thisTransformConfig.getParameters());
     
                   theseTransforms.add(thisTransform);
                 }

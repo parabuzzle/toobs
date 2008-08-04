@@ -101,8 +101,8 @@ public class ChartBuilder implements BeanFactoryAware {
     JFreeChart chart = null;
     try {
       Map params = componentRequest.getParams();
-      if(chartDef.getParameterMapping() != null){
-        ParameterUtil.mapParameters("Chart:AreaChart:" + chartDef.getId(), chartDef.getParameterMapping().getParameter(), params, params, chartDef.getId(), null);
+      if(chartDef.getParameters() != null){
+        ParameterUtil.mapParameters("Chart:AreaChart:" + chartDef.getId(), chartDef.getParameters().getParameter(), params, params, chartDef.getId(), null);
       }
       
       Plot plot = configurePlot(chartDef.getId(), chartDef.getPlot(), params);
@@ -283,8 +283,8 @@ public class ChartBuilder implements BeanFactoryAware {
 
   protected Collection datasetSearch(String id, Dataset dataset, Map params, Map outParams) throws ChartException {
     try {
-      if(dataset.getParameterMapping() != null){
-        ParameterUtil.mapParameters("Component:" + id + ":Dataset:" + dataset.getDaoObject(), dataset.getParameterMapping().getParameter(), params, params, id, null);
+      if(dataset.getParameters() != null){
+        ParameterUtil.mapParameters("Component:" + id + ":Dataset:" + dataset.getDaoObject(), dataset.getParameters().getParameter(), params, params, id, null);
       }
       return this.datasource.search(
           dataset.getReturnedValueObject(),

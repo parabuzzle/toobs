@@ -104,10 +104,10 @@ public class DoItRunner implements IDoItRunner {
     if (actionType.equalsIgnoreCase("objectAction")) {
       //Fix the input params using the param mapping for 
       //this configuration.
-      if (thisAction.getInputParameterMapping() != null) {
+      if (thisAction.getParameters() != null) {
         // Cant do this for now cause of the array problem
-        //ParameterUtil.mapParameters(thisAction.getInputParameterMapping().getParameter(), params, params, doItName);
-        ParameterUtil.mapDoItInputParameters(thisAction.getInputParameterMapping().getParameter(), params, params, true);
+        //ParameterUtil.mapParameters(thisAction.getParameters().getParameter(), params, params, doItName);
+        ParameterUtil.mapDoItParameters(thisAction.getParameters().getParameter(), params, params, true);
       }
       try {
         retObj = this.getDatasource().dispatchAction(
@@ -148,8 +148,8 @@ public class DoItRunner implements IDoItRunner {
     } else if (actionType.equalsIgnoreCase("sessionAction")) {
       Map sessionMap = new HashMap();
 
-      if (thisAction.getInputParameterMapping() != null) {
-        ParameterUtil.mapDoItInputParameters(thisAction.getInputParameterMapping().getParameter(), params, sessionMap, true);
+      if (thisAction.getParameters() != null) {
+        ParameterUtil.mapDoItParameters(thisAction.getParameters().getParameter(), params, sessionMap, true);
       }
       HttpSession session = componentRequestManager.get().getHttpRequest().getSession();
       Iterator iter = sessionMap.entrySet().iterator();
@@ -168,7 +168,7 @@ public class DoItRunner implements IDoItRunner {
     //HashMap responseParams = new HashMap();
     //Add the output params into the request for 
     //this configuration.
-    if(thisAction.getOutputParameterMapping() != null && retObj != null){
+    if(thisAction.getOutputParameters() != null && retObj != null){
       JXPathContext context = null;
       if ("delete".equalsIgnoreCase(thisAction.getObjectAction())) {
         context = JXPathContext.newContext(responseParams);
@@ -176,7 +176,7 @@ public class DoItRunner implements IDoItRunner {
       } else {
         context = JXPathContext.newContext(retObj);
       }
-      Parameter[] paramMap =  thisAction.getOutputParameterMapping().getParameter();
+      Parameter[] paramMap =  thisAction.getOutputParameters().getParameter();
       for(int j = 0; j < paramMap.length; j++){
          Parameter thisParam = paramMap[j];
          String[] paramPath = ParameterUtil.resolveParam(thisParam.getPath(), params);
@@ -352,8 +352,8 @@ public class DoItRunner implements IDoItRunner {
 
     // Fix the input params using the param mapping for 
     // this configuration.
-    if (action.getInputParameterMapping() != null) {
-      ParameterUtil.mapDoItInputParameters(action.getInputParameterMapping().getParameter(), paramMap, paramMap, true);
+    if (action.getParameters() != null) {
+      ParameterUtil.mapDoItParameters(action.getParameters().getParameter(), paramMap, paramMap, true);
     }
      
     Object inputObject = null;

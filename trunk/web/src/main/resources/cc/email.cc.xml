@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Components xmlns="cc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="cc
+  file:../../../../../PresFramework/src/main/castor/componentConfig.xsd">
+  
+  <Component id="emailHead">
+    <Pipeline>
+      <ContentType contentType="xhtml">
+        <Transform transformName="email/html/htmlEmailHead"/>
+      </ContentType>
+    </Pipeline>
+  </Component>
+
+  <Component id="emailHeader">
+    <Pipeline>
+      <ContentType contentType="xhtml">
+        <Transform transformName="email/html/htmlEmailHeader"/>
+      </ContentType>
+      <ContentType contentType="text">
+        <Transform transformName="email/text/textEmailHeader"/>
+      </ContentType>
+    </Pipeline>
+  </Component>
+
+  <Component id="emailFooter">
+    <Pipeline>
+      <ContentType contentType="xhtml">
+        <Transform transformName="email/html/htmlEmailFooter"/>
+      </ContentType>
+      <ContentType contentType="text">
+        <Transform transformName="email/text/textEmailFooter"/>
+      </ContentType>
+    </Pipeline>
+  </Component>
+  
+  <Component id="ContactUsEmail">
+    <GetObject objectAction="get" daoObject="emailTemplateDao" guidParam="templateId" returnedValueObject="EmailTemplateVO"/>
+    <GetObject objectAction="get" daoObject="infoRequestRecordDao" guidParam="recordId" returnedValueObject="InfoRequestRecordVO"/>
+    <Pipeline>
+      <ContentType contentType="xhtml">
+        <Transform transformName="email/html/ContactUsHtmlEmail">
+          <Parameters>
+            <Parameter name="host" path="sessionHost"/>
+          </Parameters>
+        </Transform>
+      </ContentType>
+      <ContentType contentType="text">
+        <Transform transformName="email/text/ContactUsTextEmail">
+          <Parameters>
+            <Parameter name="host" path="sessionHost"/>
+          </Parameters>
+        </Transform>
+      </ContentType>
+    </Pipeline>
+  </Component>
+
+</Components>
