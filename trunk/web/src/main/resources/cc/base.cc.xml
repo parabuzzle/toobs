@@ -9,7 +9,7 @@
   <Component id="standardHead">
     <Pipeline>
       <ContentType contentType="xhtml">
-        <Transform transformName="layout/head/standardHead">
+        <Transform name="layout/head/standardHead">
           <Parameters>
             <Parameter name="pageTitle" path="pageTitle" ignoreNull="true"/>
             <Parameter name="toobs.debug" path="#toobs.debug" isStatic="true"/>
@@ -23,7 +23,7 @@
   <Component id="standardHeader">
     <Pipeline>
       <ContentType contentType="xhtml">
-        <Transform transformName="layout/header/standardHeader"/>
+        <Transform name="layout/header/standardHeader"/>
       </ContentType>
     </Pipeline>
   </Component>
@@ -31,7 +31,7 @@
   <Component id="standardFooter">
     <Pipeline>
       <ContentType contentType="xhtml">
-        <Transform transformName="layout/footer/standardFooter">
+        <Transform name="layout/footer/standardFooter">
           <Parameters>
             <Parameter name="clientName" path="clientName"/>
           </Parameters>
@@ -43,7 +43,7 @@
   <Component id="noPageAccess">
     <Pipeline>
       <ContentType contentType="xhtml">
-        <Transform transformName="layout/security/noPageAccess"/>
+        <Transform name="layout/security/noPageAccess"/>
       </ContentType>
     </Pipeline>
   </Component>
@@ -51,7 +51,7 @@
   <Component id="featureNotEnabled">
     <Pipeline>
       <ContentType contentType="xhtml">
-        <Transform transformName="layout/security/featureNotEnabled"/>
+        <Transform name="layout/security/featureNotEnabled"/>
       </ContentType>
     </Pipeline>
   </Component>

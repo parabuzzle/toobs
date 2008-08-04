@@ -10,7 +10,7 @@
   <Layout id="baseXls" embedded="true">
     <Pipeline xmlns="cc">
       <ContentType contentType="xxls">
-        <Transform xmlns="cc" transformName="export/xls/xlsBase">
+        <Transform xmlns="cc" name="export/xls/xlsBase">
           <Parameters>
             <Parameter name="exportMode" path="exportMode" default="normal"/>
             <Parameter name="component" path="component" ignoreNull="true"/>
@@ -27,7 +27,7 @@
   <Layout id="basePdf"><!--  useComponentScan="true" -->
     <Pipeline xmlns="cc">
       <ContentType contentType="xpdf">
-        <Transform xmlns="cc" transformName="export/pdf/pdfBase">
+        <Transform xmlns="cc" name="export/pdf/pdfBase">
           <Parameters>
             <Parameter name="exportMode" path="exportMode" default="normal"/>
             <Parameter name="component" path="component" ignoreNull="true"/>
@@ -35,7 +35,7 @@
         </Transform>
       </ContentType>
       <ContentType contentType="xrtf">
-        <Transform xmlns="cc" transformName="export/pdf/pdfBase">
+        <Transform xmlns="cc" name="export/pdf/pdfBase">
           <Parameters>
             <Parameter name="exportMode" path="exportMode" default="normal"/>
             <Parameter name="component" path="component" ignoreNull="true"/>

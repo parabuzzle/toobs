@@ -1,36 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?> 
-<beans xmlns="http://www.springframework.org/schema/beans" 
-    	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    	 xmlns:aop="http://www.springframework.org/schema/aop" 
-    	 xsi:schemaLocation="http://www.springframework.org/schema/beans 
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
     	 http://www.springframework.org/schema/beans/spring-beans-2.0.xsd 
     	 http://www.springframework.org/schema/aop 
-    	 http://www.springframework.org/schema/aop/spring-aop-2.0.xsd"> 
+    	 http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
-	<!-- Use AOP to inject classes into classes not instantiated by Spring -->
-	<aop:spring-configured/>
+  <!-- Use AOP to inject classes into classes not instantiated by Spring -->
+  <aop:spring-configured/>
 
+  <!-- Local DataSource for J2EE environments
   <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    <property name="driverClassName"><value>com.mysql.jdbc.Driver</value></property>
-    <property name="username"><value>toobs_test</value></property>
-    <property name="password"><value>toobs_test</value></property>
-    <property name="url"><value>jdbc:mysql://localhost/toobs_test</value></property>
+    <property name="driverClassName">
+      <value>com.mysql.jdbc.Driver</value>
+    </property>
+    <property name="username">
+      <value>toobs_test</value>
+    </property>
+    <property name="password">
+      <value>toobs_test</value>
+    </property>
+    <property name="url">
+      <value>jdbc:mysql://localhost/toobs_test</value>
+    </property>
   </bean>
+  -->
   <!-- JNDI DataSource for J2EE environments
   <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
     <property name="jndiName"><value>java:/toobs</value></property>
   </bean>
   -->
-  
+
+  <!-- 
   <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
-    <property name="dataSource"><ref bean="dataSource"/></property>
-    <!-- 
+    <property name="dataSource">
+      <ref bean="dataSource"/>
+    </property>
+    <!- 
     <property name="mappingJarLocations">
       <list>
         <value>mappings.jar</value>
       </list>
     </property>
-    -->
+    ->
     <property name="mappingResources">
       <list>
         <value>mappings/Person.hbm.xml</value>
@@ -43,22 +56,28 @@
         <prop key="hibernate.hbm2ddl.auto">update</prop>
         <prop key="hibernate.cache.use_query_cache">false</prop>
         <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
-        <prop key="hibernate.cache.query_cache_factory">org.hibernate.cache.StandardQueryCacheFactory</prop>
+        <prop key="hibernate.cache.query_cache_factory"
+          >org.hibernate.cache.StandardQueryCacheFactory</prop>
       </props>
     </property>
   </bean>
-
-  <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-    <property name="sessionFactory"><ref bean="sessionFactory"/></property>
+  -->
+  <!-- Local transaction manager
+  <bean id="transactionManager"
+    class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory">
+      <ref bean="sessionFactory"/>
+    </property>
   </bean>
-  <!-- 
+  -->
+  <!-- JTA transaction manager 
   <bean id="transactionManager" class="org.springframework.transaction.jta.JtaTransactionManager">
     <property name="userTransactionName"><null/></property>
     <property name="transactionManagerName"><value>java:/TransactionManager</value></property>
   </bean>
   -->
-  
-  <!-- Service Transactional Interceptor -->
+
+  <!-- Service Transactional Interceptor
   <bean id="serviceTransactionInterceptor"
     class="org.springframework.transaction.interceptor.TransactionInterceptor">
     <property name="transactionManager">
@@ -68,13 +87,14 @@
       <value>
         org.toobsframework.pres.spring.multipart.MultipartController.resolveMultipart=PROPAGATION_REQUIRED,-Exception
         org.toobsframework.pres.doit.controller.IDoItHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception
-        org.toobsframework.pres.layout.controller.ILayoutHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception,readOnly
+        org.toobsframework.pres.layout.controller.IComponentLayoutHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception,readOnly
         org.toobsframework.pres.component.controller.IComponentViewHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception,readOnly
         org.toobsframework.pres.chart.controller.IChartHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception,readOnly
         org.toobsframework.pres.attachment.controller.IAttachmentHandler.handleRequestInternal=PROPAGATION_REQUIRED,-Exception,readOnly
       </value>
     </property>
   </bean>
+  -->
 
   <!-- 
   <bean id="LayoutSecurity" class="org.springframework.aop.framework.ProxyFactoryBean">
@@ -103,22 +123,23 @@
   </bean>
   -->
 
-  <bean id="ILayoutHandler" class="org.springframework.aop.framework.ProxyFactoryBean">
+  <bean id="IComponentLayoutHandler" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="target">
-      <bean class="org.toobsframework.pres.layout.controller.LayoutHandler">
-        <property name="componentLayoutManager"  ref="ILayoutManager"/>
+      <bean class="org.toobsframework.pres.layout.controller.ComponentLayoutHandler">
+        <property name="componentLayoutManager" ref="IComponentLayoutManager"/>
         <property name="componentRequestManager" ref="componentRequestManager"/>
         <!-- <property name="layoutSecurity"          ref="LayoutSecurity"/> -->
       </bean>
     </property>
-    <property name="proxyInterfaces" value="org.toobsframework.pres.layout.controller.ILayoutHandler"/>
+    <property name="proxyInterfaces"
+      value="org.toobsframework.pres.layout.controller.IComponentLayoutHandler"/>
     <property name="interceptorNames">
       <list>
-        <value>serviceTransactionInterceptor</value>
+        <!-- <value>serviceTransactionInterceptor</value> -->
       </list>
     </property>
   </bean>
-  
+
   <bean id="IComponentViewHandler" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="target">
       <bean class="org.toobsframework.pres.component.controller.ComponentViewHandler">
@@ -131,7 +152,7 @@
     </property>
     <property name="interceptorNames">
       <list>
-        <value>serviceTransactionInterceptor</value>
+        <!-- <value>serviceTransactionInterceptor</value> -->
       </list>
     </property>
   </bean>
@@ -149,7 +170,7 @@
     </property>
     <property name="interceptorNames">
       <list>
-        <value>serviceTransactionInterceptor</value>
+        <!-- <value>serviceTransactionInterceptor</value> -->
       </list>
     </property>
   </bean>
@@ -158,7 +179,7 @@
     <property name="target">
       <bean class="org.toobsframework.pres.doit.controller.DoItHandler">
         <property name="doItManager" ref="IDoItManager"/>
-        <property name="doItRunner"  ref="IDoItRunner"/>
+        <property name="doItRunner" ref="IDoItRunner"/>
         <property name="componentRequestManager" ref="componentRequestManager"/>
       </bean>
     </property>
@@ -167,11 +188,11 @@
     </property>
     <property name="interceptorNames">
       <list>
-        <value>serviceTransactionInterceptor</value>
+        <!-- <value>serviceTransactionInterceptor</value> -->
       </list>
     </property>
   </bean>
-  
+
   <!-- 
   <bean id="IAttachmentHandler" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="target">
@@ -188,30 +209,28 @@
   </bean>
   -->
 
-  <bean id="ILayoutManager" class="org.springframework.aop.framework.ProxyFactoryBean">
+  <bean id="IComponentLayoutManager" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="target">
-      <bean class="org.toobsframework.pres.layout.manager.LayoutManager">
+      <bean class="org.toobsframework.pres.layout.manager.ComponentLayoutManager">
         <property name="configFiles">
           <list>
-            <value>clc/example-base.clc.xml</value>
-            <value>clc/example-app.clc.xml</value>
+            <value>clc/example.clc.xml</value>
           </list>
         </property>
       </bean>
     </property>
     <property name="proxyInterfaces">
-      <value>org.toobsframework.pres.layout.manager.ILayoutManager</value>
+      <value>org.toobsframework.pres.layout.manager.IComponentLayoutManager</value>
     </property>
   </bean>
-  
+
   <bean id="IComponentManager" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="target">
       <bean class="org.toobsframework.pres.component.manager.ComponentManager">
         <property name="defaultDatasource" ref="DefaultDatasource"/>
         <property name="configFiles">
           <list>
-            <value>cc/example-base.cc.xml</value>
-            <value>cc/example-app.cc.xml</value>
+            <value>cc/example.cc.xml</value>
           </list>
         </property>
       </bean>
@@ -220,7 +239,7 @@
       <value>org.toobsframework.pres.component.manager.IComponentManager</value>
     </property>
   </bean>
-  
+
   <bean id="IChartManager" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="target">
       <bean class="org.toobsframework.pres.chart.manager.ChartManager">
@@ -268,11 +287,11 @@
     </property>
     <property name="interceptorNames">
       <list>
-        <value>serviceTransactionInterceptor</value>
+        <!-- <value>serviceTransactionInterceptor</value> -->
       </list>
     </property>
   </bean>
-  
+
   <bean id="DefaultDatasource" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="target">
       <bean class="org.toobsframework.pres.component.datasource.impl.DataSourceImpl">
@@ -285,7 +304,7 @@
       <value>org.toobsframework.pres.component.datasource.api.IDataSource</value>
     </property>
   </bean>
-  
+
   <!-- ScriptService Service Proxy with inner ProfileService Service Implementation -->
   <bean id="scriptService" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="target">

@@ -15,7 +15,7 @@
     </Section>
     <Pipeline xmlns="cc">
       <ContentType contentType="xhtml">
-        <Transform xmlns="cc" transformName="email/baseHtmlEmail"/>
+        <Transform xmlns="cc" name="email/baseHtmlEmail"/>
       </ContentType>
     </Pipeline>
   </Layout>
@@ -29,7 +29,7 @@
     </Section>
     <Pipeline xmlns="cc">
       <ContentType contentType="xhtml">
-        <Transform xmlns="cc" transformName="email/baseTextEmail"/>
+        <Transform xmlns="cc" name="email/baseTextEmail"/>
       </ContentType>
     </Pipeline>
   </Layout>

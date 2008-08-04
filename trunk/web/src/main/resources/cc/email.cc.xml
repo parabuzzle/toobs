@@ -6,7 +6,7 @@
   <Component id="emailHead">
     <Pipeline>
       <ContentType contentType="xhtml">
-        <Transform transformName="email/html/htmlEmailHead"/>
+        <Transform name="email/html/htmlEmailHead"/>
       </ContentType>
     </Pipeline>
   </Component>
@@ -14,10 +14,10 @@
   <Component id="emailHeader">
     <Pipeline>
       <ContentType contentType="xhtml">
-        <Transform transformName="email/html/htmlEmailHeader"/>
+        <Transform name="email/html/htmlEmailHeader"/>
       </ContentType>
       <ContentType contentType="text">
-        <Transform transformName="email/text/textEmailHeader"/>
+        <Transform name="email/text/textEmailHeader"/>
       </ContentType>
     </Pipeline>
   </Component>
@@ -25,10 +25,10 @@
   <Component id="emailFooter">
     <Pipeline>
       <ContentType contentType="xhtml">
-        <Transform transformName="email/html/htmlEmailFooter"/>
+        <Transform name="email/html/htmlEmailFooter"/>
       </ContentType>
       <ContentType contentType="text">
-        <Transform transformName="email/text/textEmailFooter"/>
+        <Transform name="email/text/textEmailFooter"/>
       </ContentType>
     </Pipeline>
   </Component>
@@ -38,14 +38,14 @@
     <GetObject objectAction="get" daoObject="infoRequestRecordDao" guidParam="recordId" returnedValueObject="InfoRequestRecordVO"/>
     <Pipeline>
       <ContentType contentType="xhtml">
-        <Transform transformName="email/html/ContactUsHtmlEmail">
+        <Transform name="email/html/ContactUsHtmlEmail">
           <Parameters>
             <Parameter name="host" path="sessionHost"/>
           </Parameters>
         </Transform>
       </ContentType>
       <ContentType contentType="text">
-        <Transform transformName="email/text/ContactUsTextEmail">
+        <Transform name="email/text/ContactUsTextEmail">
           <Parameters>
             <Parameter name="host" path="sessionHost"/>
           </Parameters>

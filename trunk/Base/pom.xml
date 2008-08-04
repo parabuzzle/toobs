@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.toobsframework</groupId>
   <artifactId>base</artifactId>
-  <name/>
+  <name>base</name>
   <version>${toobs.version}</version>
   <description/>
   <parent>
