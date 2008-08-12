@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Applications xmlns="tapp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="tapp
+  file:../../../../../../PresFramework/src/main/castor/toobsApplication.xsd">
+  
+  <ToobsApp><!--  root="/" -->
+    <XSLConfig>
+      <XSLLocation dir="xsl/"/>
+      <XSLLocation dir="xsl/" inApplication="false"/>
+    </XSLConfig>
+    <LayoutConfig>
+      <ConfigLocation dir="layout">
+        <ConfigFile name="example.clc.xml"/>
+      </ConfigLocation>
+    </LayoutConfig>
+    <ComponentConfig>
+      <ConfigLocation dir="component">
+        <ConfigFile name="example.cc.xml"/>
+      </ConfigLocation>
+    </ComponentConfig>
+    <DoItConfig>
+      <ConfigLocation dir="doit">
+        <ConfigFile name="example.doit.xml"/>
+      </ConfigLocation>
+    </DoItConfig>
+  </ToobsApp>
+
+</Applications>
+  

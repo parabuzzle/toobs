@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+  http://www.springframework.org/schema/beans/spring-beans-2.0.xsd 
+  http://www.springframework.org/schema/aop 
+  http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+  
+  <bean name="AppManager" class="org.toobsframework.pres.app.AppManager">
+  </bean>
+
+  <bean id="IAppHandler" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target">
+      <bean class="org.toobsframework.pres.app.controller.AppHandler">
+        <property name="appManager" ref="AppManager"/>
+        <property name="componentRequestManager" ref="componentRequestManager"/>
+        <!-- <property name="layoutSecurity"          ref="LayoutSecurity"/> -->
+      </bean>
+    </property>
+    <property name="proxyInterfaces"
+      value="org.toobsframework.pres.app.controller.IAppHandler"/>
+    <property name="interceptorNames">
+      <list>
+        <!-- <value>serviceTransactionInterceptor</value> -->
+      </list>
+    </property>
+  </bean>
+  
+</beans>  

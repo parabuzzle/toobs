@@ -102,13 +102,13 @@ public class ComponentLayoutHandler implements IComponentLayoutHandler {
         if (!hasAccess && layout.getConfig().getNoAccessLayout() != null) {
           try {
             layout = this.componentLayoutManager.getLayout(layout.getConfig().getNoAccessLayout(), deployTime);
-            output = layout.render(componentRequestManager.get(), layout.isEmbedded());
+            output = layout.render(componentRequestManager.get());
           } catch (ComponentLayoutNotFoundException cnfe) {
             log.warn("No Access Component Layout " + layout.getConfig().getNoAccessLayout() + " not found.");
             throw cnfe;
           }
         } else {
-          output = layout.render(componentRequestManager.get(), layout.isEmbedded(), false, extension);
+          output = layout.render(componentRequestManager.get(), null, extension);
         }
         
         if (layout.getDoItRef() != null) {
@@ -124,7 +124,7 @@ public class ComponentLayoutHandler implements IComponentLayoutHandler {
         log.info("Root cause " + t.getClass().getName() + " " + t.getMessage());
         if (t instanceof PermissionException
             && (layout = this.componentLayoutManager.getLayout((PermissionException)t)) != null) {
-          output = layout.render(componentRequestManager.get(), layout.isEmbedded());
+          output = layout.render(componentRequestManager.get());
         } else {
           throw e;
         }

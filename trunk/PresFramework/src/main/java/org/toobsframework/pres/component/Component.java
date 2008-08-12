@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.servlet.http.Cookie;
+import javax.xml.transform.URIResolver;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -279,6 +280,11 @@ public class Component {
     this.initDone = true;
   }
 
+  public String render(String contentType, Map params, Map paramsOut)
+    throws ComponentNotInitializedException, ComponentException, ParameterException {
+    return this.render(contentType, params, paramsOut, null);
+  }
+
   /**
    * Runs the objects through the xml pipeline to get the proper rendering of
    * the component as defined in the config file.
@@ -287,7 +293,7 @@ public class Component {
    * @throws ComponentNotInitializedException
    * @throws ComponentException
    */
-  public String render(String contentType, Map params, Map paramsOut, boolean appendUrlScanner)
+  public String render(String contentType, Map params, Map paramsOut, URIResolver uriResolver)
       throws ComponentNotInitializedException, ComponentException, ParameterException {
     StringBuffer renderedOutput = new StringBuffer();
     Date start = new Date();
@@ -295,7 +301,7 @@ public class Component {
     Date endGet = new Date();
 
     if (!contentType.equals("bizXML")) {
-      renderedOutput.append(this.callXMLPipeline(contentType, componentXML, params, appendUrlScanner));
+      renderedOutput.append(this.callXMLPipeline(contentType, componentXML, params, uriResolver));
       /*
       if (this.getControllerNames().length > 0) {
         renderedOutput.append("<script type=\"text/javascript\">\n");
@@ -380,8 +386,7 @@ public class Component {
    * @throws ComponentNotInitializedException
    * @throws ComponentException
    */
-  @SuppressWarnings("unchecked")
-  private String callXMLPipeline(String contentType, String inputXMLString, Map inParams, boolean appendUrlScanner)
+  private String callXMLPipeline(String contentType, String inputXMLString, Map inParams, URIResolver uriResolver)
       throws ComponentException, ParameterException {
     StringBuffer outputString = new StringBuffer();
     Vector outputXML = new Vector();
@@ -418,17 +423,14 @@ public class Component {
       // necessary for that Transformer.
       Vector xslSources = new Vector();
       xslSources.addAll(inputXSLs);
-      if (appendUrlScanner) {
-        if (log.isTraceEnabled()) {
-          log.trace("Transform: " + inputXSLs.get(0));
+      if (xslSources.size() > 1) {
+        if (!"xhtml".equals(contentType)) {
+          xmlTransformer = XMLTransformerFactory.getInstance().getChainTransformer(XMLTransformerFactory.OUTPUT_FORMAT_XML, uriResolver);
+        } else {
+          xmlTransformer = XMLTransformerFactory.getInstance().getChainTransformer(XMLTransformerFactory.OUTPUT_FORMAT_HTML, uriResolver);
         }
-        xslSources.add(PresConstants.XSL_URL_SCANNER_COMP);
-        xmlTransformer = XMLTransformerFactory.getInstance().getChainTransformer(XMLTransformerFactory.OUTPUT_FORMAT_HTML);
       } else {
-        if (log.isTraceEnabled()) {
-          log.trace("Transform: " + inputXSLs.get(0));
-        }
-        xmlTransformer = XMLTransformerFactory.getInstance().getDefaultTransformer();
+        xmlTransformer = XMLTransformerFactory.getInstance().getDefaultTransformer(uriResolver);
       }
 
       // Do Transformation
@@ -574,6 +576,22 @@ public class Component {
 
   public void setStyles(String[] styles) {
     this.styles = styles;
+  }
+
+  public String getDsClassName() {
+    return dsClassName;
+  }
+
+  public void setDsClassName(String dsClassName) {
+    this.dsClassName = dsClassName;
+  }
+
+  public Map getDsParams() {
+    return dsParams;
+  }
+
+  public void setDsParams(Map dsParams) {
+    this.dsParams = dsParams;
   }
 
 }

@@ -6,6 +6,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.xml.transform.URIResolver;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.toobsframework.pres.component.ComponentException;
 import org.toobsframework.pres.component.Transform;
 import org.toobsframework.pres.component.config.Parameter;
@@ -13,7 +17,6 @@ import org.toobsframework.pres.layout.config.DoItRef;
 import org.toobsframework.pres.layout.config.Section;
 import org.toobsframework.exception.ParameterException;
 import org.toobsframework.pres.util.ParameterUtil;
-import org.toobsframework.pres.util.PresConstants;
 import org.toobsframework.transformpipeline.domain.IXMLTransformer;
 import org.toobsframework.transformpipeline.domain.XMLTransformerException;
 import org.toobsframework.transformpipeline.domain.XMLTransformerFactory;
@@ -24,6 +27,8 @@ import org.toobsframework.util.IRequest;
 
 @SuppressWarnings("unchecked")
 public class RuntimeLayout {
+  private static Log log = LogFactory.getLog(RuntimeLayout.class);
+
   private static final String XML_HEADER = "<RuntimeLayout>";
   private static final String XML_FOOTER = "</RuntimeLayout>";
   private static final String XML_CP_HEADER = "<TransformParams>";
@@ -33,8 +38,6 @@ public class RuntimeLayout {
   private RuntimeLayoutConfig config;
   private String layoutXml;
   private DoItRef doItRef;
-  private boolean useComponentScan;
-  private boolean embedded;
   
   public RuntimeLayoutConfig getConfig() {
     return config;
@@ -93,15 +96,15 @@ public class RuntimeLayout {
     this.layoutXml = layoutXml;
   }
   
-  public String render(IRequest request, boolean embedded) throws ComponentException, ParameterException {
-    return this.render(request, embedded, false, "xhtml");  
+  public String render(IRequest request) throws ComponentException, ParameterException {
+    return this.render(request, null, "xhtml");  
   }
   
-  public String render(IRequest request, boolean embedded, boolean skipUrlScan) throws ComponentException, ParameterException {
-    return this.render(request, embedded, skipUrlScan, "xhtml");
+  public String render(IRequest request, URIResolver uriResolver) throws ComponentException, ParameterException {
+    return this.render(request, uriResolver, "xhtml");
   }
   
-  public String render(IRequest request, boolean embedded, boolean skipUrlScan, String contentType) throws ComponentException, ParameterException {
+  public String render(IRequest request, URIResolver uriResolver, String contentType) throws ComponentException, ParameterException {
     IXMLTransformer xmlTransformer = null;
     StringBuffer outputString = new StringBuffer();
     HashMap layoutParams = new HashMap();
@@ -125,33 +128,21 @@ public class RuntimeLayout {
       } else {
         throw new ComponentException("Component Layout with id: " + this.id + " does not have a transform for content type: " + contentType);
       }
-      /*
-      for (int t = 0; t < transforms.size(); t++) {
-        Transform trans = (Transform)transforms.get(t);
-        inputXSLs.add(trans.getTransformName());
-        if (trans.getTransformParams() != null) {
-          ParameterUtil.mapParameters("Transform:" + trans.getTransformName(), trans.getTransformParams().getParameter(), request.getParams(), layoutParams, this.id);
-        }
-      }
-      */
-      if (!skipUrlScan) {
-        if (embedded) {
-          inputXSLs.add(PresConstants.XSL_URL_SCANNER_XML);
-          xmlTransformer = XMLTransformerFactory.getInstance().getChainTransformer(XMLTransformerFactory.OUTPUT_FORMAT_XML);
+
+      log.debug("uriResolver: " + uriResolver);
+      if (inputXSLs.size() > 1) {
+        if (!"xhtml".equals(contentType)) {
+          xmlTransformer = XMLTransformerFactory.getInstance().getChainTransformer(XMLTransformerFactory.OUTPUT_FORMAT_XML, uriResolver);
           if (request.getParams().get("outputFormat") != null) {
             layoutParams.put("outputFormat", request.getParams().get("outputFormat"));
           }
-        } else if (useComponentScan) {
-          inputXSLs.add(PresConstants.XSL_URL_SCANNER_COMP);
-          xmlTransformer = XMLTransformerFactory.getInstance().getChainTransformer(XMLTransformerFactory.OUTPUT_FORMAT_HTML);
         } else {
-          inputXSLs.add(PresConstants.XSL_URL_SCANNER_LAYOUT);
-          xmlTransformer = XMLTransformerFactory.getInstance().getChainTransformer(XMLTransformerFactory.OUTPUT_FORMAT_HTML);
+          xmlTransformer = XMLTransformerFactory.getInstance().getChainTransformer(XMLTransformerFactory.OUTPUT_FORMAT_HTML, uriResolver);
         }
       } else {
-        xmlTransformer = XMLTransformerFactory.getInstance().getDefaultTransformer();
+        xmlTransformer = XMLTransformerFactory.getInstance().getDefaultTransformer(uriResolver);
       }
-      //ParameterUtil.mapParameters("Layout:" + this.id, config.getAllParams(), request.getParams(), layoutParams, this.id);
+
       ParameterUtil.mapParameters("Layout:" + this.id, config.getAllTransformParams(), request.getParams(), layoutParams, this.id);
 
       inputXMLs.add(this.layoutXml);
@@ -176,20 +167,6 @@ public class RuntimeLayout {
   }
   public void setDoItRef(DoItRef doItRef) {
     this.doItRef = doItRef;
-  }
-  /*
-  public boolean isUseComponentScan() {
-    return useComponentScan;
-  }
-  public void setUseComponentScan(boolean useComponentScan) {
-    this.useComponentScan = useComponentScan;
-  }
-  */
-  public boolean isEmbedded() {
-    return embedded;
-  }
-  public void setEmbedded(boolean embedded) {
-    this.embedded = embedded;
   }
   public Map getTransforms() {
     return transforms;

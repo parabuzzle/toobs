@@ -6,52 +6,59 @@
   <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
     <property name="basename" value="messages"/>
   </bean>
-
+  
   <!-- TODO Make a default multipart impl
-  <bean id="multipartResolver" class="org.toobsframework.pres.spring.multipart.MultipartController">
+    <bean id="multipartResolver" class="org.toobsframework.pres.spring.multipart.MultipartController">
     <property name="requestManager"    ref="componentRequestManager"/>
     <property name="multipartResolver" ref="IMultipartResolver"/>
-  </bean>
+    </bean>
   -->
-
+  
   <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
     <property name="alwaysUseFullPath" value="true"/>
     <property name="mappings">
       <props>
+        <prop key="/**">appController</prop>
         <!--
-        <prop key="/**/attachment/*">attachmentController</prop>
+          <prop key="/**/attachment/*">attachmentController</prop>
+          <prop key="/**/website/*.xhtml">componentLayoutController</prop>
+          <prop key="/**/*.xhtml">componentLayoutController</prop>
+          <prop key="/**/*.xpdf">componentLayoutController</prop>
+          <prop key="/**/*.xrtf">componentLayoutController</prop>
+          <prop key="/**/*.xxls">componentLayoutController</prop>
+          <prop key="/**/*.xcomp">componentController</prop>
+          <prop key="/**/*.xpost">updateController</prop>
+          <prop key="/**/*.xchart">chartController</prop>
         -->
-        <prop key="/**/website/*.xhtml">componentLayoutController</prop>
-        <prop key="/**/*.xhtml">componentLayoutController</prop>
-        <prop key="/**/*.xpdf">componentLayoutController</prop>
-        <prop key="/**/*.xrtf">componentLayoutController</prop>
-        <prop key="/**/*.xxls">componentLayoutController</prop>
-        <prop key="/**/*.xcomp">componentController</prop>
-        <prop key="/**/*.xpost">updateController</prop>
-        <prop key="/**/*.xchart">chartController</prop>
       </props>
     </property>
   </bean>
   
-  <bean id="componentLayoutController" class="org.toobsframework.pres.layout.controller.ComponentLayoutController">
+  <bean id="appController" class="org.toobsframework.pres.app.controller.AppController">
+    <property name="appHandler" ref="IAppHandler"/>
+  </bean>
+  
+  <!--
+    <bean id="componentLayoutController" class="org.toobsframework.pres.layout.controller.ComponentLayoutController">
     <property name="componentLayoutHandler" ref="IComponentLayoutHandler"/>
-  </bean>
-  
-  <bean id="componentController" class="org.toobsframework.pres.component.controller.ComponentViewController">
+    </bean>
+    
+    <bean id="componentController" class="org.toobsframework.pres.component.controller.ComponentViewController">
     <property name="componentViewHandler" ref="IComponentViewHandler"/>
-  </bean>
-  
-  <bean id="updateController"    class="org.toobsframework.pres.doit.controller.DoItController">
+    </bean>
+    
+    <bean id="updateController"    class="org.toobsframework.pres.doit.controller.DoItController">
     <property name="doItHandler" ref="IDoItHandler"/>
-  </bean>
-  
-  <bean id="chartController" class="org.toobsframework.pres.chart.controller.ChartController">
+    </bean>
+    
+    <bean id="chartController" class="org.toobsframework.pres.chart.controller.ChartController">
     <property name="chartHandler" ref="IChartHandler"/>
-  </bean>
-
+    </bean>
+  -->
+  
   <!-- TODO Make a default attachment impl
-  <bean id="attachmentController" class="org.toobsframework.pres.attachment.controller.AttachmentController">
+    <bean id="attachmentController" class="org.toobsframework.pres.attachment.controller.AttachmentController">
     <property name="attachmentHandler" ref="IAttachmentHandler"/>
-  </bean>
+    </bean>
   -->
 </beans>

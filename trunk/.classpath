@@ -11,9 +11,11 @@
 	<classpathentry kind="src" output="PresFramework/target/test-classes" path="PresFramework/src/test/java"/>
 	<classpathentry kind="src" output="web/target/classes" path="web/src/main/java"/>
 	<classpathentry kind="src" output="web/target/test-classes" path="web/src/test/java"/>
+	<classpathentry excluding="**" kind="src" output="web/target/classes" path="web/src/main/resources"/>
 	<classpathentry excluding="**" kind="src" output="web/target/test-classes" path="web/src/test/resources"/>
+	<classpathentry kind="src" path="PresFramework/src/main/castor"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/JVM 1.5.0 (MacOS X Default)"/>
-	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

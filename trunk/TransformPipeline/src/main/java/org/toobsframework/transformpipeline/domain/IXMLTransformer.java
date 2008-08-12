@@ -4,6 +4,8 @@ import java.util.Properties;
 import java.util.Vector;
 import java.util.HashMap;
 
+import javax.xml.transform.URIResolver;
+
 /**
  * This is the Base Interface for all datatable domain objects
  *
@@ -40,11 +42,13 @@ public interface IXMLTransformer {
    *
    * @throws StrutsCXXSLTException
    */
+  @SuppressWarnings("unchecked")
   public Vector transform(
       Vector inputXSLs,
       Vector inputXMLs,
       HashMap inputParams) throws XMLTransformerException;
 
-  public void setOutputProperties(
-      Properties outputProperties);
+  public void setOutputProperties(Properties outputProperties);
+  
+  public void setURIResolver(URIResolver uriResolver); 
 }

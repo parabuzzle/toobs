@@ -2,13 +2,7 @@ package org.toobsframework.transformpipeline.domain;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -17,6 +11,7 @@ import java.util.Vector;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.sax.SAXResult;
@@ -36,7 +31,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 @SuppressWarnings("unchecked")
-public class ChainedXSLTransformer implements IXMLTransformer {
+public class ChainedXSLTransformer extends BaseXMLTransformer {
 
   /**
    * To get the logger instance
@@ -67,6 +62,7 @@ public class ChainedXSLTransformer implements IXMLTransformer {
     ByteArrayOutputStream xmlOutputStream = null;
     try {
       TransformerFactory tFactory = TransformerFactory.newInstance();
+      setFactoryResolver(tFactory);
 
       if (tFactory.getFeature(SAXSource.FEATURE) &&
           tFactory.getFeature(SAXResult.FEATURE)) {
@@ -90,7 +86,8 @@ public class ChainedXSLTransformer implements IXMLTransformer {
           if (source instanceof StreamSource) {
             tHandler = saxTFactory.newTransformerHandler((StreamSource)source);
           } else {
-            tHandler = saxTFactory.newTransformerHandler(new StreamSource(getXSLFile((String) source)));
+            //tHandler = saxTFactory.newTransformerHandler(new StreamSource(getXSLFile((String) source)));
+            tHandler = saxTFactory.newTransformerHandler(uriResolver.resolve((String) source + ".xsl", ""));
           }
           Transformer transformer = tHandler.getTransformer();
           transformer.setOutputProperty("encoding", "UTF-8");
@@ -131,24 +128,18 @@ public class ChainedXSLTransformer implements IXMLTransformer {
           log.debug("Output XML:\n" + outputXML);
         }
       }
-    }
-    catch (IOException ex) {
-      log.error("", ex);
+    } catch (IOException ex) {
       throw new XMLTransformerException(ex);
-    }
-    catch (IllegalArgumentException ex) {
-      log.error("", ex);
+    } catch (IllegalArgumentException ex) {
       throw new XMLTransformerException(ex);
-    }
-    catch (SAXException ex) {
-      log.error("", ex);
+    } catch (SAXException ex) {
       throw new XMLTransformerException(ex);
-    }
-    catch (TransformerConfigurationException ex) {
-      log.error("", ex);
+    } catch (TransformerConfigurationException ex) {
       throw new XMLTransformerException(ex);
-    }
-    catch (TransformerFactoryConfigurationError ex) {
+    } catch (TransformerFactoryConfigurationError ex) {
+      throw new XMLTransformerException(ex);
+    } catch (TransformerException ex) {
+      throw new XMLTransformerException(ex);
     } finally {
       try {
         if (xmlInputStream != null) {
@@ -169,23 +160,4 @@ public class ChainedXSLTransformer implements IXMLTransformer {
     this.outputProperties = outputProperties;
   }
 
-  private static InputStream getXSLFile(String xslFileName)
-      throws FileNotFoundException, IOException {
-    ClassLoader cld = ChainedXSLTransformer.class.getClassLoader();
-    ByteArrayInputStream baos = null;
-    URL configFileURL = cld.getResource("xsl/" + xslFileName + ".xsl");
-    // If the file exists, read it.
-    if (null != configFileURL) {
-      File file = new File(configFileURL.getFile());
-      byte[] ba = new byte[(int)file.length()];
-      DataInputStream in = new DataInputStream(new FileInputStream(file));
-      in.readFully(ba);
-      in.close();
-      baos = new ByteArrayInputStream(ba);
-    } else {
-      log.error("XSL File " + "xsl/" + xslFileName + ".xsl does not exist for component ");
-      throw new FileNotFoundException("xsl " + xslFileName + " does not exist");
-    }
-    return baos;
-  }
 }

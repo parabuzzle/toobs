@@ -120,93 +120,13 @@ public final class ComponentLayoutManager implements IComponentLayoutManager {
           if ((layouts != null) && (layouts.length > 0)) {
             Layout compLayout = null;
             RuntimeLayout layout = null;
-            RuntimeLayoutConfig layoutConfig = null;
             for (int i = 0; i < layouts.length; i ++) {
               compLayout = layouts[i];
-              layoutConfig = new RuntimeLayoutConfig();
+              
               layout = new RuntimeLayout();
               
-              // Inherited from extended definition
-              String extendStr = compLayout.getExtends();
-              if (extendStr != null) {
-                String[] extSplit = extendStr.split(";");
-                for (int ext = 0; ext < extSplit.length; ext++) {
-                  String extension = extSplit[ext];
-                  RuntimeLayout extend = (RuntimeLayout)registry.get(extension);
-                  if (extend == null) {
-                    log.error("The Layout extension " + extension + " for " + compLayout.getId() + 
-                        " could not be located in the registry.\n"
-                        + "Check the spelling and case of the extends property and ensure it is defined before\n"
-                        + "the dependent templates");
-                    throw new ComponentLayoutInitializationException("Missing extension " + extension + " for " + compLayout.getId());
-                  }
-                  RuntimeLayoutConfig extendConfig = extend.getConfig();
-                  if (extend == null) {
-                    throw new ComponentLayoutInitializationException("Layout " + compLayout.getId() + 
-                        " cannot extend " + extension + " cause it does not exist or has not yet been loaded");
-                  }
-                  layoutConfig.addParam(extendConfig.getAllParams());
-                  layoutConfig.addTransformParam(extendConfig.getAllTransformParams());
-                  layoutConfig.addSection(extendConfig.getAllSections());
-                  layoutConfig.setNoAccessLayout(extendConfig.getNoAccessLayout());
-                  //layout.addTransform(extend.getAllTransforms());
-                  layout.getTransforms().putAll(extend.getTransforms());
-                  //layout.setUseComponentScan(extend.isUseComponentScan());
-                  layout.setEmbedded(extend.isEmbedded());
-                }
-              }
+              configureLayout(compLayout, layout, registry);
               
-              if (compLayout.getParameters() != null) {
-                layoutConfig.addParam(compLayout.getParameters().getParameter());
-              }
-              if (compLayout.getTransformParameters() != null) {
-                layoutConfig.addTransformParam(compLayout.getTransformParameters().getParameter());
-              }
-              layoutConfig.addSection(compLayout.getSection());
-              if (compLayout.getNoAccessLayout() != null) {
-                layoutConfig.setNoAccessLayout(compLayout.getNoAccessLayout());
-              }
-              layout.setId(compLayout.getId());
-              //layout.setUseComponentScan(compLayout.getUseComponentScan() || layout.isEmbedded());
-              layout.setEmbedded(compLayout.getEmbedded() || layout.isEmbedded());
-              
-              //Set component pipeline properties.
-              if (compLayout.getPipeline() != null) {
-                Enumeration contentTypeEnum = compLayout.getPipeline().enumerateContentType();
-                while (contentTypeEnum.hasMoreElements()) {
-                  Vector theseTransforms = new Vector();
-                  ContentType thisContentType = (ContentType) contentTypeEnum.nextElement();
-                  Enumeration transEnum = thisContentType.enumerateTransform();
-                  while (transEnum.hasMoreElements()) {
-                    org.toobsframework.pres.component.config.Transform thisTransformConfig = (org.toobsframework.pres.component.config.Transform) transEnum.nextElement();                  
-                    org.toobsframework.pres.component.Transform thisTransform = new org.toobsframework.pres.component.Transform();
-      
-                    thisTransform.setTransformName(thisTransformConfig.getName());
-                    thisTransform.setTransformParams(thisTransformConfig.getParameters());
-      
-                    theseTransforms.add(thisTransform);
-                  }
-                  String[] ctSplit = thisContentType.getContentType().split(";");
-                  for (int ct = 0; ct < ctSplit.length; ct++) {
-                    layout.getTransforms().put(ctSplit[ct], theseTransforms);
-                  }
-                }
-              }
-              /*
-              if (compLayout.getTransformCount() > 0) {
-                layout.getTransforms().clear();
-                for (int t = 0; t < compLayout.getTransformCount(); t++) {
-                  layout.addTransform(new Transform(compLayout.getTransform(t)));
-                }
-              }
-              */
-              layout.setConfig(layoutConfig);
-              
-              layout.setDoItRef(compLayout.getDoItRef());
-              
-              if (log.isDebugEnabled()) {
-                log.debug("Layout " + compLayout.getId() + " xml " + layout.getLayoutXml());
-              }
               if (registry.containsKey(compLayout.getId()) && !initDone) {
                 log.warn("Overriding layout with Id: " + compLayout.getId());
               }
@@ -230,6 +150,93 @@ public final class ComponentLayoutManager implements IComponentLayoutManager {
       }
       initDone = true;
     }
+  }
+
+  public static void configureLayout(Layout compLayout, RuntimeLayout layout, Map layoutRegistry) throws ComponentLayoutInitializationException, IOException {
+    RuntimeLayoutConfig layoutConfig = new RuntimeLayoutConfig();
+
+    // Inherited from extended definition
+    String extendStr = compLayout.getExtends();
+    if (extendStr != null) {
+      String[] extSplit = extendStr.split(";");
+      for (int ext = 0; ext < extSplit.length; ext++) {
+        String extension = extSplit[ext];
+        RuntimeLayout extend = (RuntimeLayout)layoutRegistry.get(extension);
+        if (extend == null) {
+          log.error("The Layout extension " + extension + " for " + compLayout.getId() + 
+              " could not be located in the registry.\n"
+              + "Check the spelling and case of the extends property and ensure it is defined before\n"
+              + "the dependent templates");
+          throw new ComponentLayoutInitializationException("Missing extension " + extension + " for " + compLayout.getId());
+        }
+        RuntimeLayoutConfig extendConfig = extend.getConfig();
+        if (extend == null) {
+          throw new ComponentLayoutInitializationException("Layout " + compLayout.getId() + 
+              " cannot extend " + extension + " cause it does not exist or has not yet been loaded");
+        }
+        layoutConfig.addParam(extendConfig.getAllParams());
+        layoutConfig.addTransformParam(extendConfig.getAllTransformParams());
+        layoutConfig.addSection(extendConfig.getAllSections());
+        layoutConfig.setNoAccessLayout(extendConfig.getNoAccessLayout());
+        //layout.addTransform(extend.getAllTransforms());
+        layout.getTransforms().putAll(extend.getTransforms());
+        //layout.setUseComponentScan(extend.isUseComponentScan());
+        //layout.setEmbedded(extend.isEmbedded());
+      }
+    }
+    
+    if (compLayout.getParameters() != null) {
+      layoutConfig.addParam(compLayout.getParameters().getParameter());
+    }
+    if (compLayout.getTransformParameters() != null) {
+      layoutConfig.addTransformParam(compLayout.getTransformParameters().getParameter());
+    }
+    layoutConfig.addSection(compLayout.getSection());
+    if (compLayout.getNoAccessLayout() != null) {
+      layoutConfig.setNoAccessLayout(compLayout.getNoAccessLayout());
+    }
+    layout.setId(compLayout.getId());
+    //layout.setUseComponentScan(compLayout.getUseComponentScan() || layout.isEmbedded());
+    //layout.setEmbedded(compLayout.getEmbedded() || layout.isEmbedded());
+    
+    //Set component pipeline properties.
+    if (compLayout.getPipeline() != null) {
+      Enumeration contentTypeEnum = compLayout.getPipeline().enumerateContentType();
+      while (contentTypeEnum.hasMoreElements()) {
+        Vector theseTransforms = new Vector();
+        ContentType thisContentType = (ContentType) contentTypeEnum.nextElement();
+        Enumeration transEnum = thisContentType.enumerateTransform();
+        while (transEnum.hasMoreElements()) {
+          org.toobsframework.pres.component.config.Transform thisTransformConfig = (org.toobsframework.pres.component.config.Transform) transEnum.nextElement();                  
+          org.toobsframework.pres.component.Transform thisTransform = new org.toobsframework.pres.component.Transform();
+
+          thisTransform.setTransformName(thisTransformConfig.getName());
+          thisTransform.setTransformParams(thisTransformConfig.getParameters());
+
+          theseTransforms.add(thisTransform);
+        }
+        String[] ctSplit = thisContentType.getContentType().split(";");
+        for (int ct = 0; ct < ctSplit.length; ct++) {
+          layout.getTransforms().put(ctSplit[ct], theseTransforms);
+        }
+      }
+    }
+    /*
+    if (compLayout.getTransformCount() > 0) {
+      layout.getTransforms().clear();
+      for (int t = 0; t < compLayout.getTransformCount(); t++) {
+        layout.addTransform(new Transform(compLayout.getTransform(t)));
+      }
+    }
+    */
+    layout.setConfig(layoutConfig);
+    
+    layout.setDoItRef(compLayout.getDoItRef());
+    
+    if (log.isDebugEnabled()) {
+      log.debug("Layout " + compLayout.getId() + " xml " + layout.getLayoutXml());
+    }
+    
   }
 
   public List getConfigFiles() {

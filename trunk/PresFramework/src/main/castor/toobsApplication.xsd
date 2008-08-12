@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="tapp" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  attributeFormDefault="unqualified"
+  xmlns:tapp="tapp"
+  >
+  
+  <xs:element name="Applications">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="tapp:ToobsApp" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="ToobsApp">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="tapp:XSLConfig" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="tapp:LayoutConfig" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="tapp:ComponentConfig" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="tapp:DoItConfig" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+      <xs:attribute name="root" type="xs:string" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="XSLConfig">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="tapp:XSLLocation" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="LayoutConfig">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="tapp:ConfigLocation" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ComponentConfig">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="tapp:ConfigLocation" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="DoItConfig">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="tapp:ConfigLocation" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="Location">
+    <xs:attribute name="dir" type="xs:string" use="required"/>
+    <xs:attribute name="inApplication" type="xs:boolean" default="true"/>
+  </xs:complexType>
+
+  <xs:element name="XSLLocation">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="tapp:Location"/>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ConfigLocation">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="tapp:Location">
+          <xs:sequence>
+            <xs:element ref="tapp:ConfigFile" minOccurs="1" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ConfigFile">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="isGlobal" type="xs:boolean" default="false"/>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>

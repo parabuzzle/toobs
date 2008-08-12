@@ -10,6 +10,7 @@
     <constructor-arg>
       <list>
         <value>classpath:applicationContext.xml</value>
+        <value>classpath:toobsContext.xml</value>
       </list>
     </constructor-arg>
   </bean>

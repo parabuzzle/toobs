@@ -5,6 +5,7 @@ import org.apache.commons.logging.Log;
 import org.apache.xml.utils.DefaultErrorHandler;
 
 import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.dom.DOMSource;
@@ -13,25 +14,27 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.*;
-import java.net.URL;
 
 /**
  */
-public class StaticXSLTransformer
-    implements IXMLTransformer {
+public class StaticXSLTransformer extends BaseXMLTransformer {
 
   /**
    * To get the logger instance
    */
   private static Log log = LogFactory.getLog(StaticXSLTransformer.class);
-
+  
   /**
    * Implementation of the transform() method. This method first checks some
    * input parameters. Then it creates a Source object and invoces the
@@ -53,7 +56,7 @@ public class StaticXSLTransformer
         log.debug("  Transform Param - name: " + entry.getKey() + " value: " + entry.getValue());
       }        
     }
-    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
     Iterator XSLIterator = inputXSLs.iterator();
     
     InputStreamReader reader = null;
@@ -61,26 +64,16 @@ public class StaticXSLTransformer
 
       Iterator XMLIterator = inputXMLs.iterator();
 
-      StreamSource xslSource = null;
       String xslFile = (String) XSLIterator.next();
-      URL configFileURL = classLoader.getResource("xsl/" + xslFile + ".xsl");
-      // If the file exists, read it.
-      if (null != configFileURL) {
-        try {
-          reader = new InputStreamReader(configFileURL.openStream());
-          xslSource = new StreamSource(reader);
-        } catch (IOException e) {
-          log.error("XSL File " + "xsl/" + xslFile+ ".xsl had IOException " + e.getMessage());
-          if (reader != null) {
-            try {
-              reader.close();
-            } catch (IOException ignore) { }
-          }
-          throw new XMLTransformerException("xsl " + xslFile + " cannot be loaded");
+      Source xslSource = null;
+      
+      try {
+        xslSource = uriResolver.resolve(xslFile + ".xsl", "");
+        if (log.isDebugEnabled()) {
+          log.debug("XSL Source: " + xslSource.getSystemId());
         }
-      } else {
-        log.error("XSL File " + "xsl/" + xslFile+ ".xsl does not exist for component ");
-        throw new XMLTransformerException("xsl " + xslFile + " does not exist");
+      } catch (TransformerException e) {
+        throw new XMLTransformerException("xsl " + xslFile + " cannot be loaded");
       }
 
       if (xslSource == null) {
@@ -184,17 +177,19 @@ public class StaticXSLTransformer
    * @param xmlResult
    *          holds the streamResult of the transform.
    */
+  @SuppressWarnings("unchecked")
   protected void doTransform(
-      StreamSource xslSource,
-      StreamSource xmlSource,
+      Source xslSource,
+      Source xmlSource,
       HashMap params,
       StreamResult xmlResult,
       String xslFile) throws XMLTransformerException {
+
     try {
       // 1. Instantiate a TransformerFactory.
       TransformerFactory tFactory = TransformerFactory.newInstance();
       // set the URI Resolver for the transformer factory
-      tFactory.setURIResolver(new XSLUriResolverImpl());
+      setFactoryResolver(tFactory);
             
       // 2. Use the TransformerFactory to process the stylesheet Source and
       //    generate a Transformer.

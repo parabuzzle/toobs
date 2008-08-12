@@ -22,7 +22,9 @@ import org.toobsframework.pres.component.config.ContentType;
 import org.toobsframework.pres.component.config.DataSourceProperty;
 import org.toobsframework.data.beanutil.converter.DateToStringConverter;
 import org.toobsframework.exception.ParameterException;
+import org.toobsframework.pres.component.datasource.api.DataSourceInitializationException;
 import org.toobsframework.pres.component.datasource.api.IDataSource;
+import org.toobsframework.pres.component.datasource.manager.DataSourceNotFoundException;
 
 import java.util.Vector;
 import java.util.Enumeration;
@@ -77,7 +79,7 @@ public final class ComponentManager implements IComponentManager {
       org.toobsframework.pres.component.Component component,
       String contentType, Map params, Map paramsOut, boolean appendUrlScanner)
       throws ComponentNotInitializedException, ComponentException, ParameterException {
-    return component.render(contentType, params, paramsOut, appendUrlScanner);
+    return component.render(contentType, params, paramsOut);
   }
 
   // Read from config file
@@ -118,61 +120,10 @@ public final class ComponentManager implements IComponentManager {
             org.toobsframework.pres.component.Component uic = null;
             for (int i = 0; i < components.length; i++) {
               comp = components[i];
-              Map dsParams = new HashMap();
-              if(comp.getDataSource() != null){
-                String dsClassName = comp.getDataSource().getClassName();
-                DataSourceProperty[] dsProperties = comp.getDataSource().getDataSourceProperty();
-                if ((dsProperties != null) && (dsProperties.length > 0)) {
-                  String propertyName = null;
-                  String[] propertyValue = null;
-                  for (int p = 0; p < dsProperties.length; p++) {
-                    propertyName = dsProperties[p].getDataSourcePropertyName();
-                    propertyValue = dsProperties[p].getDataSourcePropertyValue();
-                    dsParams.put(propertyName, propertyValue);
-                  }
-                }
-                uic = new org.toobsframework.pres.component.Component(dsClassName, dsParams);
-              } else {
-                uic = new org.toobsframework.pres.component.Component();
-                uic.setDs(defaultDatasource);
-              }
-               
-              uic.setId(comp.getId());
-              uic.setFileName(fileName);
-              uic.setRenderErrorObject(comp.getRenderErrorObject());
-              //Set object config property.
-              uic.setObjectsConfig(comp.getGetObject());
-              //Set component pipeline properties.
-              HashMap transforms = new HashMap();
-              Enumeration contentTypeEnum = comp.getPipeline().enumerateContentType();
-              while (contentTypeEnum.hasMoreElements()) {
-                Vector theseTransforms = new Vector();
-                ContentType thisContentType = (ContentType) contentTypeEnum.nextElement();
-                Enumeration transEnum = thisContentType.enumerateTransform();
-                while (transEnum.hasMoreElements()) {
-                  org.toobsframework.pres.component.config.Transform thisTransformConfig = (org.toobsframework.pres.component.config.Transform) transEnum.nextElement();                  
-                  org.toobsframework.pres.component.Transform thisTransform = new org.toobsframework.pres.component.Transform();
-    
-                  thisTransform.setTransformName(thisTransformConfig.getName());
-                  thisTransform.setTransformParams(thisTransformConfig.getParameters());
-    
-                  theseTransforms.add(thisTransform);
-                }
-                String[] ctSplit = thisContentType.getContentType().split(";");
-                for (int ct = 0; ct < ctSplit.length; ct++) {
-                  transforms.put(ctSplit[ct], theseTransforms);
-                }
-              }
-              uic.setTransforms(transforms);
-              uic.setControllerNames(new String[comp.getControllerCount()]);
-              for (int c=0; c < comp.getControllerCount(); c++) {
-                uic.getControllerNames()[c] = comp.getController(c).getName();
-              }
-              uic.setStyles(new String[comp.getStyleCount()]);
-              for (int c=0; c < comp.getStyleCount(); c++) {
-                uic.getStyles()[c] = comp.getStyle(c).getName();
-              }
-              uic.init();
+              uic = new org.toobsframework.pres.component.Component();
+              
+              configureComponent(comp, uic, fileName, registry, defaultDatasource);
+
               if (registry.containsKey(uic.getId()) && !initDone) {
                 log.warn("Overriding component with Id: " + uic.getId());
               }
@@ -196,6 +147,68 @@ public final class ComponentManager implements IComponentManager {
       }
       initDone = true;
     }
+  }
+
+  public static void configureComponent(Component comp,
+      org.toobsframework.pres.component.Component uic, String fileName, Map registry2,
+      IDataSource datasource) throws DataSourceInitializationException, DataSourceNotFoundException {
+
+    Map dsParams = new HashMap();
+    if(comp.getDataSource() != null){
+      String dsClassName = comp.getDataSource().getClassName();
+      DataSourceProperty[] dsProperties = comp.getDataSource().getDataSourceProperty();
+      if ((dsProperties != null) && (dsProperties.length > 0)) {
+        String propertyName = null;
+        String[] propertyValue = null;
+        for (int p = 0; p < dsProperties.length; p++) {
+          propertyName = dsProperties[p].getDataSourcePropertyName();
+          propertyValue = dsProperties[p].getDataSourcePropertyValue();
+          dsParams.put(propertyName, propertyValue);
+        }
+      }
+      uic.setDsClassName(dsClassName);
+      uic.setDsParams(dsParams);
+    } else {
+      uic.setDs(datasource);
+    }
+     
+    uic.setId(comp.getId());
+    uic.setFileName(fileName);
+    uic.setRenderErrorObject(comp.getRenderErrorObject());
+    //Set object config property.
+    uic.setObjectsConfig(comp.getGetObject());
+    //Set component pipeline properties.
+    HashMap transforms = new HashMap();
+    Enumeration contentTypeEnum = comp.getPipeline().enumerateContentType();
+    while (contentTypeEnum.hasMoreElements()) {
+      Vector theseTransforms = new Vector();
+      ContentType thisContentType = (ContentType) contentTypeEnum.nextElement();
+      Enumeration transEnum = thisContentType.enumerateTransform();
+      while (transEnum.hasMoreElements()) {
+        org.toobsframework.pres.component.config.Transform thisTransformConfig = (org.toobsframework.pres.component.config.Transform) transEnum.nextElement();                  
+        org.toobsframework.pres.component.Transform thisTransform = new org.toobsframework.pres.component.Transform();
+
+        thisTransform.setTransformName(thisTransformConfig.getName());
+        thisTransform.setTransformParams(thisTransformConfig.getParameters());
+
+        theseTransforms.add(thisTransform);
+      }
+      String[] ctSplit = thisContentType.getContentType().split(";");
+      for (int ct = 0; ct < ctSplit.length; ct++) {
+        transforms.put(ctSplit[ct], theseTransforms);
+      }
+    }
+    uic.setTransforms(transforms);
+    uic.setControllerNames(new String[comp.getControllerCount()]);
+    for (int c=0; c < comp.getControllerCount(); c++) {
+      uic.getControllerNames()[c] = comp.getController(c).getName();
+    }
+    uic.setStyles(new String[comp.getStyleCount()]);
+    for (int c=0; c < comp.getStyleCount(); c++) {
+      uic.getStyles()[c] = comp.getStyle(c).getName();
+    }
+    uic.init();
+    
   }
 
   public IDataSource getDefaultDatasource() {
