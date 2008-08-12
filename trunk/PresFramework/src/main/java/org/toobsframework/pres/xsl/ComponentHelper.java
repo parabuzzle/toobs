@@ -38,7 +38,6 @@ import org.toobsframework.transformpipeline.domain.XMLTransformerException;
 import org.toobsframework.transformpipeline.domain.XMLTransformerFactory;
 import org.toobsframework.util.Configuration;
 import org.toobsframework.util.IRequest;
-import org.toobsframework.util.constants.PlatformConstants;
 
 
 @SuppressWarnings("unchecked")
@@ -152,7 +151,7 @@ public class ComponentHelper {
       Map inParams = new HashMap(request.getParams());
       String componentId = parseUrl("Component:", componentUrl, request, inParams);
       if (componentId.indexOf(layoutExtension) != -1) {
-        return layoutManager.getLayout(ParameterUtil.resolveParam(componentId.replace(layoutExtension, ""), request.getParams())[0], getDeployTime(request)).render(request, true);
+        return layoutManager.getLayout(ParameterUtil.resolveParam(componentId.replace(layoutExtension, ""), request.getParams())[0], getDeployTime(request)).render(request);
       } else {
         Component component = compManager.getComponent(ParameterUtil.resolveParam(componentId, inParams)[0], getDeployTime(request));
         sb.append(compManager.renderComponent(component, contentType, inParams, request.getParams(), false));
@@ -261,7 +260,7 @@ public class ComponentHelper {
         throw new XMLTransformerException("Invalid request");
       }
       request.setParams(getRequestParameters("Layout:", layoutId, request.getParams(), parameters));      
-      return layoutManager.getLayout(ParameterUtil.resolveParam(layoutId, request.getParams())[0], getDeployTime(request)).render(request, true);
+      return layoutManager.getLayout(ParameterUtil.resolveParam(layoutId, request.getParams())[0], getDeployTime(request)).render(request);
     } catch (Exception ex) {
       throw new XMLTransformerException(ex);
     }
@@ -277,7 +276,7 @@ public class ComponentHelper {
         throw new XMLTransformerException("Invalid request");
       }
       IXMLTransformer xmlTransformer = null;
-      xmlTransformer = XMLTransformerFactory.getInstance().getDefaultTransformer();
+      xmlTransformer = XMLTransformerFactory.getInstance().getDefaultTransformer(null);
       
       HashMap inParams = new HashMap(); //new HashMap(request.getParams());
       String transformPath = parseUrl("Transform:", transformUrl, request, inParams);
@@ -321,7 +320,7 @@ public class ComponentHelper {
       throw new XMLTransformerException("Invalid request");
     }
     IXMLTransformer xmlTransformer = null;
-    xmlTransformer = XMLTransformerFactory.getInstance().getDefaultTransformer();
+    xmlTransformer = XMLTransformerFactory.getInstance().getDefaultTransformer(null);
     
     HashMap inParams = new HashMap(); //new HashMap(request.getParams());
     String transformPath = parseUrl("Transform:", transformUrl, request, inParams);
@@ -357,7 +356,7 @@ public class ComponentHelper {
 
       // This is the Translet case
     } else if (inputNode != null && inputNode instanceof org.apache.xml.dtm.ref.DTMAxisIterNodeList) {
-      org.apache.xml.dtm.ref.DTMAxisIterNodeList nodeList = (org.apache.xml.dtm.ref.DTMAxisIterNodeList)inputNode;
+      //org.apache.xml.dtm.ref.DTMAxisIterNodeList nodeList = (org.apache.xml.dtm.ref.DTMAxisIterNodeList)inputNode;
       throw new XMLTransformerException("transformEmail does not support translets");
       //inputXML.add(nodeList.toString());
     } else {

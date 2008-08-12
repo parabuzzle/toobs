@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Properties;
 
+import javax.xml.transform.URIResolver;
+
 import org.apache.xml.serializer.OutputPropertiesFactory;
 import org.toobsframework.util.Configuration;
 
@@ -40,6 +42,7 @@ public class XMLTransformerFactory implements Serializable {
   private boolean useChain = false;
   private Class defaultTransformerClazz = null;
   private Class chainTransformerClazz = null;
+  private URIResolver uriResolver;
   
   /**
    * Creates a new DatatableFactory object.
@@ -55,6 +58,8 @@ public class XMLTransformerFactory implements Serializable {
 
     useTranslets = Configuration.getInstance().getUseTranslets();
     useChain = Configuration.getInstance().getUseChain();
+    
+    uriResolver = new XSLUriResolverImpl();
     try {
       if (useTranslets && useChain) {
         defaultTransformerClazz = java.lang.Class.forName(TRANSLET_XSL);
@@ -79,11 +84,12 @@ public class XMLTransformerFactory implements Serializable {
     }
   }
 
-  public IXMLTransformer getDefaultTransformer() throws XMLTransformerException {
+  public IXMLTransformer getDefaultTransformer(URIResolver resolver) throws XMLTransformerException {
     IXMLTransformer transformer = null;
 
     try {
       transformer = (IXMLTransformer) defaultTransformerClazz.newInstance();
+      transformer.setURIResolver(resolver == null ? this.uriResolver : resolver);
     } catch(InstantiationException ie) {
       throw new XMLTransformerException("The transformer class " + defaultTransformerClazz
                                         + " can not be instantiated");
@@ -96,12 +102,13 @@ public class XMLTransformerFactory implements Serializable {
     return transformer;
   }
   
-  public IXMLTransformer getChainTransformer(String outputMethod) throws XMLTransformerException {
+  public IXMLTransformer getChainTransformer(String outputMethod, URIResolver resolver) throws XMLTransformerException {
     IXMLTransformer transformer = null;
 
     try {
       transformer = (IXMLTransformer) chainTransformerClazz.newInstance();
       transformer.setOutputProperties((Properties)outputPropertiesMap.get(outputMethod));
+      transformer.setURIResolver(resolver == null ? this.uriResolver : resolver);
     } catch(InstantiationException ie) {
       throw new XMLTransformerException("The transformer class " + chainTransformerClazz
                                         + " can not be instantiated");

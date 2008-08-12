@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layouts xmlns="clc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="clc
+  file:../../../../../../../PresFramework/src/main/castor/componentLayoutConfig.xsd">
+
+  <Layout id="simple">
+    <Pipeline xmlns="cc">
+      <ContentType>
+        <Transform name="simple"/>
+      </ContentType>
+    </Pipeline>
+  </Layout>
+
+</Layouts>

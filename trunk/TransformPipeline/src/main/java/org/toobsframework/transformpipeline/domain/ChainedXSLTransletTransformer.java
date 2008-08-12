@@ -2,11 +2,12 @@ package org.toobsframework.transformpipeline.domain;
 
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
+
+import javax.xml.transform.Source;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.TransformerHandler;
-import javax.xml.transform.stream.StreamSource;
 import org.apache.xml.serializer.Serializer;
 import org.apache.xml.serializer.SerializerFactory;
 import org.apache.xml.serializer.OutputPropertiesFactory;
@@ -24,7 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 @SuppressWarnings("unchecked")
-public class ChainedXSLTransletTransformer implements IXMLTransformer {
+public class ChainedXSLTransletTransformer extends BaseXMLTransformer {
 
   /**
    * To get the logger instance
@@ -51,11 +52,11 @@ public class ChainedXSLTransletTransformer implements IXMLTransformer {
     return resultingXMLs;
   }
 
-  @SuppressWarnings("unchecked")
   public String transform(
       Vector inputXSLs,
       String inputXML,
       HashMap inputParams) throws XMLTransformerException {
+
     String outputXML = null;
     ByteArrayInputStream  xmlInputStream = null;
     ByteArrayOutputStream xmlOutputStream = null;
@@ -68,6 +69,8 @@ public class ChainedXSLTransletTransformer implements IXMLTransformer {
         log.error("Error setting XSLTC specific attribute", iae);
         throw new XMLTransformerException(iae);
       }
+      setFactoryResolver(tFactory);
+      
       TransformerFactoryImpl traxFactory = (TransformerFactoryImpl)tFactory;
 
       // Create a TransformerHandler for each stylesheet.
@@ -84,11 +87,14 @@ public class ChainedXSLTransletTransformer implements IXMLTransformer {
       Serializer serializer = SerializerFactory.getSerializer(outputProperties);
       for (int it = 0; it < inputXSLs.size(); it++) {
         String xslTranslet = (String) inputXSLs.get(it);
-        String tPkg = "xsl." + xslTranslet.substring(0, xslTranslet.lastIndexOf("/")).replaceAll("/", ".").replaceAll("-", "_"); 
+        Source source = uriResolver.resolve(xslTranslet + ".xsl", "");
+
+        String tPkg = source.getSystemId().substring(0, source.getSystemId().lastIndexOf("/")).replaceAll("/", ".").replaceAll("-", "_");
+        
         // Package name needs to be set for each TransformerHandler instance
         tFactory.setAttribute("package-name", tPkg);
-        String xslFile = Thread.currentThread().getContextClassLoader().getResource("xsl/" + xslTranslet + ".xsl").getFile();
-        tHandler = traxFactory.newTransformerHandler(new StreamSource(xslFile));
+        tHandler = traxFactory.newTransformerHandler(source);
+
         // Set parameters and output encoding on each handlers transformer
         Transformer transformer = tHandler.getTransformer();
         transformer.setOutputProperty("encoding", "UTF-8");

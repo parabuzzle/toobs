@@ -64,6 +64,17 @@
 					  <bindingfile>PresFramework/src/main/castor/compBinding.xml</bindingfile>
 					</configuration>
   				</execution>
+          <execution>
+            <id>generate::toobsApplication</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <schema>PresFramework/src/main/castor/toobsApplication.xsd</schema>
+              <packaging>org.toobsframework.pres.app.config</packaging>
+            </configuration>
+          </execution>
   			</executions>
   		</plugin>
   	</plugins>

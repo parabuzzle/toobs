@@ -13,13 +13,15 @@ import java.io.UnsupportedEncodingException;
 import java.io.IOException;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.Source;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
+
 import java.util.Map;
 
-public class TransletTransformer implements IXMLTransformer {
+public class TransletTransformer extends BaseXMLTransformer {
 
   private static Log log = LogFactory.getLog(TransletTransformer.class);
 
@@ -93,18 +95,23 @@ public class TransletTransformer implements IXMLTransformer {
     return inputXMLs;
   }
 
+  @SuppressWarnings("unchecked")
   protected void doTransform(
       String xslTranslet,
       StreamSource xmlSource,
       HashMap params,
       StreamResult xmlResult) throws XMLTransformerException {
+
     try {
       // Dont rely on the system property to get the right transformer
       TransformerFactory tFactory = new org.apache.xalan.xsltc.trax.TransformerFactoryImpl();
       // set the URI Resolver for the transformer factory      
-      tFactory.setURIResolver(new XSLUriResolverImpl());      
+      setFactoryResolver(tFactory);
       
-      String tPkg = "xsl." + xslTranslet.substring(0, xslTranslet.lastIndexOf("/")).replaceAll("/", ".").replaceAll("-", "_"); 
+      Source source = uriResolver.resolve(xslTranslet + ".xsl", "");
+
+      String tPkg = source.getSystemId().substring(0, source.getSystemId().lastIndexOf("/")).replaceAll("/", ".").replaceAll("-", "_");
+      
       try {
         //tFactory.setAttribute("use-classpath", Boolean.TRUE);
         tFactory.setAttribute("auto-translet", Boolean.TRUE);
@@ -113,8 +120,8 @@ public class TransletTransformer implements IXMLTransformer {
         log.error("Error setting XSLTC specific attribute", iae);
         throw new XMLTransformerException(iae);
       }
-      String xslFile = Thread.currentThread().getContextClassLoader().getResource("xsl/" + xslTranslet + ".xsl").getFile();
-      Transformer transformer = tFactory.newTransformer(new StreamSource(xslFile));
+
+      Transformer transformer = tFactory.newTransformer(source);
 
       // 2.2 Set character encoding for all transforms to UTF-8.
       transformer.setOutputProperty("encoding", "UTF-8");
