@@ -65,7 +65,7 @@ public class BeanMonkey {
    */
   public static BeanFactory getBeanFactoryInstance()
   {
-    return ContextHelper.getInstance().getWebApplicationContext().getParentBeanFactory();    
+    return ContextHelper.getWebApplicationContext().getParentBeanFactory();    
   }
   
   public static void populate(Object bean, Map properties, Collection errorMessages) 

@@ -77,7 +77,7 @@ public class Component {
   public Component() {
     this.Id = null;
     this.initDone = false;
-    componentRequestManager = (ComponentRequestManager)ContextHelper.getInstance().getWebApplicationContext().getParentBeanFactory().getBean("componentRequestManager");
+    componentRequestManager = (ComponentRequestManager)ContextHelper.getWebApplicationContext().getParentBeanFactory().getBean("componentRequestManager");
   }
 
   public IDataSourceObject[] getObjects(Map paramsIn, Map paramsOut) throws ComponentException,
@@ -94,7 +94,7 @@ public class Component {
       Map params = new HashMap(paramsIn);
       GetObject thisObjDef = objectsConfig[i];
       //Fetch Datasource for this get.
-      IDataSource datasource = (IDataSource)ContextHelper.getInstance().getWebApplicationContext().getParentBeanFactory().getBean(thisObjDef.getDatasource());
+      IDataSource datasource = (IDataSource)ContextHelper.getWebApplicationContext().getParentBeanFactory().getBean(thisObjDef.getDatasource());
 
       //Fix the params using the param mapping for 
       //this configuration.

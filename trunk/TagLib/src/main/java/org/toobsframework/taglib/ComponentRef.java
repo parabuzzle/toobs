@@ -41,21 +41,15 @@ public class ComponentRef extends SimpleTagSupport {
 
   private static ComponentRequestManager reqManager;
   private static IComponentManager compManager;
-  private static IComponentLayoutManager layoutManager;
-  private static IChartManager chartManager;
-  private static ChartBuilder chartBuilder;
   private static boolean debugComponents;
   private static String layoutExtension;
   private static String componentExtension;
   private static String chartExtension;
 
   static {
-    beanFactory = ContextHelper.getInstance().getWebApplicationContext().getParentBeanFactory();
+    beanFactory = ContextHelper.getWebApplicationContext();
     reqManager = (ComponentRequestManager)beanFactory.getBean("componentRequestManager");
     compManager = (IComponentManager)beanFactory.getBean("IComponentManager");
-    layoutManager = (IComponentLayoutManager)beanFactory.getBean("IComponentLayoutManager");
-    chartManager = (IChartManager)beanFactory.getBean("IChartManager");
-    chartBuilder = (ChartBuilder)beanFactory.getBean("chartBuilder");
     debugComponents = Configuration.getInstance().getDebugComponents();
     layoutExtension = Configuration.getInstance().getLayoutExtension();
     componentExtension = Configuration.getInstance().getComponentExtension();
