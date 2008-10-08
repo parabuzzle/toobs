@@ -8,7 +8,7 @@
   <parent>
   	<artifactId>toobsframework</artifactId>
   	<groupId>org.toobsframework</groupId>
-  	<version>${toobs.version}</version>
+  	<version>0.0.2</version>
   </parent>
   <dependencies>
   	<dependency>

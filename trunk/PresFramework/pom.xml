@@ -8,7 +8,7 @@
   <parent>
   	<artifactId>toobsframework</artifactId>
   	<groupId>org.toobsframework</groupId>
-  	<version>${toobs.version}</version>
+  	<version>0.0.2</version>
   </parent>
   <build>
   	<plugins>
@@ -77,7 +77,18 @@
           </execution>
   			</executions>
   		</plugin>
-  	</plugins>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
   <dependencies>
   	<dependency>

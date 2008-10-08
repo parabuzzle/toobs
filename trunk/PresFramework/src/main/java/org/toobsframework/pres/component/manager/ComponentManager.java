@@ -44,8 +44,6 @@ public final class ComponentManager implements IComponentManager {
   private static long[] lastModified;
   private static long localDeployTime = 0L;
 
-  private IDataSource defaultDatasource;
-  
   private List configFiles = null;
 
   private ComponentManager() throws ComponentInitializationException {
@@ -122,7 +120,7 @@ public final class ComponentManager implements IComponentManager {
               comp = components[i];
               uic = new org.toobsframework.pres.component.Component();
               
-              configureComponent(comp, uic, fileName, registry, defaultDatasource);
+              configureComponent(comp, uic, fileName, registry);
 
               if (registry.containsKey(uic.getId()) && !initDone) {
                 log.warn("Overriding component with Id: " + uic.getId());
@@ -150,28 +148,9 @@ public final class ComponentManager implements IComponentManager {
   }
 
   public static void configureComponent(Component comp,
-      org.toobsframework.pres.component.Component uic, String fileName, Map registry2,
-      IDataSource datasource) throws DataSourceInitializationException, DataSourceNotFoundException {
+      org.toobsframework.pres.component.Component uic, String fileName, Map registry2) throws DataSourceInitializationException, DataSourceNotFoundException {
 
-    Map dsParams = new HashMap();
-    if(comp.getDataSource() != null){
-      String dsClassName = comp.getDataSource().getClassName();
-      DataSourceProperty[] dsProperties = comp.getDataSource().getDataSourceProperty();
-      if ((dsProperties != null) && (dsProperties.length > 0)) {
-        String propertyName = null;
-        String[] propertyValue = null;
-        for (int p = 0; p < dsProperties.length; p++) {
-          propertyName = dsProperties[p].getDataSourcePropertyName();
-          propertyValue = dsProperties[p].getDataSourcePropertyValue();
-          dsParams.put(propertyName, propertyValue);
-        }
-      }
-      uic.setDsClassName(dsClassName);
-      uic.setDsParams(dsParams);
-    } else {
-      uic.setDs(datasource);
-    }
-     
+
     uic.setId(comp.getId());
     uic.setFileName(fileName);
     uic.setRenderErrorObject(comp.getRenderErrorObject());
@@ -209,14 +188,6 @@ public final class ComponentManager implements IComponentManager {
     }
     uic.init();
     
-  }
-
-  public IDataSource getDefaultDatasource() {
-    return defaultDatasource;
-  }
-
-  public void setDefaultDatasource(IDataSource defaultDatasource) {
-    this.defaultDatasource = defaultDatasource;
   }
 
   public List getConfigFiles() {

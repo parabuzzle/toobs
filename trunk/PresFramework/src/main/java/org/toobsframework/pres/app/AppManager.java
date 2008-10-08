@@ -219,7 +219,7 @@ public class AppManager {
               
               comp = new Component();
               
-              ComponentManager.configureComponent(compDef, comp, fileName, compMap, null);
+              ComponentManager.configureComponent(compDef, comp, fileName, compMap);
               
               if (compMap.containsKey(compDef.getId())) {
                 log.warn("Overriding layout with Id: " + compDef.getId());

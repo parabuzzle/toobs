@@ -25,25 +25,11 @@ import org.toobsframework.util.constants.PlatformConstants;
 
 
 @SuppressWarnings("unchecked")
-public class DataSourceImpl implements IDataSource {
+public class RhinoDataSourceImpl implements IDataSource {
 
-  private Log log = LogFactory.getLog(DataSourceImpl.class);
+  private Log log = LogFactory.getLog(RhinoDataSourceImpl.class);
   
   private IScriptManager scriptManager;
-  
-  public String getId() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  
-  public String getLabel() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  
-  public void init(Map params) throws DataSourceInitializationException {
-    log.info("entered init");
-  }
   
   public IDataSourceObject getObject(String objectType, String objectDao,
       String objectId, Map params, Map outParams) throws ObjectNotFoundException,
@@ -64,15 +50,6 @@ public class DataSourceImpl implements IDataSource {
       throw new ObjectNotFoundException("Error getting object:" + objectType + 
           ":" + objectId, e);
     }
-    return dsObj;
-  }
-  
-  public IDataSourceObject createObject(Object valueObject) throws DataSourceNotInitializedException {
-    if (valueObject == null) {
-      return null;
-    }
-    DataSourceObjectImpl dsObj = new DataSourceObjectImpl();
-    dsObj.setValueObject(valueObject);
     return dsObj;
   }
   
@@ -317,10 +294,6 @@ public class DataSourceImpl implements IDataSource {
       throw new ObjectCreationException("Error Creating object", e);
     }
     return dsObj;
-  }
-  
-  public void save(Writer writer) throws IOException {
-    // TODO Auto-generated method stub
   }
   
   public Object callAction(String objectType, String action, String objectDao, String objectId, String permissionContext, String namespace, Map params, Map outParams) throws ObjectCreationException {

@@ -13,38 +13,6 @@ import java.io.IOException;
 public interface IDataSource {
 
   /**
-   * get the unique identifier for this datasource
-   * 
-   * @return
-   */
-  public String getId();
-
-  /**
-   * get the label for this datasource
-   * 
-   * @return label
-   */
-  public String getLabel();
-
-  /**
-   * initialization method which initializes this datasource. should be called
-   * before trying to access objects in this datasource
-   * 
-   * @param params -
-   *          initialization parameters
-   */
-  public void init(Map params) throws DataSourceInitializationException;
-
-  /**
-   * create a new object using the specified value object
-   * 
-   * @param objectId
-   * @param params
-   * @return specified object
-   */
-  public IDataSourceObject createObject(Object valueObject) throws DataSourceNotInitializedException;
-
-  /**
    * get the object identified by the specified Id whether the tree rooted at
    * this object is returned is implementation specific
    * 
@@ -144,10 +112,4 @@ public interface IDataSource {
   public Object dispatchAction(String action, String dao, String objectType, 
       String returnObjectType, String guidParam, String permissionContext, String indexParam, String namespace, Map params, Map outParams) throws Exception;
 
-    /**
-   * Save this datasource to the specified writer
-   * 
-   * @param writer
-   */
-  public void save(Writer writer) throws IOException;
 }

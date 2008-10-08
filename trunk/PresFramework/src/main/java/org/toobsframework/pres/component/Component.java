@@ -18,7 +18,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.toobsframework.pres.component.config.GetObject;
 import org.toobsframework.exception.ParameterException;
-import org.toobsframework.pres.component.datasource.api.DataSourceInitializationException;
 import org.toobsframework.pres.component.datasource.api.DataSourceNotInitializedException;
 import org.toobsframework.pres.component.datasource.api.IDataSource;
 import org.toobsframework.pres.component.datasource.api.IDataSourceObject;
@@ -26,8 +25,7 @@ import org.toobsframework.pres.component.datasource.api.InvalidSearchContextExce
 import org.toobsframework.pres.component.datasource.api.InvalidSearchFilterException;
 import org.toobsframework.pres.component.datasource.api.ObjectCreationException;
 import org.toobsframework.pres.component.datasource.api.ObjectNotFoundException;
-import org.toobsframework.pres.component.datasource.manager.DataSourceManager;
-import org.toobsframework.pres.component.datasource.manager.DataSourceNotFoundException;
+import org.toobsframework.pres.component.datasource.impl.DataSourceObjectImpl;
 import org.toobsframework.pres.util.ComponentRequestManager;
 import org.toobsframework.pres.util.CookieVO;
 import org.toobsframework.pres.util.ParameterUtil;
@@ -60,17 +58,11 @@ public class Component {
   
   private String Id;
 
-  private IDataSource ds;
-
   private boolean renderErrorObject;
 
   private boolean scanUrls;
 
   private boolean initDone;
-
-  private String dsClassName;
-
-  private Map dsParams;
 
   private Map transforms;
 
@@ -85,16 +77,6 @@ public class Component {
   public Component() {
     this.Id = null;
     this.initDone = false;
-    this.dsClassName = null;
-    this.dsParams = null;
-    componentRequestManager = (ComponentRequestManager)ContextHelper.getInstance().getWebApplicationContext().getParentBeanFactory().getBean("componentRequestManager");
-  }
-
-  public Component(String dsClassName, Map dsParams) {
-    this.Id = null;
-    this.initDone = false;
-    this.dsClassName = dsClassName;
-    this.dsParams = dsParams;
     componentRequestManager = (ComponentRequestManager)ContextHelper.getInstance().getWebApplicationContext().getParentBeanFactory().getBean("componentRequestManager");
   }
 
@@ -106,10 +88,14 @@ public class Component {
       ex.setComponentId(this.Id);
       throw ex;
     }
+
     int len = objectsConfig.length;
     for (int i = 0; i < len; i++) {
       Map params = new HashMap(paramsIn);
       GetObject thisObjDef = objectsConfig[i];
+      //Fetch Datasource for this get.
+      IDataSource datasource = (IDataSource)ContextHelper.getInstance().getWebApplicationContext().getParentBeanFactory().getBean(thisObjDef.getDatasource());
+
       //Fix the params using the param mapping for 
       //this configuration.
       if(thisObjDef.getParameters() != null){
@@ -135,6 +121,7 @@ public class Component {
         obj = checkForValidation(paramsIn, thisObjDef, (String)guidObj);
         if (obj == null) {
           obj = this.getObject(
+              datasource,
               thisObjDef.getReturnedValueObject(),
               ParameterUtil.resolveParam(thisObjDef.getDaoObject(), params)[0], 
               thisObjDef.getNoCache(), 
@@ -170,7 +157,7 @@ public class Component {
         }
       } else if (thisObjDef.getObjectAction().equals("search")) {
         try {
-          theseObjects.addAll(this.ds.search(
+          theseObjects.addAll(datasource.search(
               ParameterUtil.resolveParam(thisObjDef.getReturnedValueObject(), params)[0], 
               ParameterUtil.resolveParam(thisObjDef.getDaoObject(), params)[0], 
               thisObjDef.getSearchCriteria(),
@@ -188,7 +175,7 @@ public class Component {
         }
       } else if (thisObjDef.getObjectAction().equals("searchIndex")) {
         try {
-          theseObjects.addAll(this.ds.searchIndex(
+          theseObjects.addAll(datasource.searchIndex(
               thisObjDef.getReturnedValueObject(),
               ParameterUtil.resolveParam(thisObjDef.getDaoObject(), params)[0], 
               thisObjDef.getSearchCriteria(),
@@ -222,26 +209,15 @@ public class Component {
 
   public IDataSourceObject createObject(Object valueObject) throws ComponentException,
       ComponentNotInitializedException {
-    IDataSourceObject object = null;
-    if (!this.initDone) {
-      ComponentNotInitializedException ex = new ComponentNotInitializedException();
-      ex.setComponentId(this.Id);
-      throw ex;
+    if (valueObject == null) {
+      return null;
     }
-    try {
-      if (valueObject instanceof ArrayList) {
-        object = this.ds.createObject(((ArrayList)valueObject).get(0));
-      } else {
-        object = this.ds.createObject(valueObject);
-      }
-    } catch (DataSourceNotInitializedException ex) {
-      ComponentException ce = new ComponentException("Datasource not initialized.", ex);
-      throw ce;
-    }
-    return object;
+    DataSourceObjectImpl dsObj = new DataSourceObjectImpl();
+    dsObj.setValueObject(valueObject);
+    return dsObj;
   }
 
-  public IDataSourceObject getObject(String returnedValueObject,
+  public IDataSourceObject getObject(IDataSource datasource, String returnedValueObject,
       String daoObject, boolean noCache, String guid, Map params, Map outParams) throws ComponentException,
       ComponentNotInitializedException {
     IDataSourceObject object = null;
@@ -255,7 +231,7 @@ public class Component {
         object = componentRequestManager.checkRequestCache("get", returnedValueObject, guid);
       }
       if (object == null) {
-        object = this.ds.getObject(returnedValueObject, daoObject, guid, params, outParams);
+        object = datasource.getObject(returnedValueObject, daoObject, guid, params, outParams);
         if (!noCache) {
           componentRequestManager.cacheObject("get", returnedValueObject, guid, object);
         }
@@ -271,12 +247,7 @@ public class Component {
     return object;
   }
   
-  public void init() throws DataSourceInitializationException,
-      DataSourceNotFoundException {
-    if (this.ds == null) {
-      DataSourceManager dsm = DataSourceManager.getInstance();
-      this.ds = dsm.getDataSource(this.dsClassName, this.dsParams);
-    }
+  public void init() {
     this.initDone = true;
   }
 
@@ -506,14 +477,6 @@ public class Component {
   }
   */
 
-  public IDataSource getDs() {
-    return ds;
-  }
-
-  public void setDs(IDataSource ds) {
-    this.ds = ds;
-  } 
-
   public GetObject[] getObjectsConfig() {
     return objectsConfig;
   }
@@ -576,22 +539,6 @@ public class Component {
 
   public void setStyles(String[] styles) {
     this.styles = styles;
-  }
-
-  public String getDsClassName() {
-    return dsClassName;
-  }
-
-  public void setDsClassName(String dsClassName) {
-    this.dsClassName = dsClassName;
-  }
-
-  public Map getDsParams() {
-    return dsParams;
-  }
-
-  public void setDsParams(Map dsParams) {
-    this.dsParams = dsParams;
   }
 
 }

@@ -4,7 +4,7 @@
   <artifactId>toobsframework</artifactId>
   <packaging>pom</packaging>
   <name>toobsframework</name>
-  <version>${toobs.version}</version>
+  <version>0.0.2</version>
   <description/>
   <build>
   	<plugins>
@@ -26,6 +26,7 @@
   	<module>TransformPipeline</module>
   	<module>BusinessLogic</module>
   	<module>PresFramework</module>
+  	<module>TagLib</module>
   	<module>web</module>
   </modules>
   <repositories>
@@ -42,18 +43,16 @@
       <layout>default</layout>
     </repository>
   </repositories>
-  <dependencies>
-  	<dependency>
-  		<groupId>org.testng</groupId>
-  		<artifactId>testng</artifactId>
-  		<version>5.7</version>
-  		<type>jar</type>
-  		<classifier>jdk15</classifier>
-  		<scope>test</scope>
-  	</dependency>
-  </dependencies>
   <dependencyManagement>
   	<dependencies>
+      	<dependency>
+      		<groupId>org.testng</groupId>
+      		<artifactId>testng</artifactId>
+      		<version>5.8</version>
+      		<type>jar</type>
+      		<classifier>jdk15</classifier>
+      		<scope>test</scope>
+      	</dependency>
   		<dependency>
   			<groupId>commons-beanutils</groupId>
   			<artifactId>commons-beanutils</artifactId>
