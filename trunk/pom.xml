@@ -43,6 +43,20 @@
       <layout>default</layout>
     </repository>
   </repositories>
+  <distributionManagement>
+    <!-- use the following if you're not using a snapshot version. -->
+    <repository>
+      <id>groups-ext-releases</id>
+      <name>Groups Ext Repository</name>
+      <url>http://dev-db5.bix.corp.re1.yahoo.com:8081/artifactory/ext-releases</url>
+    </repository>
+    <!-- use the following if you ARE using a snapshot version. -->
+    <snapshotRepository>
+      <id>groups-ext-releases</id>
+      <name>Groups Ext Repository</name>
+      <url>http://dev-db5.bix.corp.re1.yahoo.com:8081/artifactory/ext-releases</url>
+    </snapshotRepository>
+  </distributionManagement>
   <dependencyManagement>
   	<dependencies>
       	<dependency>

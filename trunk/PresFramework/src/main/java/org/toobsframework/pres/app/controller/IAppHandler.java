@@ -11,7 +11,6 @@ import org.toobsframework.pres.util.ComponentRequestManager;
 
 public interface IAppHandler {
 
-  public static String DEFAULT_VIEW = "[default]";
   /**
    * 
    * Retrieves the URL path to use for lookup and delegates to
@@ -42,8 +41,4 @@ public interface IAppHandler {
 
   public abstract void setLayoutSecurity(IComponentSecurity layoutSecurity);
 
-  public abstract String getCompPrefix();
-
-  public abstract void setCompPrefix(String compPrefix);
-  
 }
