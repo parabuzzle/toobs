@@ -6,8 +6,10 @@
  */
 package org.toobsframework.pres.component.datasource.impl;
 
+import org.springframework.beans.factory.BeanFactory;
 import org.toobsframework.pres.component.datasource.api.*;
 import org.toobsframework.pres.util.ComponentRequestManager;
+import org.toobsframework.servlet.ContextHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -16,7 +18,14 @@ import java.util.Collection;
 
 public class RequestDataSourceImpl implements IDataSource {
   private Log log = LogFactory.getLog(RequestDataSourceImpl.class);
-  private ComponentRequestManager componentRequestManager = null;
+  
+  private static BeanFactory beanFactory;
+  private static ComponentRequestManager componentRequestManager;
+
+  static {
+    beanFactory = ContextHelper.getWebApplicationContext();
+    componentRequestManager = (ComponentRequestManager)beanFactory.getBean("componentRequestManager");
+  }
 
   public IDataSourceObject getObject(String objectType, String objectDao,
       String objectId, Map params, Map outParams) throws ObjectNotFoundException,
@@ -26,19 +35,23 @@ public class RequestDataSourceImpl implements IDataSource {
       throw new DataSourceNotInitializedException("Component Request Manager or Component Request is null.");
     }
 
-    DataSourceObjectImpl dsObj = new DataSourceObjectImpl();
+    Object retObj = null;
     try {
-      Object retObj = componentRequestManager.get().getParam(objectDao + "." + objectId);
-      if(retObj instanceof DataSourceObjectImpl) {
-        return (IDataSourceObject) retObj;
-      }
-      // Prepare Result
-      dsObj.setValueObject(retObj);
-
+      retObj = componentRequestManager.get().getParam(objectDao);
     } catch (Exception e) {
-      throw new ObjectNotFoundException("Error getting object:" + objectType + ":" + objectId, e);
+        throw new ObjectNotFoundException("Error getting object:" + objectType + ":" + objectId, e);
     }
-    return dsObj;
+
+    // Prepare Result
+    if(retObj == null) {
+      throw new ObjectNotFoundException("Error getting object:" + objectType + ":" + objectId);
+    } else if(retObj instanceof DataSourceObjectImpl) {
+      return (IDataSourceObject) retObj;
+    } else {
+      DataSourceObjectImpl dsObj = new DataSourceObjectImpl();
+      dsObj.setValueObject(retObj);
+      return dsObj;
+    }
   }
 
 

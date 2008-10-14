@@ -57,7 +57,7 @@ public class ComponentRef extends SimpleTagSupport {
   }
 
   private String componentId;
-  private String contentType = null;
+  private String contentType = "xhtml";
   private Map    parameterMap = new HashMap();
   private String dataObjectName;
   private Object dataObject;
@@ -109,6 +109,9 @@ public class ComponentRef extends SimpleTagSupport {
     }
 
     //Render Component
+    if (contentType == null || contentType.length() == 0) {
+      contentType = "xhtml";
+    }
     String output = "";
     try {
       output = this.compManager.renderComponent(component, contentType, reqManager.get().getParams(), reqManager.get().getParams(), true);

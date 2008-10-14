@@ -77,7 +77,7 @@ public class Component {
   public Component() {
     this.Id = null;
     this.initDone = false;
-    componentRequestManager = (ComponentRequestManager)ContextHelper.getWebApplicationContext().getParentBeanFactory().getBean("componentRequestManager");
+    componentRequestManager = (ComponentRequestManager)ContextHelper.getWebApplicationContext().getBean("componentRequestManager");
   }
 
   public IDataSourceObject[] getObjects(Map paramsIn, Map paramsOut) throws ComponentException,
@@ -94,7 +94,7 @@ public class Component {
       Map params = new HashMap(paramsIn);
       GetObject thisObjDef = objectsConfig[i];
       //Fetch Datasource for this get.
-      IDataSource datasource = (IDataSource)ContextHelper.getWebApplicationContext().getParentBeanFactory().getBean(thisObjDef.getDatasource());
+      IDataSource datasource = (IDataSource)ContextHelper.getWebApplicationContext().getBean(thisObjDef.getDatasource());
 
       //Fix the params using the param mapping for 
       //this configuration.
@@ -273,17 +273,6 @@ public class Component {
 
     if (!contentType.equals("bizXML")) {
       renderedOutput.append(this.callXMLPipeline(contentType, componentXML, params, uriResolver));
-      /*
-      if (this.getControllerNames().length > 0) {
-        renderedOutput.append("<script type=\"text/javascript\">\n");
-        for (int i=0; i < this.getControllerNames().length; i++) {
-          if (this.getControllerNames()[i].length() > 0) {
-            renderedOutput.append("setTimeout( function() { Toobs.Controller.useComp('" + this.getControllerNames()[i] + "'); }, 100);\n");
-          }
-        }
-        renderedOutput.append("</script>\n");
-      }
-      */
     } else {
       renderedOutput.append(componentXML);
     }

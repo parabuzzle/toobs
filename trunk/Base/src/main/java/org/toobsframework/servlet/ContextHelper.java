@@ -7,20 +7,20 @@ import org.springframework.web.context.WebApplicationContext;
 
 public class ContextHelper implements ApplicationContextAware {
 
-	private static WebApplicationContext webApplicationContext;
+	private static ApplicationContext webApplicationContext;
 
-	public static WebApplicationContext getWebApplicationContext() {
+	public static ApplicationContext getWebApplicationContext() {
 		return webApplicationContext;
 	}
 
 	public void setWebApplicationContext(
-			WebApplicationContext webApplicationContext) {
+			ApplicationContext webApplicationContext) {
 		this.webApplicationContext = webApplicationContext;
 	}
 
 	public void setApplicationContext(ApplicationContext appContext)
 			throws BeansException {
-		this.webApplicationContext = (WebApplicationContext) appContext;
+		this.webApplicationContext = (ApplicationContext) appContext;
 	}
 
 	public static Object getBean(String beanName) {
