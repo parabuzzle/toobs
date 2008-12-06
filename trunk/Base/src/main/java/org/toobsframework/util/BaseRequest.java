@@ -51,6 +51,10 @@ public class BaseRequest implements IRequest {
     return this.params.get(paramName);
   }
 
+  public Object putParam(String paramName, Object paramValue) {
+    return this.params.put(paramName, paramValue);
+  }
+
   public String getString(String paramName) {
     Object param = this.params.get(paramName);
     if (param != null && param.getClass().isArray()) {

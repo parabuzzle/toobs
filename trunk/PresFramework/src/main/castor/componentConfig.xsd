@@ -21,23 +21,11 @@
    <xs:sequence>
     <xs:element ref="cc:Style" minOccurs="0" maxOccurs="unbounded"/>
     <xs:element ref="cc:Controller" minOccurs="0" maxOccurs="unbounded"/>
-    <xs:element ref="cc:DataSource" minOccurs="0"/>
     <xs:element ref="cc:GetObject" maxOccurs="unbounded" minOccurs="0"/>
     <xs:element ref="cc:Pipeline"/>
    </xs:sequence>
    <xs:attribute name="id" type="xs:string" use="required"/>
    <xs:attribute name="renderErrorObject" type="xs:boolean" default="false"/>
-  </xs:complexType>
- </xs:element>
- <xs:element name="DataSource">
-  <xs:annotation>
-   <xs:documentation>This holds a DataSource</xs:documentation>
-  </xs:annotation>
-  <xs:complexType>
-   <xs:sequence>
-    <xs:element ref="cc:DataSourceProperty" minOccurs="0" maxOccurs="unbounded"/>
-   </xs:sequence>
-   <xs:attribute name="className" type="xs:string"/>
   </xs:complexType>
  </xs:element>
  <xs:element name="DataSourceProperty">
@@ -97,6 +85,7 @@
    <xs:attribute name="searchCriteria" type="xs:string"/>
    <xs:attribute name="searchMethod" type="xs:string"/>
    <xs:attribute name="permissionAction" type="xs:string"/>
+   <xs:attribute name="datasource" type="xs:string" default="DefaultDatasource"/>
    <xs:attribute name="noCache" type="xs:boolean" default="false"/>
   </xs:complexType>
  </xs:element>

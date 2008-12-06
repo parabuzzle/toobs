@@ -227,7 +227,6 @@
   <bean id="IComponentManager" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="target">
       <bean class="org.toobsframework.pres.component.manager.ComponentManager">
-        <property name="defaultDatasource" ref="DefaultDatasource"/>
         <property name="configFiles">
           <list>
             <value>cc/example.cc.xml</value>
@@ -292,9 +291,12 @@
     </property>
   </bean>
 
-  <bean id="DefaultDatasource" class="org.springframework.aop.framework.ProxyFactoryBean">
+
+  <alias name="RhinoDatasource" alias="DefaultDatasource" />
+
+  <bean id="RhinoDatasource" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="target">
-      <bean class="org.toobsframework.pres.component.datasource.impl.DataSourceImpl">
+      <bean class="org.toobsframework.pres.component.datasource.impl.RhinoDataSourceImpl">
         <property name="scriptManager">
           <ref bean="scriptService"/>
         </property>
@@ -305,6 +307,14 @@
     </property>
   </bean>
 
+  <bean id="RequestDatasource" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target">
+      <bean class="org.toobsframework.pres.component.datasource.impl.RequestDataSourceImpl"/>
+    </property>
+    <property name="proxyInterfaces">
+      <value>org.toobsframework.pres.component.datasource.api.IDataSource</value>
+    </property>
+  </bean>
   <!-- ScriptService Service Proxy with inner ProfileService Service Implementation -->
   <bean id="scriptService" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="target">

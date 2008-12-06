@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.toobsframework</groupId>
+  <artifactId>taglib</artifactId>
+  <name>taglib</name>
+  <version>${toobs.version}</version>
+  <description>
+    JSP Tags for calling components from within a JSP layout framework.
+  </description>      
+  <parent>
+  	<artifactId>toobsframework</artifactId>
+  	<groupId>org.toobsframework</groupId>
+  	<version>0.0.2</version>
+  </parent>
+  <build>
+    <plugins>
+      <plugin>
+          <artifactId>maven-source-plugin</artifactId>
+          <executions>
+              <execution>
+                  <id>attach-sources</id>
+                  <goals>
+                      <goal>jar</goal>
+                  </goals>
+              </execution>
+          </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+  	  <groupId>org.toobsframework</groupId>
+  	  <artifactId>presentation</artifactId>
+  	  <version>${toobs.version}</version>
+  	</dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+</project>

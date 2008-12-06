@@ -24,7 +24,7 @@ import org.toobsframework.pres.app.config.ConfigLocation;
 import org.toobsframework.pres.app.config.LayoutConfig;
 import org.toobsframework.pres.app.config.ToobsApp;
 import org.toobsframework.pres.app.config.XSLConfig;
-import org.toobsframework.pres.app.controller.AppHandler.AppView;
+import org.toobsframework.pres.app.controller.IAppView;
 import org.toobsframework.pres.component.Component;
 import org.toobsframework.pres.component.ComponentException;
 import org.toobsframework.pres.component.config.Components;
@@ -39,7 +39,7 @@ import org.toobsframework.pres.layout.manager.ComponentLayoutManager;
 import org.toobsframework.transformpipeline.domain.XSLUriResolverImpl;
 import org.toobsframework.util.IRequest;
 
-public class AppManager {
+public class AppManager implements AppReader {
 
   private static final Log log = LogFactory.getLog(AppManager.class);
 
@@ -71,9 +71,9 @@ public class AppManager {
       throw new AppNotFoundException();
     }
     toobsApp = appRegistry.get(appRoot);
-    synchronized(toobsApp) {
+    //synchronized(toobsApp) {
       return toobsApp;
-    }
+    //}
   }
 
   public void init() throws ComponentLayoutInitializationException {
@@ -219,7 +219,7 @@ public class AppManager {
               
               comp = new Component();
               
-              ComponentManager.configureComponent(compDef, comp, fileName, compMap, null);
+              ComponentManager.configureComponent(compDef, comp, fileName, compMap);
               
               if (compMap.containsKey(compDef.getId())) {
                 log.warn("Overriding layout with Id: " + compDef.getId());
@@ -398,12 +398,12 @@ public class AppManager {
     }
   }
 
-  public String renderView(AppView appView, IRequest request) throws AppNotFoundException, ComponentException, ParameterException {
-    if (appView.isComp) {
+  public String renderView(IAppView appView, IRequest request) throws AppNotFoundException, ComponentException, ParameterException {
+    if (appView.isComponentView()) {
       return null;
     } else {
-      RuntimeLayout layout = getApp(appView.appName).getLayouts().get(appView.viewName);
-      return layout.render(request, new XSLUriResolverImpl(getApp(appView.appName).getXslLocations()));
+      RuntimeLayout layout = getApp(appView.getAppName()).getLayouts().get(appView.getViewName());
+      return layout.render(request, new XSLUriResolverImpl(getApp(appView.getAppName()).getXslLocations()));
     }
   }
   

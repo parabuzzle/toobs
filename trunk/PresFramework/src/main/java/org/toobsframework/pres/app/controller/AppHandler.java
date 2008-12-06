@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UrlPathHelper;
 import org.toobsframework.pres.app.AppManager;
+import org.toobsframework.pres.app.AppReader;
 import org.toobsframework.pres.component.config.Parameter;
 import org.toobsframework.doitref.IDoItRefQueue;
 import org.toobsframework.exception.PermissionException;
@@ -38,8 +39,7 @@ public class AppHandler implements IAppHandler {
   private ComponentRequestManager componentRequestManager = null;
   private IDoItRefQueue doItRefQueue = null;
   private IComponentSecurity layoutSecurity;
-  
-  private String compPrefix = "comp";
+  private IURLResolver urlResolver; 
   
   /* (non-Javadoc)
    * @see org.toobsframework.pres.app.controller.IAppHandler#handleRequestInternal(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -49,17 +49,16 @@ public class AppHandler implements IAppHandler {
     String output = "";
     String urlPath = this.urlPathHelper.getLookupPathForRequest(request);
 
-    AppView appView = getAppView(urlPath);
+    IAppView appView = urlResolver.resolve( (AppReader)appManager, urlPath, request.getMethod() );
     
     if (log.isDebugEnabled()) {
       
       appManager.showApps();
       
-      log.debug("AppView App   : " + appView.appName);
-      log.debug("AppView isComp: " + appView.isComp);
-      log.debug("AppView Param : " + appView.paramName);
-      log.debug("AppView Value : " + appView.paramValue);
-      log.debug("AppView View  : " + appView.viewName);
+      log.debug("AppView App   : " + appView.getAppName());
+      log.debug("AppView isComp: " + appView.isComponentView());
+      log.debug("AppView View  : " + appView.getViewName());
+      appView.debugUrlParams();
     }
     
     Date startTime = null;
@@ -82,80 +81,10 @@ public class AppHandler implements IAppHandler {
 
     if (log.isDebugEnabled()) {
       Date endTime = new Date();
-      log.debug("Time [" + appView.appName + ":" + appView.viewName + "] - " + (endTime.getTime() - startTime.getTime()));
+      log.debug("Time [" + appView.getAppName() + ":" + appView.getViewName() + "] - " + (endTime.getTime() - startTime.getTime()));
     }
     return null;
 
-  }
-
-  private AppView getAppView(String urlPath) {
-    String[] splitUrl = urlPath.split("/");
-    if (log.isDebugEnabled()) {
-      for (int i = 0; i < splitUrl.length; i++) {
-        log.debug("Url part " + i + ": " + splitUrl[i]);
-      }
-    }
-    if (splitUrl.length <= 1) {
-      return new AppView("/", false, null, null, DEFAULT_VIEW);
-    }
-    if (splitUrl[1].equals(compPrefix)) {
-      if (splitUrl.length >= 5) {
-        return new AppView("/", true, splitUrl[2], splitUrl[3], splitUrl[4]);
-      } else if (splitUrl.length == 4) {
-        return new AppView("/", true, splitUrl[2], splitUrl[3], splitUrl[2]);
-      } else {
-        return new AppView("/", true, null, null, splitUrl[2]);
-      }
-    }
-    if (appManager.containsApp("/" + splitUrl[1])) {
-      if (splitUrl[1].equals(compPrefix)) {
-        if (splitUrl.length >= 6) {
-          return new AppView("/" + splitUrl[1], true, splitUrl[3], splitUrl[4], splitUrl[5]);
-        } else if (splitUrl.length == 4) {
-          return new AppView("/" + splitUrl[1], true, splitUrl[3], splitUrl[4], splitUrl[3]);
-        } else {
-          return new AppView("/" + splitUrl[1], true, null, null, splitUrl[3]);
-        }
-      } else {
-        if (splitUrl.length >= 5) {
-          return new AppView("/" + splitUrl[1], false, splitUrl[2], splitUrl[3], splitUrl[4]);
-        } else if (splitUrl.length == 4) {
-          return new AppView("/" + splitUrl[1], false, splitUrl[2], splitUrl[3], splitUrl[2]);
-        } else if (splitUrl.length == 3) {
-          return new AppView("/" + splitUrl[1], false, null, null, splitUrl[2]);
-        } else {
-          return new AppView("/" + splitUrl[1], false, null, null, DEFAULT_VIEW);
-        }
-      }
-    } else {
-      if (splitUrl.length >= 4) {
-        return new AppView("/", true, splitUrl[1], splitUrl[2], splitUrl[3]);
-      } else if (splitUrl.length == 3) {
-        return new AppView("/", true, splitUrl[1], splitUrl[2], splitUrl[1]);
-      } else {
-        return new AppView("/", true, null, null, splitUrl[1]);
-      }
-    }
-      
-  }
-
-  public class AppView {
-    public AppView() {
-    }
-    public AppView(String appName, boolean isComp, String paramName,
-        String paramValue, String viewName) {
-      super();
-      this.appName = appName;
-      this.isComp = isComp;
-      this.paramName = paramName;
-      this.paramValue = paramValue;
-      this.viewName = viewName;
-    }
-    public String appName;
-    public String paramName;
-    public String paramValue;
-    public String viewName;
-    public boolean isComp;
   }
 
   /* (non-Javadoc)
@@ -212,14 +141,6 @@ public class AppHandler implements IAppHandler {
    */
   public void setLayoutSecurity(IComponentSecurity layoutSecurity) {
     this.layoutSecurity = layoutSecurity;
-  }
-
-  public String getCompPrefix() {
-    return compPrefix;
-  }
-
-  public void setCompPrefix(String compPrefix) {
-    this.compPrefix = compPrefix;
   }
 
 }

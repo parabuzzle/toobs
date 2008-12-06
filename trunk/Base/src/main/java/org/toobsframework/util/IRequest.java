@@ -26,4 +26,6 @@ public interface IRequest {
   public abstract String[] getStringArray(String paramName);
   
   public abstract Object getParam(String paramName);
+
+  public abstract Object putParam(String paramName, Object paramValue);
 }

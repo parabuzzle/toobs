@@ -59,7 +59,7 @@ public class ComponentHelper {
   private static String chartExtension;
   
   static {
-    beanFactory = ContextHelper.getInstance().getWebApplicationContext().getParentBeanFactory();
+    beanFactory = ContextHelper.getWebApplicationContext();
     reqManager = (ComponentRequestManager)beanFactory.getBean("componentRequestManager");
     compManager = (IComponentManager)beanFactory.getBean("IComponentManager");
     layoutManager = (IComponentLayoutManager)beanFactory.getBean("IComponentLayoutManager");
