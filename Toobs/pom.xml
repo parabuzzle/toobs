@@ -298,6 +298,6 @@
   </dependencyManagement>
   <properties>
   	<toobs.version>0.0.2-SNAPSHOT</toobs.version>
-  	<spring.version>2.5.5</spring.version>
+  	<spring.version>3.2.5.RELEASE</spring.version>
   </properties>
 </project>
